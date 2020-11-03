@@ -1,4 +1,4 @@
-Caracal
+# [Caracal](https://nl.wikipedia.org/wiki/Caracal_(dier))
 
 ## Opdracht
 
@@ -6,7 +6,11 @@ TBD
 
 ## Leden
 
-
+- Imre Boersma
+- Sander Wiggers
+- Stan Gerritsen
+- Patrick Roelofs
+- Bram Klapwijk
 
 ## Product Owner
 

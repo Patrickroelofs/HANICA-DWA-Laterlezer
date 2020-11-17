@@ -1,6 +1,8 @@
+const userController = require("../controllers/userController")
+
 const express = require('express')
 const router = express();
 
+router.post("/tag", userController.createTagPost);
 
-
-export default router;
+module.exports = router;

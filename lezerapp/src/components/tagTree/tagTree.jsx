@@ -1,4 +1,5 @@
 import React from 'react';
+import './tagTree.scss';
 
 export const TagTree = () => {
   return (

@@ -1,0 +1,54 @@
+.pure-tree {
+  text-align: left;
+  display: block;
+  &.main-tree {
+    width: 100%;
+    display: inline-block;
+  }
+  &:not(.main-tree) {
+    padding-left: 1.2em;
+    li {
+      overflow: hidden;
+      height: 0;
+      display: block;
+    }
+  }
+  label {
+    display: block;
+    cursor: pointer;
+    &:before {
+      width: 1em;
+      height: 1em;
+      line-height: 1em;
+      display: inline-block;
+      font-size: 12px;
+      font-family: 'FontAwesome', sans-serif;
+      content: '►';
+      padding-right: 6px;
+      display: inline;
+    }
+  }
+  .pure-tree_link {
+    a {
+      display: block;
+      text-decoration: none;
+    }
+  }
+  &.nested {
+    padding-left: 1.7em;
+  }
+  [type='checkbox'] {
+    display: none;
+    &:checked + label {
+      &:before {
+        content: '▼';
+        font-size: 12px;
+        padding-right: 6px;
+        display: inline;
+      }
+    }
+    &:checked ~ ul > li {
+      height: auto;
+    }
+  }
+}

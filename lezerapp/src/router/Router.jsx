@@ -3,8 +3,8 @@ import {
   BrowserRouter, Switch, Route, Redirect,
 } from 'react-router-dom';
 
-import Login from '../login/login';
-import Register from '../register/register';
+import Login from '../login/Login';
+import Register from '../register/Register';
 import App from '../app/App';
 
 function Router() {

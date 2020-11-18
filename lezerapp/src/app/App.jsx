@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './css/App.scss';
+import './App.scss';
 
 import Dock from './components/dock/Dock';
 import Nav from './components/nav/Nav';

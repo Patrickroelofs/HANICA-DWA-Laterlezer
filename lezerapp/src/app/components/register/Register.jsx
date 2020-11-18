@@ -3,7 +3,7 @@ import React from 'react';
 // TODO: Register functionality
 function Register() {
   return (
-    <>
+    <div className="bootstrap-container">
       <h1>Register</h1>
 
       <form>
@@ -39,7 +39,7 @@ function Register() {
           <input type="submit" />
         </div>
       </form>
-    </>
+    </div>
   );
 }
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import './article.scss';
 
-export const Article = () => {
+function Article() {
   return (
-    <React.Fragment>
+    <>
       <article>
         <img alt="" src="https://placehold.it/125x100" />
-        <div class="content">
+        <div className="content">
           <strong>Javascript is a very cool language</strong>
           <p>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet
@@ -14,7 +14,8 @@ export const Article = () => {
           </p>
         </div>
       </article>
-    </React.Fragment>
+    </>
   );
-};
+}
 
+export default Article;

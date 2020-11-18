@@ -1,13 +1,13 @@
 import React from 'react';
 import './nav.scss';
 
-import { TagList } from '../tagList/TagList'
+import TagList from '../tagList/TagList';
 
-export const Nav = () => {
+function Nav() {
   return (
     <section id="navList">
       <div>
-        <ul class="navlinks">
+        <ul className="navlinks">
           <li>
             <a href="index.html">New</a>
           </li>
@@ -19,8 +19,10 @@ export const Nav = () => {
           </li>
         </ul>
 
-        <TagList></TagList>
+        <TagList />
       </div>
     </section>
   );
-};
+}
+
+export default Nav;

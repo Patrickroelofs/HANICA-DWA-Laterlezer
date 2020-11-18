@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const User = require("../models/user");
+const response = require("../utils/response");
 
 exports.createTagPost = async (req, res, next) => {
     try {
-        const user = await User.getUser("tesyt");
+        const user = await User.getUser("test");
         user.createTag(req.body);
         user.save();
-        res.send("tag created");
+        res.status(201).send(response("tag created"));
     } catch (error) {
         next(error)
     }

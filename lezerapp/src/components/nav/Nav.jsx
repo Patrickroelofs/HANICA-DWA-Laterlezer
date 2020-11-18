@@ -1,7 +1,7 @@
 import React from 'react';
 import './nav.scss';
 
-import { TagList } from './../tagList/tagList'
+import { TagList } from '../tagList/TagList'
 
 export const Nav = () => {
   return (

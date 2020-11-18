@@ -1,7 +1,7 @@
 import React from 'react';
 import './articles.scss';
 
-import { Article } from './../article/article';
+import { Article } from '../article/article';
 
 export const Articles = () => {
   return (
@@ -18,3 +18,4 @@ export const Articles = () => {
     </React.Fragment>
   );
 };
+

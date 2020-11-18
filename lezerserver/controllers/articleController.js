@@ -9,7 +9,7 @@ exports.createArticlePost = async (req, res) => {
     const html = await response.text();
 
     try {
-        user.createArticle(html, req.body.url);
+        user.updateOrCreateArticle(html, req.body.url);
     } catch (e) {
         console.log(e)
         res.status(500).json(e.message);

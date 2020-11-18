@@ -23,12 +23,18 @@ userSchema.methods.createTag = function (title, color) {
     })
 };
 
-userSchema.methods.createArticle = function (html, source, data = {}) {
-    this.articles.push({
-        html: html,
-        source: source,
-        ...data
-    })
+userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
+    const key = Object.keys(this.articles).find(key => this.articles[key].source === source);
+
+    if (key) {
+        this.articles[key] = {...this.articles[key], ...data, html, source}
+    } else {
+        this.articles.push({
+            html: html,
+            source: source,
+            ...data
+        })
+    }
 };
 
 const User = mongoose.model("User", userSchema);

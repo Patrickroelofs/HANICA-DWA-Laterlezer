@@ -7,6 +7,11 @@ $paper-color: #ffffff;
 	font-family: 'Merriweather', serif;
 	min-width: 300px;
 	min-height: 200px;
+
+	&__Loader div {
+		margin-left: auto;
+		margin-right: auto;
+	}
 }
 
 .paper {

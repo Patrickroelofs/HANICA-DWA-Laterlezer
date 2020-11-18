@@ -35,7 +35,7 @@ describe('User Model Tests', () => {
         await mongoose.disconnect();
     });
 
-    test('User method getUserByUsername', async () => {
+    test('User method getUserByUsername should get the user from db', async () => {
         let testUser = await User.getUserByUsername('stanhan');
 
         expect(testUser.firstName).toEqual('Stan');
@@ -45,6 +45,17 @@ describe('User Model Tests', () => {
         expect(testUser.email).toEqual('stanhan@hotmail.com');
 
     });
+
+    test('User method getUserByUsername should throw an error', async () => {
+        let thrownError;
+        try {
+            await User.getUserByUsername('stanhann');
+        } catch (error) {
+            thrownError = error;
+        }
+        expect(thrownError.message).toEqual("User does not exists");
+    });
+
 
     test('User method createTag', async () => {
         let testUser = await User.getUserByUsername('stanhan');

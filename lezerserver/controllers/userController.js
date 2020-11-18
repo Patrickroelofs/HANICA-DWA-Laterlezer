@@ -4,7 +4,7 @@ const response = require("../utils/response");
 
 exports.createTagPost = async (req, res, next) => {
     try {
-        const user = await User.getUser("test");
+        const user = await User.getUserByUsername("test");
         user.createTag(req.body);
         user.save();
         res.status(201).send(response("tag created"));

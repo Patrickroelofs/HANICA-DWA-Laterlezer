@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     tags: [Tag.schema]
 })
 
-userSchema.statics.getUser = async function (userName) {
+userSchema.statics.getUserByUsername = async function (userName) {
     const user = await this.model("User").findOne({userName: userName});
     if (!user) throw new CustomError("User does not exists", 400);
     return user;

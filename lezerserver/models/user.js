@@ -23,6 +23,14 @@ userSchema.methods.createTag = function (title, color) {
     })
 };
 
+userSchema.methods.createArticle = function (html, source, data = {}) {
+    this.articles.push({
+        html: html,
+        source: source,
+        ...data
+    })
+};
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

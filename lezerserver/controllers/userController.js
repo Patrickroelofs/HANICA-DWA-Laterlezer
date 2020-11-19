@@ -10,6 +10,9 @@ exports.createTagPost = async (req, res, next) => {
         res.status(201).send(response("tag created", user.tags, true));
     } catch (error) {
         next(error)
+    }
+}
+
 exports.createUser = async (req, res) => {
     try {
         const user = new User({

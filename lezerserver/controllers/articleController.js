@@ -3,6 +3,23 @@ const fetch = require('node-fetch');
 const htmlParser = require('../utils/HTMLParser');
 let _User;
 
+exports.getArticles = async (req, res) => {
+    const user = await _User.findOne({userName: "test"});
+    const articles = user.articles.map((article) => {
+        article.html = null;
+        return article;
+    });
+
+    res.json(articles);
+}
+
+exports.getArticle = async (req, res) => {
+    const user = await _User.findOne({userName: "test"});
+    const article = user.articles.find((article) => article._id == req.params.id);
+
+    res.json(article);
+}
+
 exports.createArticlePost = async (req, res) => {
     const user = await _User.findOne({userName: "test"});
     const page = await htmlParser(req.body.url);

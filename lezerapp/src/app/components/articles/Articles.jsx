@@ -4,6 +4,12 @@ import './articles.scss';
 import Article from '../article/Article';
 
 function Articles() {
+  const [articles, setArticles] = useState([]);
+
+  const getArticles = () => {
+    fetch('')
+  }
+
   return (
     <>
       <h1>Programming</h1>

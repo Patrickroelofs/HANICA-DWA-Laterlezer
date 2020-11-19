@@ -1,4 +1,7 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+
+// Import all slices
+import loginSlice from '../app/components/login/LoginSlice';
 
 // Logger logs all states after actions
 const loggerMiddleware = (store) => (next) => (action) => {
@@ -8,19 +11,10 @@ const loggerMiddleware = (store) => (next) => (action) => {
   return result;
 };
 
-const initialState = {
-
-};
-
-function rootReducer(state = initialState, action) {
-  switch (action.type) {
-    default:
-      return state;
-  }
-}
-
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: combineReducers({
+    user: loginSlice,
+  }),
   middleware: [loggerMiddleware, ...getDefaultMiddleware()],
   devTools: true,
 });

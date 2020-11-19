@@ -1,9 +1,8 @@
 const htmlParser = require('../utils/HTMLParser');
-
-let _User;
+const User = require('../models/user');
 
 exports.createArticlePost = async (req, res) => {
-  const user = await _User.findOne({ userName: 'test' });
+  const user = await User.findOne({ userName: 'test' });
   const page = await htmlParser(req.body.url);
 
   try {
@@ -26,7 +25,3 @@ exports.createArticlePost = async (req, res) => {
     }
   });
 };
-
-exports.setUserModel = (userModel) => _User = userModel;
-
-exports.setUserModel(require('../models/user'));

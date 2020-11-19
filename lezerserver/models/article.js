@@ -17,4 +17,6 @@ const articleSchema = mongoose.Schema({
   },
 });
 
+articleSchema.methods.addTag = function (tag) { this.tags.push(tag); };
+
 module.exports = mongoose.model('Article', articleSchema);

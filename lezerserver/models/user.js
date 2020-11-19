@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Article = require("./article");
 const Tag = require("./tag");
+const CustomError = require("../utils/custom-error");
 
 const userSchema = new mongoose.Schema({
     firstName: String,
@@ -12,15 +13,17 @@ const userSchema = new mongoose.Schema({
     tags: [Tag.schema]
 })
 
-userSchema.methods.getUser = function (userName) {
-    return this.model("User").find({userName: userName});
+userSchema.statics.getUserByUsername = async function (userName) {
+    const user = await this.model("User").findOne({userName: userName});
+    if (!user) throw new CustomError("User does not exists", 400);
+    return user;
 }
 
-userSchema.methods.createTag = function (title, color) {
-    this.tags.push({
-        title: title,
-        color: color
-    })
+userSchema.methods.createTag = function (data) {
+    for(let tag of this.tags) {
+        if(tag.title === data.title) throw new CustomError("Tag already exists", 400);
+    }
+    this.tags.push(data);
 };
 
 userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {

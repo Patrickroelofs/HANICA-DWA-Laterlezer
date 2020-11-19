@@ -3,9 +3,13 @@ const api = require('./routing/api');
 const express = require('express')
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
+const cors = require('cors');
 
 const app = express()
 const port = 3000
+
+app.use(cors({ origin: true, credentials: true }));
+app.options('*', cors({ origin: true, credentials: true }));
 
 app.use(bodyParser.json());
 

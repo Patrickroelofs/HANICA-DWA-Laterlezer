@@ -22,3 +22,42 @@ exports.createTagPost = async (req, res) => {
         }
     });
 }
+
+exports.createUser = async (req, res) => {
+    try {
+        const user = new User({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName: req.body.userName,
+            password: req.body.password,
+            email: req.body.email
+        })
+
+        user.save((function (err) {
+            if(err) {
+                res.status(404).send("User creation failed.")
+            } else {
+                res.send(user)
+            }
+        }))
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+exports.loginUser = async (req, res) => {
+    try {
+        const user = await User.findOne({userName: req.body.userName, password: req.body.password});
+
+        if(user === null) {
+            res.status(401).send("Username or password incorrect")
+        } else {
+            res.send(user);
+        }
+
+
+    } catch (err) {
+        console.log(err)
+    }
+}

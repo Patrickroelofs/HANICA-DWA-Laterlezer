@@ -20,7 +20,10 @@ userSchema.statics.getUserByUsername = async function (userName) {
 }
 
 userSchema.methods.createTag = function (data) {
-    this.tags.push(data)
+    for(let tag of this.tags) {
+        if(tag.title === data.title) throw new CustomError("Tag already exists", 400);
+    }
+    this.tags.push(data);
 };
 
 userSchema.methods.createArticle = function (html, source, data = {}) {

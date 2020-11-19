@@ -4,7 +4,7 @@ const articleController = require("../controllers/articleController");
 const express = require('express')
 const router = express();
 
-router.post("/tag", userController.createTagPost);
+router.post("/user/:username/tag", userController.createTagPost);
 
 router.post("/articles", articleController.createArticlePost);
 

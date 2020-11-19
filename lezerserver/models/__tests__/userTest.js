@@ -2,16 +2,16 @@
  * @jest-environment node
  */
 
-'use strict';
+"use strict";
 
-const mongoose = require('mongoose');
-require('../user');
+const mongoose = require("mongoose");
+require("../user");
 
-const User = mongoose.model('User');
+const User = mongoose.model("User");
 
-describe('User Model Tests', () => {
+describe("User Model Tests", () => {
     beforeAll(async () => {
-        await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true });
+        await mongoose.connect("mongodb://localhost:27017/testUserDB", { useNewUrlParser: true });
     });
 
     beforeEach(async () => {
@@ -22,7 +22,10 @@ describe('User Model Tests', () => {
             password: "password",
             email: "stanhan@hotmail.com",
             articles: [],
-            tags: [],
+            tags: [{
+                title: "javascript",
+                color: "blue"
+            }],
         });
     });
 
@@ -35,30 +38,31 @@ describe('User Model Tests', () => {
         await mongoose.disconnect();
     });
 
-    test('User method getUserByUsername should get the user from db', async () => {
-        let testUser = await User.getUserByUsername('stanhan');
+    test("User method getUserByUsername should get the user from db", async () => {
+        let testUser = await User.getUserByUsername("stanhan");
 
-        expect(testUser.firstName).toEqual('Stan');
-        expect(testUser.lastName).toEqual('Han');
-        expect(testUser.userName).toEqual('stanhan');
-        expect(testUser.password).toEqual('password');
-        expect(testUser.email).toEqual('stanhan@hotmail.com');
+        expect(testUser.firstName).toEqual("Stan");
+        expect(testUser.lastName).toEqual("Han");
+        expect(testUser.userName).toEqual("stanhan");
+        expect(testUser.password).toEqual("password");
+        expect(testUser.email).toEqual("stanhan@hotmail.com");
 
     });
 
-    test('User method getUserByUsername should throw an error', async () => {
+    test("User method getUserByUsername should throw an error", async () => {
         let thrownError;
         try {
-            await User.getUserByUsername('stanhann');
+            await User.getUserByUsername("stanhann");
         } catch (error) {
             thrownError = error;
         }
         expect(thrownError.message).toEqual("User does not exists");
+        expect(thrownError.status).toEqual(400);
     });
 
 
-    test('User method createTag', async () => {
-        let testUser = await User.getUserByUsername('stanhan');
+    test("User method createTag should add a new tag to the tags list", async () => {
+        let testUser = await User.getUserByUsername("stanhan");
         let newTag = {
             title: "test",
             color: "red"
@@ -73,5 +77,21 @@ describe('User Model Tests', () => {
                 })
             ])
         );
+    });
+
+    test("User method createTag should throw an error", async () => {
+        let thrownError;
+        try {
+            let testUser = await User.getUserByUsername("stanhan");
+            let newTag = {
+                title: "javascript",
+                color: "blue"
+            }
+            testUser.createTag(newTag);
+        } catch (error) {
+            thrownError = error;
+        }
+        expect(thrownError.message).toEqual("Tag already exists");
+        expect(thrownError.status).toEqual(400);
     });
 });

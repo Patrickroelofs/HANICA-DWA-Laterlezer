@@ -11,12 +11,9 @@ const registerUser = (data) => (dispatch) => axios
     email: data.email,
   })
   .then((response) => {
+    // TODO: Dispatch data to slice
     console.log(response);
-    dispatch();
-    return true;
-  })
-  .catch((error) => {
-    console.log(error);
+    dispatch({ type: 'REGISTER_USER' });
   });
 
 export default registerUser;

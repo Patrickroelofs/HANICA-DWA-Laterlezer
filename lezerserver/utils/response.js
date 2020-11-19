@@ -10,7 +10,7 @@ function response(message, data, success) {
   return {
     message: formatMessage(message),
     data: data || null,
-    success: success ? true : success
+    success: success == null ? true : success
   };
 }
 

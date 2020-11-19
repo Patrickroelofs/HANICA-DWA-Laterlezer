@@ -48,10 +48,10 @@ exports.createUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     try {
-        const user = await User.findOne({userName: req.body.userName, password: req.body.password});
+        const user = await User.findOne({userName: req.params.userName});
 
         if(user === null) {
-            res.status(401).send("Username or password incorrect")
+            res.status(401).send("User not found")
         } else {
             res.send(user);
         }

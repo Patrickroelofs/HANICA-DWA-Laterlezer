@@ -1,10 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import registerUser from './RegisterAction';
 
 function Register() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,7 +19,9 @@ function Register() {
       email: e.target.email.value,
     };
 
-    dispatch(registerUser(userData));
+    dispatch(registerUser(userData)).then(() => {
+      history.push('/app');
+    });
   };
 
   return (

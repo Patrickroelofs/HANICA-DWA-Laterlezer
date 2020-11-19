@@ -5,6 +5,6 @@ const router = express();
 
 router.post("/tag", userController.createTagPost);
 router.post("/user", userController.createUser);
-router.get("/user", userController.loginUser);
+router.get("/user/:userName", userController.loginUser);
 
 module.exports = router;

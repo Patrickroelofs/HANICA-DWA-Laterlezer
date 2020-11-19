@@ -18,6 +18,7 @@ module.exports = {
     'react',
   ],
   rules: {
-    'linebreak-style': 0,
+    'linebreak-style': 0, // Fixes issues with windows/linux linebreaks
+    'no-param-reassign': 0, // reducers need param-reassigns
   },
 };

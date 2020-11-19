@@ -12,3 +12,43 @@ exports.createTagPost = async (req, res, next) => {
         next(error)
     }
 }
+
+exports.createUser = async (req, res) => {
+    try {
+        const user = new User({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName: req.body.userName,
+            password: req.body.password,
+            email: req.body.email
+        })
+
+        user.save((function (err) {
+            if(err) {
+                res.status(404).send("User creation failed.")
+            } else {
+                res.send(user)
+            }
+        }))
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+exports.loginUser = async (req, res) => {
+    try {
+        const user = await User.findOne({userName: req.params.userName});
+
+        if(user === null) {
+            res.status(401).send("User not found")
+        } else {
+            res.send(user);
+        }
+
+
+    } catch (err) {
+        console.log(err)
+
+    }
+}

@@ -5,20 +5,19 @@
  * @param {boolean} success Status of the request
  */
 
+function formatMessage(str) {
+  if (!str) return '';
+
+  // Make first letter capital
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 function response(message, data, success) {
   return {
     message: formatMessage(message),
     data: data || null,
-    success: success == null ? true : success
+    success: success == null ? true : success,
   };
 }
 
-function formatMessage(str) {
-  if (!str) return ""
-
-  // Make first letter capital
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
-
-module.exports = response
+module.exports = response;

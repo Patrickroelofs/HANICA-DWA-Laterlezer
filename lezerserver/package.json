@@ -3,16 +3,24 @@
 		"body-parser": "^1.19.0",
 		"express": "^4.17.1",
 		"mongoose": "^5.10.15",
-    	"cors": "^2.8.5",
+		"cors": "^2.8.5",
 		"@postlight/mercury-parser": "^2.2.0"
 	},
 	"name": "lezerserver",
 	"version": "1.0.0",
 	"main": "app.js",
-	"devDependencies": {},
+	"devDependencies": {
+		"eslint": "^7.13.0",
+		"eslint-config-airbnb": "^18.2.1",
+		"eslint-plugin-import": "^2.22.1",
+		"jest": "^26.6.3",
+		"supertest": "^6.0.1"
+	},
 	"scripts": {
 		"test": "jest --runInBand",
-		"start": "nodemon ./app.js"
+		"start": "nodemon ./app.js",
+		"seed": "node ./seeder/seed.js",
+		"lint": "eslint --fix"
 	},
 	"repository": {
 		"type": "git",

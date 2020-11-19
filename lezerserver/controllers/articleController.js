@@ -1,14 +1,21 @@
 const mongoose = require("mongoose");
 const fetch = require('node-fetch');
+const htmlParser = require('../utils/HTMLParser');
 let _User;
 
 exports.createArticlePost = async (req, res) => {
     const user = await _User.findOne({userName: "test"});
-    const response = await fetch(req.body.url);
-    const html = await response.text();
+    const page = await htmlParser(req.body.url);
 
     try {
-        user.updateOrCreateArticle(html, req.body.url);
+        user.updateOrCreateArticle(page.content, req.body.url, {
+            title: page.title,
+            author: page.author,
+            published: page.date_published,
+            image: page.lead_image_url,
+            links: [page.next_page_url],
+            description: page.excerpt,
+        });
     } catch (e) {
         res.status(500).json(e.message);
     }

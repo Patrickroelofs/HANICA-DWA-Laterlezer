@@ -11,15 +11,7 @@ function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userData = {
-      firstName: e.target.firstName.value,
-      lastName: e.target.lastName.value,
-      username: e.target.username.value,
-      password: e.target.password.value,
-      email: e.target.email.value,
-    };
-
-    dispatch(registerUser(userData)).then(() => {
+    dispatch(registerUser(e.target.username.value)).then(() => {
       history.push('/app');
     });
   };
@@ -37,33 +29,9 @@ function Register() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="firstname" className="leading-10">
-                First Name
-                <input id="firstname" name="firstName" type="string" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" />
-              </label>
-            </div>
-            <div>
-              <label htmlFor="lastname" className="leading-10">
-                Last Name
-                <input id="lastname" name="lastName" type="string" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" />
-              </label>
-            </div>
-            <div>
-              <label htmlFor="email" className="leading-10">
-                Email
-                <input id="email" name="email" type="email" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" />
-              </label>
-            </div>
-            <div>
               <label htmlFor="username" className="leading-10">
                 Username
                 <input id="username" name="username" type="string" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" />
-              </label>
-            </div>
-            <div>
-              <label htmlFor="password" className="leading-10">
-                Password
-                <input id="password" name="password" type="password" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" />
               </label>
             </div>
             <div>

@@ -25,7 +25,15 @@ describe("User Model Tests", () => {
             tags: [{
                 title: "javascript",
                 color: "blue"
-            }],
+            },
+                {
+                    title: "javascript2",
+                    color: "blue2"
+                },
+                {
+                    title: "javascript3",
+                    color: "blue2"
+                }],
         });
     });
 
@@ -93,5 +101,30 @@ describe("User Model Tests", () => {
         }
         expect(thrownError.message).toEqual("Tag already exists");
         expect(thrownError.status).toEqual(400);
+    });
+
+    test("User method getTags should return all user tags", async () => {
+        let testUser = await User.getUserByUsername("stanhan");
+        let tags = testUser.getTags();
+        let expectedTags = [
+            {
+                title: "javascript",
+                color: "blue"
+            },
+            {
+                title: "javascript2",
+                color: "blue2"
+            },
+            {
+                title: "javascript3",
+                color: "blue2"
+            }]
+
+        expect(tags.length).toEqual(expectedTags.length);
+
+        for(let i = 0; i < tags.length; i++) {
+            expect(tags[i].title).toEqual(expectedTags[i].title);
+            expect(tags[i].color).toEqual(expectedTags[i].color);
+        }
     });
 });

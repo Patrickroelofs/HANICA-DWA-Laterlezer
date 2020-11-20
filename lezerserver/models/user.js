@@ -19,6 +19,10 @@ userSchema.statics.getUserByUsername = async function (userName) {
     return user;
 }
 
+userSchema.methods.getTags = function () {
+    return this.tags;
+}
+
 userSchema.methods.createTag = function (data) {
     for(let tag of this.tags) {
         if(tag.title === data.title) throw new CustomError("Tag already exists", 400);

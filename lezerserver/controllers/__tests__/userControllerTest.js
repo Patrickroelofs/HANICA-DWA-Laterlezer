@@ -26,6 +26,10 @@ describe("User Controller Tests", () => {
             tags: [{
                 title: "javascript",
                 color: "blue"
+            },
+            {
+                title: "javascript2",
+                color: "blue"
             }],
         });
     });
@@ -72,5 +76,36 @@ describe("User Controller Tests", () => {
         expect(response.status).toEqual(400)
         expect(response.body.message).toEqual("User does not exists");
         expect(response.body.success).toEqual(false);
+    });
+
+
+    test("GET /user/:username/tag should return bad request response, user doesnt exist", async () => {
+        let response = await request(app).get("/api/user/stantest/tag")
+
+        expect(response.status).toEqual(400)
+        expect(response.body.message).toEqual("User does not exists");
+        expect(response.body.success).toEqual(false);
+    });
+
+    test("GET /user/:username/tag should return all tags from user stanhan and give the right response", async () => {
+        let response = await request(app).get("/api/user/stanhan/tag")
+        let expectedTags =  [{
+            title: "javascript",
+            color: "blue"
+        },
+        {
+            title: "javascript2",
+            color: "blue"
+        }];
+
+        expect(response.status).toEqual(200)
+        expect(response.body.message).toEqual("All tags from stanhan");
+        expect(response.body.success).toEqual(true);
+
+        expect(response.body.data.length).toEqual(expectedTags.length);
+        for(let i = 0; i < response.body.data.length; i++) {
+            expect(response.body.data[i].title).toEqual(expectedTags[i].title);
+            expect(response.body.data[i].color).toEqual(expectedTags[i].color);
+        }
     });
 });

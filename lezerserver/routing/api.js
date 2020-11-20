@@ -5,6 +5,7 @@ const express = require('express')
 const router = express();
 
 router.post("/user/:username/tag", userController.createTagPost);
+router.get("/user/:username/tag", userController.getTagsGet);
 
 router.post("/articles", articleController.createArticlePost);
 

@@ -4,12 +4,16 @@ import { Provider } from 'react-redux';
 import Router from './router/Router';
 import reportWebVitals from './reportWebVitals';
 
+import './css/tailwind.generated.css';
+
 import store from './reducers';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router />
-  </Provider>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <Router />
+    </Provider>
+  </React.StrictMode>,
   document.getElementById('root'),
 );
 

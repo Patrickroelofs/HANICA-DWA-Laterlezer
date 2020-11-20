@@ -6,9 +6,12 @@ const router = express();
 
 router.post("/user/:username/tag", userController.createTagPost);
 
-router.get("/articles", articleController.getArticles);
+router.use('/articles', articleController.middleware);
+router.route('/articles')
+    .get(articleController.getArticles)
+    .post(articleController.createArticlePost);
 router.get("/articles/:id", articleController.getArticle);
-router.post("/articles", articleController.createArticlePost);
+
 router.post("/user/:username/tag", userController.createTagPost);
 router.get("/user/:userName", userController.loginUser);
 router.post("/user", userController.createUser);

@@ -1,0 +1,15 @@
+article {
+  margin-bottom: 32px;
+  cursor: pointer;
+  display: flex;
+
+  img {
+    height: 100px;
+    width: 125px;
+    border-radius: 6px;
+  }
+
+  .content {
+    margin-left: 12px;
+  }
+}

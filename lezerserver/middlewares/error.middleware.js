@@ -4,11 +4,11 @@ const response = require('../utils/response');
 const errorNames = ['CastError', 'JsonWebTokenError', 'ValidationError', 'SyntaxError', 'MongooseError', 'MongoError'];
 
 module.exports = (app) => {
-  app.use('*', (req, res) => {
+  app.use('*', (req, res, next) => {
     res.status(400).send(response('Invalid request', null, false));
   });
 
-  app.use((error, req, res) => {
+  app.use((error, req, res, next) => {
     if (error.name === 'CustomError') {
       res.status(error.status).send(response(error.message, null, false));
     } else if (error.name === 'MongoError' && error.code === 11000) {

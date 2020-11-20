@@ -19,13 +19,15 @@ db.once('open', async () => {
   console.info('Connection Successful!');
 
   // drops the existing collection before making a new one
-  await db.dropCollection('users', (err) => {
-    if (err) {
-      console.error('error delete existing collection');
-    } else {
-      console.info('delete existing collection success');
-    }
-  });
+  if (db.collection('users')) {
+    await db.dropCollection('users', (err) => {
+      if (err) {
+        console.error(`error delete existing collection: ${err}`);
+      } else {
+        console.info('delete existing collection success');
+      }
+    });
+  }
 
   // converts tags from Javascript objects to Mongoose objects
   tags.map((t) => {

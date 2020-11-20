@@ -10,7 +10,7 @@ const User = require('../../models/user');
 describe('User Controller Tests', () => {
   beforeAll(async () => {
     await mongoose.disconnect();
-    await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true });
+    await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
   });
 
   beforeEach(async () => {
@@ -23,7 +23,7 @@ describe('User Controller Tests', () => {
       articles: [],
       tags: [{
         title: 'javascript',
-        color: 'blue',
+        color: '#00FF00',
       }],
     });
   });
@@ -39,8 +39,11 @@ describe('User Controller Tests', () => {
   test('POST /user/:username/tag should return response with status 201', async () => {
     const response = await request(app).post('/api/user/stanhan/tag')
       .send({
-        title: 'testTag',
-        color: 'testColor',
+        tags: [
+          {
+            title: 'testTag',
+            color: '#00FF00',
+          }],
       })
       .set('Accept', 'application/json');
     expect(response.status).toEqual(201);
@@ -51,8 +54,11 @@ describe('User Controller Tests', () => {
   test('POST /user/:username/tag  should return bad request response, tag already exists', async () => {
     const response = await request(app).post('/api/user/stanhan/tag')
       .send({
-        title: 'javascript',
-        color: 'blue',
+        tags: [
+          {
+            title: 'javascript',
+            color: '#00FF00',
+          }],
       })
       .set('Accept', 'application/json');
     expect(response.status).toEqual(400);
@@ -63,8 +69,11 @@ describe('User Controller Tests', () => {
   test('POST /user/:username/tag should return bad request response, user doesnt exist', async () => {
     const response = await request(app).post('/api/user/stanwew/tag')
       .send({
-        title: 'javascript',
-        color: 'blue',
+        tags: [
+          {
+            title: 'testTag',
+            color: '#00FF00',
+          }],
       })
       .set('Accept', 'application/json');
     expect(response.status).toEqual(400);

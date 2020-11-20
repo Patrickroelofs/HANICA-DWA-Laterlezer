@@ -9,7 +9,7 @@ const User = mongoose.model('User');
 
 describe('User Model Tests', () => {
   beforeAll(async () => {
-    await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true });
+    await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
   });
 
   beforeEach(async () => {
@@ -22,7 +22,7 @@ describe('User Model Tests', () => {
       articles: [],
       tags: [{
         title: 'javascript',
-        color: 'blue',
+        color: '#FF0000',
       }],
     });
   });
@@ -58,17 +58,17 @@ describe('User Model Tests', () => {
 
   test('User method createTag should add a new tag to the tags list', async () => {
     const testUser = await User.getUserByUsername('stanhan');
-    const newTag = {
+    const newTag = [{
       title: 'test',
-      color: 'red',
-    };
+      color: '#00FF00',
+    }];
     testUser.createTag(newTag);
 
     expect(testUser.tags).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           title: 'test',
-          color: 'red',
+          color: '#00FF00',
         }),
       ]),
     );
@@ -78,10 +78,10 @@ describe('User Model Tests', () => {
     let thrownError;
     try {
       const testUser = await User.getUserByUsername('stanhan');
-      const newTag = {
+      const newTag = [{
         title: 'javascript',
-        color: 'blue',
-      };
+        color: '#FF0000',
+      }];
       testUser.createTag(newTag);
     } catch (error) {
       thrownError = error;

@@ -4,7 +4,7 @@ const articleController = require('../controllers/articleController');
 
 const router = express();
 
-router.post('/articles', articleController.createArticlePost);
+router.post('/user/:username/article', articleController.createArticlePost);
 router.post('/user/:username/tag', userController.createTagPost);
 router.get('/user/:userName', userController.loginUser);
 router.post('/user', userController.createUser);

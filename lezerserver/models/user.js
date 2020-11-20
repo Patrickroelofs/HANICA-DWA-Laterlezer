@@ -9,14 +9,8 @@ const userSchema = new mongoose.Schema({
   userName: String,
   password: String,
   email: String,
-  articles: {
-    type: [Map],
-    of: Article,
-  },
-  tags: {
-    type: [Map],
-    of: Tag,
-  },
+  articles: [Article.schema],
+  tags: [Tag.schema],
 });
 
 userSchema.statics.getUserByUsername = async function (userName) {
@@ -26,10 +20,15 @@ userSchema.statics.getUserByUsername = async function (userName) {
 };
 
 userSchema.methods.createTag = function (data) {
-  this.tags.forEach((tag) => {
-    if (tag.title === data.title) throw new CustomError('Tag already exists', 400);
+  if (this.tags === []) return;
+  if (data === []) return;
+  data.forEach((newTag) => {
+    if (this.tags.find((tag) => tag.title === newTag.title) === undefined) {
+      this.tags.push(newTag);
+    } else {
+      throw new CustomError('Tag already exists', 400);
+    }
   });
-  this.tags.push(data);
 };
 
 userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {

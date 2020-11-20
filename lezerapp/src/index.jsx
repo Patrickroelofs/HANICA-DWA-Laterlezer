@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import Router from './router/Router';
 import reportWebVitals from './reportWebVitals';
 
+import './css/tailwind.generated.css';
+
 import store from './reducers';
 
 ReactDOM.render(

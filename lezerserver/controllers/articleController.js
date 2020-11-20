@@ -5,7 +5,7 @@ const htmlParser = require('../utils/HTMLParser');
 let _User;
 
 exports.middleware = async (req, res, next) => {
-  const user = await _User.findOne({ userName: 'test' });
+  const user = await _User.findOne({ userName: req.headers.username });
     if (!user) {
       res.status(401).send('Invalid username')
     }

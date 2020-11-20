@@ -26,14 +26,19 @@ userSchema.methods.getTags = function () {
 };
 
 userSchema.methods.createTag = function (data) {
-  this.tags.forEach((tag) => {
-    if (tag.title === data.title) throw new CustomError('Tag already exists', 400);
+  if (this.tags === []) return;
+  if (data === []) return;
+  data.forEach((newTag) => {
+    if (this.tags.find((tag) => tag.title === newTag.title) === undefined) {
+      this.tags.push(newTag);
+    } else {
+      throw new CustomError('Tag already exists', 400);
+    }
   });
-  this.tags.push(data);
 };
 
 userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
-  const key = Object.keys(this.articles).find((key) => this.articles[key].source === source);
+  const key = Object.keys(this.articles).find((k) => this.articles[k].source === source);
 
   if (key) {
     this.articles[key] = {

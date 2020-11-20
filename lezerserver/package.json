@@ -18,7 +18,7 @@
 		"eslint-plugin-import": "^2.22.1"
 	},
 	"scripts": {
-		"test": "jest --verbose",
+		"test": "jest --verbose --collectCoverage --env=node",
 		"start": "nodemon ./app.js",
 		"seed": "node ./seeder/seed.js"
 	},

@@ -1,14 +1,14 @@
+/* eslint-disable no-unused-vars */
 const response = require('../utils/response');
 
 // Possible error names
 const errorNames = ['CastError', 'JsonWebTokenError', 'ValidationError', 'SyntaxError', 'MongooseError', 'MongoError'];
 
 module.exports = (app) => {
-  app.use('*', (req, res) => {
+  app.use('*', (req, res, next) => {
     res.status(400).send(response('Invalid request', null, false));
   });
 
-  // eslint-disable-next-line no-unused-vars
   app.use((error, req, res, next) => {
     if (error.name === 'CustomError') {
       res.status(error.status).send(response(error.message, null, false));

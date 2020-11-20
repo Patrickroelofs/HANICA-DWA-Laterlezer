@@ -104,8 +104,8 @@ dist
 .tern-port
 
 ############# My Additions
-# vscode
-**/.vscode
+# VSCode
+.vscode
 
 # macOS hidden file
 .DS_Store

@@ -24,7 +24,7 @@
   },
   "scripts": {
     "build:tailwind": "postcss src/css/tailwind.css -o src/css/tailwind.generated.css",
-    "start": "concurrently \"postcss -w src/css/tailwind.css -o src/css/tailwind.generated.css\" \"react-scripts start\"",
+    "start": "concurrently \"postcss -w src/css/tailwind.css -o src/css/tailwind.generated.css\" \"set PORT=3001 && react-scripts start \"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

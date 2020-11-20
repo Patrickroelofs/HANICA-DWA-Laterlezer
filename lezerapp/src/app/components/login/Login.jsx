@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 
 import loginUser from './LoginAction';
 
-// TODO: Login functionality
 function Login() {
   const dispatch = useDispatch();
   const history = useHistory();

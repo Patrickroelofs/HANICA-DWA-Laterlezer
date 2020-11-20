@@ -1,46 +1,30 @@
-import './App.scss'
-import { useState, useEffect } from 'react'
-import ReactLoading from 'react-loading';
-import fetch from 'node-fetch'
+import './App.scss';
+import React, { useState, useEffect } from 'react';
+import SaveArticle from "./components/SaveArticle";
+import Login from "./components/Login";
 
 function App(props) {
-	const base_url = 'http://localhost:3000';
-	const [loaded, setLoaded] = useState(false);
+	const [user, setUser] = useState('');
 
-	const checkBrowser = () => {
-		if (!!chrome) {
-			chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
-				postArticle(tabs[0].url);
-			});
-		}
-	}
-
-	const postArticle = (url) => {
-		fetch('http://localhost:3000/api/articles', {
-			method: 'POST',
-			body: JSON.stringify({
-				url: url
-			}),
-			headers: {'Content-Type': 'application/json'}
-		}).then(() => {
-			setLoaded(true);
-		}).catch(e => {
-			console.log(e)
-		});
+	const storeUser = (user) => {
+		localStorage.setItem('username', user);
+		setUser(user);
 	};
 
 	useEffect(() => {
-		checkBrowser()
-	}, [])
+		const stored = localStorage.getItem('username');
+		if (stored) {
+			setUser(stored)
+		}
+	})
 
 	return (<div className="App">
-			{
-				loaded
-				?
-				<h2>Your article has been saved.</h2>
-				:
-				<div className="App__Loader"><ReactLoading type="cylon" color="#000" /></div>
-			}
+		{
+			!user ?
+			<Login setUser={storeUser}/>
+			:
+			<SaveArticle user={user} />
+		}
 	</div>)
 }
 

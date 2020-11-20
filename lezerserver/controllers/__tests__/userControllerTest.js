@@ -4,14 +4,14 @@
 
 const request = require('supertest');
 const mongoose = require('mongoose');
-const userController = require('../userController');
+
 const app = require('../../app'); // path to app.js
 const User = require('../../models/user');
 
 describe('User Controller Tests', () => {
   beforeAll(async () => {
     await mongoose.disconnect();
-    await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true });
+    await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
   });
 
   beforeEach(async () => {
@@ -40,8 +40,11 @@ describe('User Controller Tests', () => {
   test('POST /user/:username/tag should return response with status 201', async () => {
     const response = await request(app).post('/api/user/stanhan/tag')
       .send({
-        title: 'testTag',
-        color: '#123122',
+        tags: [
+          {
+            title: 'testTag',
+            color: '#123122',
+          }],
       })
       .set('Username', 'test')
       .set('Accept', 'application/json');
@@ -53,8 +56,11 @@ describe('User Controller Tests', () => {
   test('POST /user/:username/tag  should return bad request response, tag already exists', async () => {
     const response = await request(app).post('/api/user/stanhan/tag')
       .send({
-        title: 'javascript',
-        color: '#123122',
+        tags: [
+          {
+            title: 'javascript',
+            color: '#123122',
+          }],
       })
       .set('Username', 'test')
       .set('Accept', 'application/json');
@@ -66,8 +72,11 @@ describe('User Controller Tests', () => {
   test('POST /user/:username/tag should return bad request response, user doesnt exist', async () => {
     const response = await request(app).post('/api/user/stanwew/tag')
       .send({
-        title: 'javascript',
-        color: '#123122',
+        tags: [
+          {
+            title: 'testTag',
+            color: '#123122',
+          }],
       })
       .set('Username', 'test')
       .set('Accept', 'application/json');

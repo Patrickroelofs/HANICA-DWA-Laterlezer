@@ -14,6 +14,7 @@ router.route('/articles')
   .get(articleController.getArticles)
   .post(articleController.createArticlePost);
 router.get('/articles/:id', articleController.getArticle);
+router.post('/user/:username/article', articleController.createArticlePost);
 
 router.post('/user/:username/tag', userController.createTagPost);
 router.post('/tag', userController.createTagPost);

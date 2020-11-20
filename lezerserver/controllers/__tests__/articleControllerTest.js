@@ -9,10 +9,11 @@ const articleController = require('../articleController');
 describe('User Model Tests', () => {
     test('Invalid username in middleware', () => {
         const findOne = jest.fn(() => {}).mockResolvedValue(undefined);
-        const status = jest.fn(() => {return {json: () => {}}});
+        const status = jest.fn(() => {return {send: () => {}}});
+        const next = jest.fn(() => {});
 
         articleController.setUserModel({findOne: findOne});
-        articleController.middleware({}, {status}).then(() => {
+        articleController.middleware({}, {status}, next).then(() => {
             expect(findOne.mock.calls.length).toBe(1);
 
             expect(status.mock.calls.length).toBe(1);
@@ -21,7 +22,7 @@ describe('User Model Tests', () => {
     });
 
     test('successful username in middleware', () => {
-        const findOne = jest.fn(() => {}).mockResolvedValue({});
+        const findOne = jest.fn(() => {}).mockResolvedValue({id: 12});
         const next = jest.fn(() => {});
         const req = {};
 
@@ -29,9 +30,39 @@ describe('User Model Tests', () => {
         articleController.middleware(req, null, next).then(() => {
             expect(findOne.mock.calls.length).toBe(1);
             expect(next.mock.calls.length).toBe(1);
-
-            expect(req.user).toBe({});
+            expect(req.user).toMatchObject({id: 12});
         });
+    });
+
+    test('Get all the articles', () => {
+        const user = {
+            articles: [
+                {},
+                {}
+            ]
+        };
+        const json = jest.fn(() => {});
+        articleController.getArticles({user}, {json}).then(() => {
+            expect(json.mock.calls.length).toBe(1);
+            expect(json.mock.calls[0][0]).toMatchObject([
+                {"html": null},
+                {"html": null}
+            ]);
+        })
+    });
+
+    test('Get one article', () => {
+        const user = {
+            articles: [
+                {_id: 12},
+                {_id: 13},
+            ]
+        };
+        const json = jest.fn(() => {});
+        articleController.getArticle({user, params: {id: '12'}}, {json}).then(() => {
+            expect(json.mock.calls.length).toBe(1);
+            expect(json.mock.calls[0][0]).toMatchObject({_id: 12});
+        })
     });
 
     test('Fetches site and saves successfully', async () => {
@@ -67,5 +98,5 @@ describe('User Model Tests', () => {
 
             expect(status.mock.calls.length).toBe(400);
         });
-    })
+    });
 });

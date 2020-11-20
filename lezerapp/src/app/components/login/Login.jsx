@@ -12,12 +12,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userData = {
-      username: e.target.username.value,
-      password: e.target.password.value,
-    };
-
-    dispatch(loginUser(userData)).then(() => {
+    dispatch(loginUser(e.target.username.value)).then(() => {
       history.push('/app');
     });
   };
@@ -40,12 +35,6 @@ function Login() {
               <label htmlFor="username" className="leading-10">
                 Username
                 <input id="username" name="username" type="string" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" />
-              </label>
-            </div>
-            <div>
-              <label htmlFor="password" className="leading-10">
-                Password
-                <input id="password" name="password" type="password" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password" />
               </label>
             </div>
           </div>

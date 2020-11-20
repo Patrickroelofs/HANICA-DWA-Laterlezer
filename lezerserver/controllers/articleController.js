@@ -4,12 +4,35 @@ const htmlParser = require('../utils/HTMLParser');
 
 let _User;
 
-exports.createArticlePost = async (req, res) => {
+exports.middleware = async (req, res, next) => {
   const user = await _User.findOne({ userName: req.headers.username });
+    if (!user) {
+      res.status(401).send('Invalid username')
+    }
+    req.user = user;
+    next();
+};
+
+exports.getArticles = async (req, res) => {
+    const articles = req.user.articles.reverse().map((article) => {
+        article.html = null;
+        return article;
+    });
+
+    res.json(articles);
+};
+
+exports.getArticle = async (req, res) => {
+    const article = req.user.articles.find((article) => article._id == req.params.id);
+
+    res.json(article);
+};
+
+exports.createArticlePost = async (req, res) => {
   const page = await htmlParser(req.body.url);
 
   try {
-    user.updateOrCreateArticle(page.content, req.body.url, {
+    req.user.updateOrCreateArticle(page.content, req.body.url, {
       title: page.title,
       author: page.author,
       published: page.date_published,
@@ -20,7 +43,7 @@ exports.createArticlePost = async (req, res) => {
   } catch (e) {
     res.status(500).json(e.message);
   }
-  user.save((err) => {
+  req.user.save((err) => {
     if (err) {
       res.status(404).send('User not found');
     } else {

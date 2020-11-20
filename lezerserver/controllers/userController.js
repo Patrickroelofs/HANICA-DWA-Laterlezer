@@ -48,3 +48,13 @@ exports.loginUser = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.getTagsGet = async (req, res, next) => {
+  try {
+    const user = await User.getUserByUsername(req.params.username);
+    const tags = await user.getTags();
+    res.status(200).send(response(`all tags from ${user.userName}`, tags, true));
+  } catch (error) {
+    next(error);
+  }
+};

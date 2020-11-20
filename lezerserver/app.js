@@ -1,4 +1,5 @@
 /* eslint no-console: ["off", { allow: ["warn"] }] */
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -20,7 +21,7 @@ require('./middlewares/error.middleware')(app);
 
 app.listen(port, () => {
   mongoose.connect('mongodb://localhost:27017/reader', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, () => {
-    console.log(`App listening at http://localhost:${port}`);
+    console.info(`App listening at http://localhost:${port}`);
   });
 });
 

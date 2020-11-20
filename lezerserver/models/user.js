@@ -29,7 +29,6 @@ userSchema.methods.createTag = function (data) {
   this.tags.forEach((tag) => {
     if (tag.title === data.title) throw new CustomError('Tag already exists', 400);
   });
-
   this.tags.push(data);
 };
 

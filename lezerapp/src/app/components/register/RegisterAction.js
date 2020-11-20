@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { setUsername } from './RegisterSlice';
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -7,9 +8,7 @@ const registerUser = (username) => (dispatch) => axios
     userName: username,
   })
   .then((response) => {
-    // TODO: Dispatch data to slice
-    console.log(response);
-    dispatch({ type: 'REGISTER_USER' });
+    dispatch(setUsername(response.data));
   });
 
 export default registerUser;

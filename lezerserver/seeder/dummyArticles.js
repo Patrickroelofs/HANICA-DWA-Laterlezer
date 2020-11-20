@@ -17,11 +17,11 @@ const articles = [
     tags: [
       {
         title: 'telegraaftag',
-        color: 'red',
+        color: '#FF5733',
       },
       {
         title: 'nu.nltag',
-        color: 'blue',
+        color: '#FF5733',
       },
     ],
   },

@@ -5,8 +5,6 @@ const users = [
     userName: 'stanhan',
     password: 'password',
     email: 'stanhan@hotmail.com',
-    articles: [],
-    tags: [],
   },
   {
     firstName: 'Jeroen',

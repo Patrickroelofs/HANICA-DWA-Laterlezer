@@ -1,19 +1,19 @@
 const tags = [
   {
     title: 'Tech',
-    color: '#fff000',
+    color: '#FF5733',
   },
   {
     title: 'Info',
-    color: '#00bbff',
+    color: '#FF5733',
   },
   {
     title: 'Politiek',
-    color: '#ff0055',
+    color: '#FF5733',
   },
   {
     title: 'Fun',
-    color: '#2a35a8',
+    color: '#FF5733',
   },
 ];
 

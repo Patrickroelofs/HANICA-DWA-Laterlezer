@@ -11,61 +11,41 @@ function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userData = {
-      firstName: e.target.firstName.value,
-      lastName: e.target.lastName.value,
-      username: e.target.username.value,
-      password: e.target.password.value,
-      email: e.target.email.value,
-    };
-
-    dispatch(registerUser(userData)).then(() => {
+    dispatch(registerUser(e.target.username.value)).then(() => {
       history.push('/app');
     });
   };
 
   return (
-    <div className="bootstrap-container">
-      <h1>Register</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-12">
+        <h1 className="mt-6 text-center text-6xl font-extrabold text-gray-900">
+          LaterLezer
+        </h1>
+        <h2 className="mt-6 text-center text-2xl font-extrabold text-gray-900">
+          Register an account
+        </h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="firstname">
-            First Name
-            <input name="firstName" type="text" />
-          </label>
-        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <label htmlFor="username" className="leading-10">
+                Username
+                <input id="username" name="username" type="string" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" />
+              </label>
+            </div>
+            <div>
+              <button type="submit" className="mt-6 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Register Account
+              </button>
+              <button type="button" onClick={() => history.push('/login')} className="group relative w-full flex justify-center py-2 px-4 mt-6 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Login
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
 
-        <div>
-          <label htmlFor="lastname">
-            Last Name
-            <input name="lastName" type="text" />
-          </label>
-        </div>
-
-        <div>
-          <label htmlFor="username">
-            Username
-            <input name="username" type="text" />
-          </label>
-        </div>
-
-        <div label htmlFor="email">
-          Email
-          <input name="email" type="text" />
-        </div>
-
-        <div>
-          <label htmlFor="password">
-            Password
-            <input name="password" type="password" />
-          </label>
-        </div>
-
-        <div>
-          <input type="submit" value="Register" />
-        </div>
-      </form>
     </div>
   );
 }

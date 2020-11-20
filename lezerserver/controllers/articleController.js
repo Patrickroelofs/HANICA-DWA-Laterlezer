@@ -5,7 +5,7 @@ const htmlParser = require('../utils/HTMLParser');
 let _User;
 
 exports.createArticlePost = async (req, res) => {
-  const user = await _User.findOne({ userName: 'test' });
+  const user = await _User.findOne({ userName: req.headers.username });
   const page = await htmlParser(req.body.url);
 
   try {

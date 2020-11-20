@@ -22,13 +22,9 @@ describe('User Model Tests', () => {
       articles: [],
       tags: [{
         title: 'javascript',
-        color: 'blue',
+        color: '#234123',
       }],
     });
-  });
-
-  afterEach(async () => {
-    await User.deleteMany({});
   });
 
   afterAll(async () => {
@@ -60,7 +56,7 @@ describe('User Model Tests', () => {
     const testUser = await User.getUserByUsername('stanhan');
     const newTag = {
       title: 'test',
-      color: 'red',
+      color: '#234123',
     };
     testUser.createTag(newTag);
 
@@ -68,7 +64,36 @@ describe('User Model Tests', () => {
       expect.arrayContaining([
         expect.objectContaining({
           title: 'test',
-          color: 'red',
+          color: '#234123',
+        }),
+      ]),
+    );
+  });
+
+  test('User method getUserByUsername should throw an error', async () => {
+    let thrownError;
+    try {
+      await User.getUserByUsername('stanhann');
+    } catch (error) {
+      thrownError = error;
+    }
+    expect(thrownError.message).toEqual('User does not exists');
+    expect(thrownError.status).toEqual(400);
+  });
+
+  test('User method createTag should add a new tag to the tags list', async () => {
+    const testUser = await User.getUserByUsername('stanhan');
+    const newTag = {
+      title: 'test',
+      color: '#234123',
+    };
+    testUser.createTag(newTag);
+
+    expect(testUser.tags).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          title: 'test',
+          color: '#234123',
         }),
       ]),
     );
@@ -80,7 +105,7 @@ describe('User Model Tests', () => {
       const testUser = await User.getUserByUsername('stanhan');
       const newTag = {
         title: 'javascript',
-        color: 'blue',
+        color: '#234123',
       };
       testUser.createTag(newTag);
     } catch (error) {
@@ -88,5 +113,23 @@ describe('User Model Tests', () => {
     }
     expect(thrownError.message).toEqual('Tag already exists');
     expect(thrownError.status).toEqual(400);
+  });
+
+  test('User method getTags should return all user tags', async () => {
+    const testUser = await User.getUserByUsername('stanhan');
+    const tags = testUser.getTags();
+    const expectedTags = [
+      {
+        title: 'javascript',
+        color: '#234123',
+      }];
+
+    expect(tags.length).toEqual(expectedTags.length);
+
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < tags.length; i++) {
+      expect(tags[i].title).toEqual(expectedTags[i].title);
+      expect(tags[i].color).toEqual(expectedTags[i].color);
+    }
   });
 });

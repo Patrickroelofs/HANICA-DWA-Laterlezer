@@ -8,7 +8,8 @@ module.exports = (app) => {
     res.status(400).send(response('Invalid request', null, false));
   });
 
-  app.use((error, req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  app.use((error, req, res, next) => {
     if (error.name === 'CustomError') {
       res.status(error.status).send(response(error.message, null, false));
     } else if (error.name === 'MongoError' && error.code === 11000) {

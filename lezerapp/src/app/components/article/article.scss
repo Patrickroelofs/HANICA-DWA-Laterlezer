@@ -1,9 +1,10 @@
-article {
+.article {
   margin-bottom: 32px;
-  cursor: pointer;
   display: flex;
 
-  img {
+  .thumbnail {
+    height: 100px;
+    width: 125px;
     border-radius: 6px;
   }
 

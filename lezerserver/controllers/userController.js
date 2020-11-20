@@ -4,10 +4,9 @@ const response = require('../utils/response');
 
 exports.createTagPost = async (req, res, next) => {
   try {
-    const user = await User.getUserByUsername(req.params.username);
-    user.createTag(req.body);
-    user.save();
-    res.status(201).send(response('tag created', user.tags, true));
+    req.user.createTag(req.body);
+    req.user.save();
+    res.status(201).send(response('tag created', req.user.tags, true));
   } catch (error) {
     next(error);
   }
@@ -37,12 +36,10 @@ exports.createUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    const user = await User.findOne({ userName: req.params.userName });
-
-    if (user === null) {
+    if (req.user === null) {
       res.status(401).send('User not found');
     } else {
-      res.send(user);
+      res.send(req.user);
     }
   } catch (err) {
     console.log(err);
@@ -51,9 +48,8 @@ exports.loginUser = async (req, res) => {
 
 exports.getTagsGet = async (req, res, next) => {
   try {
-    const user = await User.getUserByUsername(req.params.username);
-    const tags = await user.getTags();
-    res.status(200).send(response(`all tags from ${user.userName}`, tags, true));
+    const tags = await req.user.getTags();
+    res.status(200).send(response(`all tags from ${req.user.userName}`, tags, true));
   } catch (error) {
     next(error);
   }

@@ -50,11 +50,11 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.getTagsGet = async (req, res, next) => {
-    try {
-        const user = await User.getUserByUsername(req.params.username);
-        const tags = await user.getTags();
-        res.status(200).send(response(`all tags from ${user.userName}`, tags, true ));
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const user = await User.getUserByUsername(req.params.username);
+    const tags = await user.getTags();
+    res.status(200).send(response(`all tags from ${user.userName}`, tags, true));
+  } catch (error) {
+    next(error);
+  }
 };

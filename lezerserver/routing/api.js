@@ -9,6 +9,6 @@ router.post('/user/:username/tag', userController.createTagPost);
 router.get('/user/:userName', userController.loginUser);
 router.post('/user', userController.createUser);
 router.post('/tag', userController.createTagPost);
-router.get("/user/:username/tag", userController.getTagsGet);
+router.get('/user/:username/tag', userController.getTagsGet);
 
 module.exports = router;

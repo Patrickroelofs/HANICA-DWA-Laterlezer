@@ -9,25 +9,21 @@ const userSchema = new mongoose.Schema({
   userName: String,
   password: String,
   email: String,
-  articles: {
-    type: [Map],
-    of: Article,
-  },
-  tags: {
-    type: [Map],
-    of: Tag,
-  },
+  articles: [Article.schema],
+  tags: [Tag.schema],
 });
 
 userSchema.statics.getUserByUsername = async function (userName) {
   const user = await this.model('User').findOne({ userName });
-  if (!user) throw new CustomError('User does not exists', 400);
+  if (!user) {
+    throw new CustomError('User does not exists', 400);
+  }
   return user;
 };
 
 userSchema.methods.getTags = function () {
-    return this.tags;
-}
+  return this.tags;
+};
 
 userSchema.methods.createTag = function (data) {
   this.tags.forEach((tag) => {

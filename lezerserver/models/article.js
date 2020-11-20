@@ -11,10 +11,7 @@ const articleSchema = mongoose.Schema({
   description: String,
   published: String,
   links: [String],
-  tags: {
-    type: [Map],
-    of: Tag,
-  },
+  tags: [Tag.schema],
 });
 
 module.exports = mongoose.model('Article', articleSchema);

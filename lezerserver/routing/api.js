@@ -5,6 +5,9 @@ const { auth } = require('../middlewares/auth.middleware');
 
 const router = express();
 
+router.get('/user/:userName', userController.loginUser);
+router.post('/user', userController.createUser);
+
 router.use(auth);
 
 router.route('/articles')
@@ -13,8 +16,6 @@ router.route('/articles')
 router.get('/articles/:id', articleController.getArticle);
 
 router.post('/user/:username/tag', userController.createTagPost);
-router.get('/user/:userName', userController.loginUser);
-router.post('/user', userController.createUser);
 router.post('/tag', userController.createTagPost);
 router.get('/user/:username/tag', userController.getTagsGet);
 

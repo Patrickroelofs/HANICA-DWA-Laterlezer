@@ -31,11 +31,12 @@ exports.createUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
+  const user = await User.getUserByUsername(req.params.userName);
   try {
-    if (req.user === null) {
+    if (user === null) {
       res.status(401).send('User not found');
     } else {
-      res.send(req.user.userName);
+      res.send(user.userName);
     }
   } catch (err) {
     console.log(err);

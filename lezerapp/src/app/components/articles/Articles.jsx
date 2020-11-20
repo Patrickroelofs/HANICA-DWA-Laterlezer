@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './articles.scss';
+import axios from 'axios';
 import Article from '../article/Article';
 
 function Articles() {
   const [articles, setArticles] = useState([]);
 
   const getArticles = () => {
-    fetch('http://localhost:3000/api/articles').then((res) => res.json()).then((data) => {
+    axios.get('http://localhost:3000/api/articles').then(({ data }) => {
       setArticles(data);
     });
   };
@@ -21,7 +22,8 @@ function Articles() {
       <p>Everything about programming</p>
 
       <div className="articles">
-        { articles.map((article) => <Article article={article} />) }
+        {/* eslint-disable-next-line no-underscore-dangle */}
+        { articles.map((article) => <Article key={article._id} article={article} />) }
       </div>
     </>
   );

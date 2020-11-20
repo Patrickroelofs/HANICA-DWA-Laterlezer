@@ -40,7 +40,6 @@ describe('Article Model Tests', () => {
     const createArticle = jest.fn((html, url) => 1 + 1);
     const user = { createArticle, save: (fn) => fn(false) };
     const req = { body: { url: 'https://nl.lipsum.com/' }, user };
-    const userModel = { findOne: user };
     const send = jest.fn(() => 't');
 
     articleController.createArticlePost(req, {

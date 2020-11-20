@@ -1,15 +1,24 @@
-article {
-  margin-bottom: 32px;
-  cursor: pointer;
-  display: flex;
+.reader {
+  margin: 0 16px;
+  cursor: auto;
 
-  img {
-    height: 100px;
-    width: 125px;
-    border-radius: 6px;
+  &__navbar {
+    margin-top: 0.67em;
+    a {
+      text-decoration: none;
+      color: black;
+
+      &:last-child {
+        float: right;
+      }
+    }
+    svg {
+      position: relative;
+      top: 5px;
+    }
   }
 
-  .content {
-    margin-left: 12px;
+  img {
+    max-width: 100%;
   }
 }

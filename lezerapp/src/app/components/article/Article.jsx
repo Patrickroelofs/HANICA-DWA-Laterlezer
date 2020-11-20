@@ -1,20 +1,25 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint react/prop-types: 0 */
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './article.scss';
+import Thumbnail from '../thumbnail/Thumbnail';
 
-function Article() {
+function Article(props) {
+  const { article } = props;
+
   return (
-    <>
-      <article>
-        <img alt="" src="https://placehold.it/125x100" />
+    <Link to={`app/${article._id}`}>
+      <article className="article">
+        <Thumbnail url={article.image || 'https://placehold.it/125x100'} />
         <div className="content">
-          <strong>Javascript is a very cool language</strong>
+          <strong>{ article.title }</strong>
           <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet
-            quo odio veniam.
+            { article.description }
           </p>
         </div>
       </article>
-    </>
+    </Link>
   );
 }
 

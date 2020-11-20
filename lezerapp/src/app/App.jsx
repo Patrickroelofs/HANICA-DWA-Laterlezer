@@ -2,9 +2,12 @@ import React from 'react';
 
 import './App.scss';
 
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
 import Dock from './components/dock/Dock';
 import Nav from './components/nav/Nav';
 import Articles from './components/articles/Articles';
+import Reader from './components/reader/Reader';
 
 function App() {
   return (
@@ -18,11 +21,17 @@ function App() {
           <div className="container">
             <div className="row">
               <div className="col-md-8">
-                <Articles />
-              </div>
+                <BrowserRouter>
+                  <Switch>
+                    <Route exact path="/app">
+                      <Articles />
+                    </Route>
 
-              <div className="col-md-4">
-                <p>Een paar coole links, of iets anders interessants</p>
+                    <Route path="/app/:id">
+                      <Reader />
+                    </Route>
+                  </Switch>
+                </BrowserRouter>
               </div>
             </div>
           </div>

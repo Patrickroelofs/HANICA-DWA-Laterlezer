@@ -29,30 +29,16 @@ db.once('open', async () => {
     });
   }
 
-  // converts tags from Javascript objects to Mongoose objects
-  tags.map((t) => {
-    const tag = new Tag(t);
-    return tag;
-  });
-
-  // converts articles from Javascript objects to Mongoose objects and adds tags to them
-  articles.map((a) => {
-    // eslint-disable-next-line no-param-reassign
-    a.tags = tags;
-    const article = new Article(a);
-    return article;
-  });
-
-  // converts users from Javascript object to Mongoose object and adds tags and articles to them
-  users.map(async (u, index) => {
-    const user = new User(u);
-    user.articles = articles;
-    user.tags = tags;
-    await user.save(() => {
-      if (index === users.length - 1) {
-        console.log('DONE!');
-        mongoose.disconnect();
-      }
-    });
-  });
+  for(let user of users) {
+    const newUser = new User(user);
+    for(let tag of tags) {
+      newUser.createTag(new Tag(tag))
+    }
+    for(let article of articles) {
+      newUser.articles.push(new Article(article))
+    }
+    await newUser.save();
+  }
+  console.log("DONE")
+  mongoose.disconnect();
 });

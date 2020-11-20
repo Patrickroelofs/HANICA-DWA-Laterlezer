@@ -4,6 +4,7 @@
 
 const request = require('supertest');
 const mongoose = require('mongoose');
+
 const app = require('../../app'); // path to app.js
 const User = require('../../models/user');
 
@@ -23,7 +24,7 @@ describe('User Controller Tests', () => {
       articles: [],
       tags: [{
         title: 'javascript',
-        color: '#00FF00',
+        color: '#123122',
       }],
     });
   });
@@ -42,7 +43,7 @@ describe('User Controller Tests', () => {
         tags: [
           {
             title: 'testTag',
-            color: '#00FF00',
+            color: '#123122',
           }],
       })
       .set('Accept', 'application/json');
@@ -57,7 +58,7 @@ describe('User Controller Tests', () => {
         tags: [
           {
             title: 'javascript',
-            color: '#00FF00',
+            color: '#123122',
           }],
       })
       .set('Accept', 'application/json');
@@ -72,12 +73,39 @@ describe('User Controller Tests', () => {
         tags: [
           {
             title: 'testTag',
-            color: '#00FF00',
+            color: '#123122',
           }],
       })
       .set('Accept', 'application/json');
     expect(response.status).toEqual(400);
     expect(response.body.message).toEqual('User does not exists');
     expect(response.body.success).toEqual(false);
+  });
+
+  test('GET /user/:username/tag should return bad request response, user doesnt exist', async () => {
+    const response = await request(app).get('/api/user/stantest/tag');
+
+    expect(response.status).toEqual(400);
+    expect(response.body.message).toEqual('User does not exists');
+    expect(response.body.success).toEqual(false);
+  });
+
+  test('GET /user/:username/tag should return all tags from user stanhan and give the right response', async () => {
+    const response = await request(app).get('/api/user/stanhan/tag');
+    const expectedTags = [{
+      title: 'javascript',
+      color: '#123122',
+    }];
+
+    expect(response.status).toEqual(200);
+    expect(response.body.message).toEqual('All tags from stanhan');
+    expect(response.body.success).toEqual(true);
+
+    expect(response.body.data.length).toEqual(expectedTags.length);
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < response.body.data.length; i++) {
+      expect(response.body.data[i].title).toEqual(expectedTags[i].title);
+      expect(response.body.data[i].color).toEqual(expectedTags[i].color);
+    }
   });
 });

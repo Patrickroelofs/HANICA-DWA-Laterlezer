@@ -15,8 +15,14 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.getUserByUsername = async function (userName) {
   const user = await this.model('User').findOne({ userName });
-  if (!user) throw new CustomError('User does not exists', 400);
+  if (!user) {
+    throw new CustomError('User does not exists', 400);
+  }
   return user;
+};
+
+userSchema.methods.getTags = function () {
+  return this.tags;
 };
 
 userSchema.methods.createTag = function (data) {

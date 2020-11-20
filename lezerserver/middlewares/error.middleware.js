@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const response = require('../utils/response');
 
 // Possible error names

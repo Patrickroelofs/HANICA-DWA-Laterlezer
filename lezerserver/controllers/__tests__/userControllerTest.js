@@ -108,4 +108,21 @@ describe('User Controller Tests', () => {
       expect(response.body.data[i].color).toEqual(expectedTags[i].color);
     }
   });
+
+  test('POST /user should return 200, user has been created', async () => {
+    const response = await request(app).post('/api/user', {
+      userName: 'chef_tony',
+    }).set('Accept', 'application/json');
+
+    expect(response.status).toEqual(200);
+  });
+
+  test('POST /user should return 401, user already exists', async () => {
+    const createUserOne = await request(app).post('/api/user')
+      .send({
+        userName: 'stanhan',
+      }).set('Accept', 'application/json');
+
+    expect(createUserOne.status).toEqual(401);
+  });
 });

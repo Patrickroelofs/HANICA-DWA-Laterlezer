@@ -46,8 +46,9 @@ describe('User Controller Tests', () => {
             color: '#123122',
           }],
       })
-      .set('Username', 'test')
+      .set('Username', 'stanhan')
       .set('Accept', 'application/json');
+    console.log(response.body)
     expect(response.status).toEqual(201);
     expect(response.body.message).toEqual('Tag created');
     expect(response.body.success).toEqual(true);
@@ -62,7 +63,7 @@ describe('User Controller Tests', () => {
             color: '#123122',
           }],
       })
-      .set('Username', 'test')
+      .set('Username', 'stanhan')
       .set('Accept', 'application/json');
     expect(response.status).toEqual(400);
     expect(response.body.message).toEqual('Tag already exists');
@@ -78,7 +79,7 @@ describe('User Controller Tests', () => {
             color: '#123122',
           }],
       })
-      .set('Username', 'test')
+      .set('Username', 'stanwew')
       .set('Accept', 'application/json');
     expect(response.status).toEqual(400);
     expect(response.body.message).toEqual('User does not exists');
@@ -86,7 +87,7 @@ describe('User Controller Tests', () => {
   });
 
   test('GET /user/:username/tag should return bad request response, user doesnt exist', async () => {
-    const response = await request(app).get('/api/user/stantest/tag').set('Username', 'test');
+    const response = await request(app).get('/api/user/stantest/tag').set('Username', 'stantest');
 
     expect(response.status).toEqual(400);
     expect(response.body.message).toEqual('User does not exists');
@@ -94,7 +95,7 @@ describe('User Controller Tests', () => {
   });
 
   test('GET /user/:username/tag should return all tags from user stanhan and give the right response', async () => {
-    const response = await request(app).get('/api/user/stanhan/tag').set('Username', 'test');
+    const response = await request(app).get('/api/user/stanhan/tag').set('Username', 'stanhan');
     const expectedTags = [{
       title: 'javascript',
       color: '#123122',

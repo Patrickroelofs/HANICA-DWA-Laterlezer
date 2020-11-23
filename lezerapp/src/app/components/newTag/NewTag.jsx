@@ -7,6 +7,8 @@ function NewTag() {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createTag(e.target.tagTitle.value, e.target.tagColor.value));
+    e.target.tagTitle.value = '';
+    e.target.tagColor.value = '';
   };
   return (
     <form onSubmit={handleSubmit}>

@@ -15,7 +15,6 @@ const createTag = (title, color) => (dispatch) => axios
     },
   })
   .then((response) => {
-    console.log(response);
     if (response.status === 201) {
       dispatch(setTags(response.data.data));
     }

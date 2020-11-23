@@ -2,6 +2,7 @@ import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/
 
 // Import all slices
 import loginSlice from '../app/components/login/LoginSlice';
+import newTagSlice from '../app/components/newTag/NewTagSlice';
 
 // Logger logs all states after actions
 const loggerMiddleware = (store) => (next) => (action) => {
@@ -14,6 +15,7 @@ const loggerMiddleware = (store) => (next) => (action) => {
 const store = configureStore({
   reducer: combineReducers({
     user: loginSlice,
+    tags: newTagSlice,
   }),
   middleware: [loggerMiddleware, ...getDefaultMiddleware()],
   devTools: true,

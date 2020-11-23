@@ -1,11 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const newTagSlice = createSlice({
-  name: 'user',
-  tags: [],
-
+  name: 'tags',
   initialState: {
-
+    tags: [],
   },
   reducers: {
     setTags: (state, action) => {

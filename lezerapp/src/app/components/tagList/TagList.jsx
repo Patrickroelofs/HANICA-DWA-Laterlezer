@@ -1,10 +1,12 @@
 import React from 'react';
+import TagSelect from '../tagSelect/TagSelect';
 import './tagList.scss';
 
 function TagList() {
   return (
     <ul id="compositions-list" className="pure-tree main-tree">
       <h4>Tags</h4>
+      <TagSelect />
       <li>
         <label htmlFor="Tag-1">
           <input type="checkbox" id="Tag-1" />

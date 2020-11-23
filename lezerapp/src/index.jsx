@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import axios from 'axios';
 import Router from './router/Router';
 import reportWebVitals from './reportWebVitals';
 
 import './css/tailwind.generated.css';
 
 import store from './reducers';
-
 
 ReactDOM.render(
   <React.StrictMode>

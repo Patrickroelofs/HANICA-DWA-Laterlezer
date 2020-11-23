@@ -1,5 +1,4 @@
 import React from 'react';
-import './nav.scss';
 
 import TagList from '../tagList/TagList';
 

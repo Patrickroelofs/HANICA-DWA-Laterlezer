@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import './reader.scss';
+import axios from 'axios';
 
 function Reader() {
   const { id } = useParams();
   const [article, setArticle] = useState({});
 
   const getArticle = () => {
-    fetch(`http://localhost:3000/api/articles/${id}`).then((res) => res.json()).then((data) => {
-      console.log(data.html.includes(data.image));
+    axios.get(`http://localhost:3000/api/articles/${id}`).then(({ data }) => {
       setArticle(data);
     });
   };

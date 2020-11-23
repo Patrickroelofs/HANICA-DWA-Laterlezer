@@ -1,31 +1,19 @@
-const mongoose = require('mongoose');
-const fetch = require('node-fetch');
 const htmlParser = require('../utils/HTMLParser');
 
-let _User;
-
-exports.middleware = async (req, res, next) => {
-  const user = await _User.findOne({ userName: req.headers.username });
-    if (!user) {
-      res.status(401).send('Invalid username')
-    }
-    req.user = user;
-    next();
-};
-
 exports.getArticles = async (req, res) => {
-    const articles = req.user.articles.reverse().map((article) => {
-        article.html = null;
-        return article;
-    });
+  const articles = req.user.articles.reverse().map((article) => {
+    const parsedArticle = article;
+    parsedArticle.html = null;
+    return parsedArticle;
+  });
 
-    res.json(articles);
+  res.json(articles);
 };
 
 exports.getArticle = async (req, res) => {
-    const article = req.user.articles.find((article) => article._id == req.params.id);
+  const article = req.user.articles.find((article) => article._id == req.params.id);
 
-    res.json(article);
+  res.json(article);
 };
 
 exports.createArticlePost = async (req, res) => {
@@ -51,7 +39,3 @@ exports.createArticlePost = async (req, res) => {
     }
   });
 };
-
-exports.setUserModel = (userModel) => _User = userModel;
-
-exports.setUserModel(require('../models/user'));

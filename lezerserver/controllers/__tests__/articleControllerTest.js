@@ -4,6 +4,21 @@
 
 const articleController = require('../articleController');
 
+describe('Article Model Tests', () => {
+  test('Get all the articles', () => {
+    const user = {
+      articles: [
+        {},
+        {},
+      ],
+    };
+    const json = jest.fn(() => {});
+    articleController.getArticles({ user }, { json }).then(() => {
+      expect(json.mock.calls.length).toBe(1);
+      expect(json.mock.calls[0][0]).toMatchObject([
+        { html: null },
+        { html: null },
+      ]);
 describe('User Model Tests', () => {
   test('Fetches site and saves successfully', async () => {
     const req = { body: { url: 'https://nl.lipsum.com/' } };
@@ -89,7 +104,6 @@ describe('User Model Tests', () => {
     const createArticle = jest.fn((html, url) => 1 + 1);
     const user = { createArticle, save: (fn) => fn(false) };
     const req = { body: { url: 'https://nl.lipsum.com/' }, user };
-    const userModel = { findOne: user };
     const send = jest.fn(() => 't');
 
     articleController.createArticlePost(req, {
@@ -136,8 +150,7 @@ describe('User Model Tests', () => {
 
       expect(status.mock.calls.length).toBe(400);
     });
-  });
-  test('Did not save', () => {
+  });test('Did not save', () => {
     const createArticle = jest.fn((html, url) => 1 + 1);
     const user = { createArticle, save: (fn) => fn(true) };
     const req = { body: { url: 'https://nl.lipsum.com/' }, user };

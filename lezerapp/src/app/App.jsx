@@ -4,12 +4,22 @@ import './App.scss';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import axios from 'axios';
+import { useStore } from 'react-redux';
 import Dock from './components/dock/Dock';
 import Nav from './components/nav/Nav';
 import Articles from './components/articles/Articles';
 import Reader from './components/reader/Reader';
 
 function App() {
+  const store = useStore();
+  axios.interceptors.request.use((config) => {
+    if (store.getState().user) {
+      config.headers.Username = store.getState().user.username;
+    }
+    return config;
+  });
+
   return (
     <>
       <nav>

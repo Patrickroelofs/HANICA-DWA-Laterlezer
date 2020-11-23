@@ -1,8 +1,19 @@
-import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from 'redux-persist';
 
-// Import all slices
 import loginSlice from '../app/components/login/LoginSlice';
 import newTagSlice from '../app/components/newTag/NewTagSlice';
+
+const reducers = combineReducers({
+  user: loginSlice,
+  tags: newTagSlice,
+});
+
+const persistConfig = {
+  key: 'root',
+  storage,
+};
 
 // Logger logs all states after actions
 const loggerMiddleware = (store) => (next) => (action) => {
@@ -12,13 +23,23 @@ const loggerMiddleware = (store) => (next) => (action) => {
   return result;
 };
 
+const persistedReducer = persistReducer(persistConfig, reducers);
+
 const store = configureStore({
-  reducer: combineReducers({
-    user: loginSlice,
-    tags: newTagSlice,
-  }),
-  middleware: [loggerMiddleware, ...getDefaultMiddleware()],
+  reducer: persistedReducer,
+  middleware: [loggerMiddleware, ...getDefaultMiddleware({
+    /**
+     * Fixes serializable value error on action 'persist/REGISTER'
+     * React doesnt allow non-serializable values, redux-persist needs them
+     * see: https://github.com/rt2zz/redux-persist/issues/988
+     */
+    serializableCheck: {
+      ignoredActions: ['persist/PERSIST'],
+    },
+  })],
   devTools: true,
 });
 
-export default store;
+const persistor = persistStore(store);
+
+export { store, persistor };

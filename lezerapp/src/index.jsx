@@ -1,17 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import Router from './router/Router';
 import reportWebVitals from './reportWebVitals';
 
 import './css/tailwind.generated.css';
 
-import store from './reducers';
+import { store, persistor } from './reducers';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router />
+      <PersistGate loading={null} persistor={persistor}>
+        <Router />
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

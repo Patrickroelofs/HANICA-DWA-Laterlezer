@@ -2,12 +2,13 @@
 let _User;
 
 module.exports.auth = async (req, res, next) => {
-  const user = await _User.getUserByUsername(req.headers.username);
-  if (!user) {
-    res.status(401).send('Invalid username');
+  try {
+    const user = await _User.getUserByUsername(req.headers.username);
+    req.user = user;
+    next();
+  } catch (error) {
+    next(error);
   }
-  req.user = user;
-  next();
 };
 
 module.exports.setUserModel = (userModel) => _User = userModel;

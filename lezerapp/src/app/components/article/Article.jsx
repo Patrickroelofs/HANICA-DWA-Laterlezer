@@ -9,11 +9,11 @@ function Article(props) {
 
   return (
     <Link to={`app/${article._id}`}>
-      <article className="grid grid-cols-4 mt-6 h-48">
+      <article className="grid grid-cols-4 mt-6 h-36">
         <Thumbnail url={article.image || 'https://placehold.it/125x100'} />
         <div className="col-span-3 ml-8">
-          <strong className="font-bold text-xl">{ article.title }</strong>
-          <p className="text-base mt-4">
+          <strong className="font-bold text-lg">{ article.title }</strong>
+          <p className="text-sm mt-4">
             { article.description }
           </p>
         </div>

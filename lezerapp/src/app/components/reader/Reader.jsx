@@ -19,7 +19,7 @@ function Reader() {
 
   return (
     <div className="reader">
-      <div className="reader__navbar">
+      <div className="flex justify-between">
         <Link to="/app">
           <KeyboardArrowLeft />
           Back
@@ -29,8 +29,8 @@ function Reader() {
           <KeyboardArrowRight />
         </a>
       </div>
-      <h1>{article.title}</h1>
-      <small>
+      <h1 className="font-bold text-3xl pt-16 pb-4">{article.title}</h1>
+      <small className="text-md italic pb-4 block">
         { article.author }
         ,&nbsp;
         { article.published ? 'published on' : '' }
@@ -38,10 +38,10 @@ function Reader() {
         { article.published }
       </small>
       <div>
-        { article.html && !article.html.includes(article.image) ? <img alt="news" src={article.image} /> : '' }
+        { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8" alt="news" src={article.image} /> : '' }
       </div>
       {/* eslint-disable-next-line react/no-danger */}
-      <div dangerouslySetInnerHTML={{ __html: article.html }} />
+      <div className="max-w-2xl m-auto" dangerouslySetInnerHTML={{ __html: article.html }} />
     </div>
   );
 }

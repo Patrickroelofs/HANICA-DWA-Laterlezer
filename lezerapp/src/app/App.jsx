@@ -19,7 +19,7 @@ function App() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 font-Merriweather">
+    <div className="min-h-screen bg-gray-50 font-Merriweather text-sm">
       <div className="min-h-screen grid grid-cols-4">
         <nav className="col-span-1">
           <div className="grid grid-cols-5">

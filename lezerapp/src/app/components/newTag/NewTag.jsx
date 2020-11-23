@@ -14,6 +14,7 @@ function NewTag() {
     dispatch(createTag(title, color));
     setTitle('');
     setColor('');
+    setShowPicker(false);
   };
 
   const changeShowPicker = () => {

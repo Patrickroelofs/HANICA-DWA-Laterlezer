@@ -48,7 +48,10 @@ exports.loginUser = async (req, res, next) => {
     if (user === null) {
       res.status(401).send('User not found');
     } else {
-      res.send(user.userName);
+      res.send({
+        username: user.userName,
+        tags: user.tags,
+      });
     }
   } catch (error) {
     next(error);

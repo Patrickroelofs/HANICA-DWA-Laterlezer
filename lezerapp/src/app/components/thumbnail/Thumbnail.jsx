@@ -5,7 +5,7 @@ function Thumbnail(props) {
   const { url } = props;
   return (
     <>
-      <div className="w-auto h-full bg-cover bg-center rounded-xl col-span-1" style={{ backgroundImage: `url('${url}')` }} />
+      <div className="w-auto h-full bg-cover bg-center rounded-xl col-span-1 shadow-xl" style={{ backgroundImage: `url('${url}')` }} />
     </>
   );
 }

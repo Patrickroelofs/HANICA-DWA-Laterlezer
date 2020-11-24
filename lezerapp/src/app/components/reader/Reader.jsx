@@ -32,6 +32,9 @@ function Reader() {
         </a>
       </div>
       <h1 className="font-bold text-3xl pt-16 pb-4">{article.title}</h1>
+      <div className="articleTags pb-4">
+        { (article.tags) ? article.tags.map((tag) => <span className="mr-4" key={tag.id} style={{ color: tag.color }}>{tag.title}</span>) : <span>No tags found</span> }
+      </div>
       <small className="text-md italic pb-4 block">
         { article.author }
         ,&nbsp;

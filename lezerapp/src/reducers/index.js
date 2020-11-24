@@ -3,9 +3,11 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
 import loginSlice from '../app/components/login/LoginSlice';
+import newTagSlice from '../app/components/newTag/NewTagSlice';
 
 const reducers = combineReducers({
   user: loginSlice,
+  tags: newTagSlice,
 });
 
 const persistConfig = {

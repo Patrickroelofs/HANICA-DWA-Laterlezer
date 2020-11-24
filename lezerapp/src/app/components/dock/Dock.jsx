@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import './dock.scss';
 
 function Dock() {
   const history = useHistory();
@@ -14,14 +13,14 @@ function Dock() {
   };
 
   return (
-    <section id="dock">
-      <div>
-        <h3>Logo</h3>
+    <section id="dock" className="flex flex-col justify-between min-h-screen md:sticky md:top-0">
+      <div className="w-full text-center pt-4">
+        {/* logo here */}
       </div>
 
-      <div>
-        <button type="button" onClick={onLogout} className="text-center w-full">Logout</button>
-        <button className="profile" type="button"><img alt="" src="http://placehold.it/48x48" /></button>
+      <div className="pb-8">
+        <button type="button" onClick={onLogout} className="text-center w-full mb-4">Logout</button>
+        <img className="m-auto rounded-full h-42 w-42" alt="" src="http://placehold.it/48x48" />
       </div>
     </section>
   );

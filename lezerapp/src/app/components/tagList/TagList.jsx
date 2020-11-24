@@ -1,5 +1,6 @@
 import React from 'react';
 import './tagList.scss';
+import { useSelector } from 'react-redux';
 
 function TagList() {
   const tags = useSelector((state) => state.tags);

@@ -1,11 +1,9 @@
 import React from 'react';
 import './tagList.scss';
-import NewTag from '../newTag/NewTag';
 
 function TagList() {
   return (
     <ul id="compositions-list" className="pure-tree main-tree">
-      <NewTag />
       <h4>Tags</h4>
       <li>
         <label htmlFor="Tag-1">

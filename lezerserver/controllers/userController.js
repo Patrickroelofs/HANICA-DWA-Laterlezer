@@ -5,8 +5,13 @@ const response = require('../utils/response');
 exports.createTagPost = async (req, res, next) => {
   try {
     req.user.createTag(req.body.tags);
-    req.user.save();
-    res.status(201).send(response('tag created', req.user.tags, true));
+    req.user.save(((err) => {
+      if (err) {
+        res.status(400).send(response('Color must be in the right format', null, false));
+      } else {
+        res.status(201).send(response('tag created', req.user.tags, true));
+      }
+    }));
   } catch (error) {
     next(error);
   }
@@ -43,7 +48,10 @@ exports.loginUser = async (req, res, next) => {
     if (user === null) {
       res.status(401).send('User not found');
     } else {
-      res.send(user.userName);
+      res.send({
+        username: user.userName,
+        tags: user.tags,
+      });
     }
   } catch (error) {
     next(error);

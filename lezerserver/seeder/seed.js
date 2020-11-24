@@ -29,16 +29,16 @@ db.once('open', async () => {
     });
   }
 
-  for(let user of users) {
+  for(const user of users) {
     const newUser = new User(user);
-    for(let tag of tags) {
-      newUser.createTag(new Tag(tag))
+    for(const tag of tags) {
+      newUser.createTag([new Tag(tag)]);
     }
-    for(let article of articles) {
-      newUser.articles.push(new Article(article))
+    for (const article of articles) {
+      newUser.articles.push(new Article(article));
     }
     await newUser.save();
   }
-  console.log("DONE")
+  console.log('DONE');
   mongoose.disconnect();
 });

@@ -12,8 +12,8 @@ function Article(props) {
       <article className="grid grid-cols-4 mt-6 h-36">
         <Thumbnail url={article.image || 'https://placehold.it/125x100'} />
         <div className="col-span-3 ml-8">
-          <strong className="font-bold text-lg">{ article.title }</strong>
-          <p className="text-sm mt-4">
+          <strong className="font-bold text-md">{ article.title }</strong>
+          <p className="text-xs mt-4">
             { article.description }
           </p>
         </div>

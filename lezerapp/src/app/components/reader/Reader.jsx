@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import axios from 'axios';
 
+import './Reader.scss';
+
 function Reader() {
   const { id } = useParams();
   const [article, setArticle] = useState({});
@@ -41,7 +43,7 @@ function Reader() {
         { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8" alt="news" src={article.image} /> : '' }
       </div>
       {/* eslint-disable-next-line react/no-danger */}
-      <div className="max-w-2xl m-auto" dangerouslySetInnerHTML={{ __html: article.html }} />
+      <div className="max-w-2xl m-auto mb-64 article" dangerouslySetInnerHTML={{ __html: article.html }} />
     </div>
   );
 }

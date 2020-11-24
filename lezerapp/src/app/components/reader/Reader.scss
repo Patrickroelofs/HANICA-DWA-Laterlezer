@@ -1,6 +1,17 @@
 .article {
+    .excerpt{
+        font-weight: bold;
+        font-size: 1.25em;
+    }
     p {
         line-height: 1.62;
         margin-bottom: 32px;
+    }
+    h2{
+        font-weight: bold;
+        margin-top: 36px;
+        font-size: 18px;
+        display: block;
+        margin-bottom: 8px;
     }
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import axios from 'axios';
+import moment from 'moment';
 
 import './Reader.scss';
 
@@ -26,7 +27,7 @@ function Reader() {
           <KeyboardArrowLeft />
           Back
         </Link>
-        <a href={article.source}>
+        <a rel="noreferrer" target="_blank" href={article.source}>
           Source
           <KeyboardArrowRight />
         </a>
@@ -40,7 +41,7 @@ function Reader() {
         ,&nbsp;
         { article.published ? 'published on' : '' }
         &nbsp;
-        { article.published }
+        { moment(article.published).format('DD-MM-YYYY') }
       </small>
       <div>
         { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8" alt="news" src={article.image} /> : '' }

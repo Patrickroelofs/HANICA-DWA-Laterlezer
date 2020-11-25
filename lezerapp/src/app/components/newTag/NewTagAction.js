@@ -16,11 +16,16 @@ const createTag = (title, color) => (dispatch) => axios
     },
   })
   .then((response) => {
-    if (response.status === 201) {
-      dispatch(setTags(response.data.data));
-    }
-  }).catch((error) => {
-    alert(error.response.data.message);
-  });
+    dispatch(setTags(response.data.data));
+    return {
+      status: response.status,
+      message: response.data.message,
+      success: response.data.success,
+    };
+  }).catch((error) => ({
+    status: error.response.status,
+    message: error.response.data.message,
+    success: error.response.data.success,
+  }));
 
 export default createTag;

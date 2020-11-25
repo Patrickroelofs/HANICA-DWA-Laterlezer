@@ -5,6 +5,7 @@ import {
 
 import Login from '../app/components/login/Login';
 import Register from '../app/components/register/Register';
+import Reader from '../app/components/reader/Reader';
 import App from '../app/App';
 
 function Router() {
@@ -23,8 +24,12 @@ function Router() {
           <Register />
         </Route>
 
-        <Route path="/app">
+        <Route path="/app" exact>
           <App />
+        </Route>
+
+        <Route path="/app/:id">
+          <Reader />
         </Route>
       </Switch>
     </BrowserRouter>

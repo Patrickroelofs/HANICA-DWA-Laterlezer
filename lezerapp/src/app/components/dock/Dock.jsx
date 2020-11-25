@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { Lock } from '@material-ui/icons';
 
 function Dock() {
   const history = useHistory();
@@ -19,7 +20,7 @@ function Dock() {
       </div>
 
       <div className="pb-8">
-        <button type="button" onClick={onLogout} className="text-center w-full mb-4">Logout</button>
+        <button type="button" onClick={onLogout} className="text-center w-full mb-4"><Lock /></button>
         <img className="m-auto rounded-full h-42 w-42" alt="" src="http://placehold.it/48x48" />
       </div>
     </section>

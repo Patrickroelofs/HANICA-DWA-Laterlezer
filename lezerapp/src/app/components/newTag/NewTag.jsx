@@ -49,9 +49,9 @@ function NewTag() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <p style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</p>
       <label htmlFor="tagTitle">
-        Tag title:
+        Tag title: &nbsp;
+        <span style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
         <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={changeTitle} className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md l:text-l border-gray-300" />
       </label>
       <label htmlFor="showPicker">

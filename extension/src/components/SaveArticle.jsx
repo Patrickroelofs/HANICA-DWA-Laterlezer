@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
 import ReactLoading from 'react-loading';
 import axios from 'axios';
@@ -16,10 +17,13 @@ function SaveArticle() {
       tag.color = chroma(tag.color).hex();
       return tag;
     });
-
     axios
       .post('http://localhost:3000/api/articles',
-        JSON.stringify({ url: tab, tags: selectedTags }))
+        { url: tab, tags: selectedTags }, {
+          headers: {
+            Username: localStorage.getItem('username'),
+          },
+        })
       .then((res) => {
         if (!res.ok) throw Error(res.statusText);
         setLoaded(true);
@@ -55,7 +59,7 @@ function SaveArticle() {
               ? (
                 <h2>
                   Your article has
-                  {error ? 'not' : ''}
+                  {error ? ' not' : ''}
                   {' '}
                   been saved.
                 </h2>

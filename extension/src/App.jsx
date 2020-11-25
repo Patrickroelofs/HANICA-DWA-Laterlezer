@@ -5,12 +5,6 @@ import SaveArticle from './components/SaveArticle';
 import Login from './components/Login';
 
 function App() {
-  axios.interceptors.request.use((config) => {
-    if (store.getState().user) {
-      config.headers.Username = store.getState().user.username;
-    }
-    return config;
-  });
   const [user, setUser] = useState('');
 
   const storeUser = (u) => {

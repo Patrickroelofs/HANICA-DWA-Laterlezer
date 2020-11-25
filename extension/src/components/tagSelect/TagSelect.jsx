@@ -12,7 +12,11 @@ function TagSelect(props) {
   const [selectedTags, setSelectedTags] = useState([]);
 
   const fetchTags = () => {
-    axios.get('http://localhost:3000/api/tags').then(({ data }) => {
+    axios.get('http://localhost:3000/api/tags', {
+      headers: {
+        Username: localStorage.getItem('username'),
+      },
+    }).then(({ data }) => {
       setTags(data.data.map((tag) => {
         tag.value = tag.title;
         tag.label = tag.title;

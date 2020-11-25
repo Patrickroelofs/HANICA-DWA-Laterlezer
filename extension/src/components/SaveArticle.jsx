@@ -7,11 +7,12 @@ import chroma from 'chroma-js';
 import TagSelect from './tagSelect/TagSelect';
 
 function SaveArticle() {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState('waitForSelect');
   const [error, setError] = useState('');
   const [tab, setTab] = useState({});
 
   const postArticle = (selectedTags) => {
+    setLoaded(false);
     selectedTags.map((tag) => {
       tag.title = tag.value;
       tag.color = chroma(tag.color).hex();
@@ -24,8 +25,7 @@ function SaveArticle() {
             Username: localStorage.getItem('username'),
           },
         })
-      .then((res) => {
-        if (!res.ok) throw Error(res.statusText);
+      .then(() => {
         setLoaded(true);
       }).catch((e) => {
         setError(e.message);
@@ -42,30 +42,37 @@ function SaveArticle() {
     }
   };
 
+  const getLoader = () => {
+    if (loaded === true) {
+      return (
+        <h2>
+          Your article has
+          {error ? ' not' : ''}
+          {' '}
+          been saved.
+        </h2>
+      );
+    }
+    if (loaded === false) {
+      return <div className="App__Loader"><ReactLoading type="cylon" color="#000" /></div>;
+    }
+    return '';
+  };
+
   useEffect(() => {
     checkBrowser();
   }, []);
 
   return (
     <>
-      <TagSelect onSave={postArticle} />
+      { loaded === 'waitForSelect' ? <TagSelect onSave={postArticle} /> : ''}
+
       {
             error
               ? <h3 style={{ color: 'red' }}>{error}</h3>
               : ''
         }
-      {
-            loaded
-              ? (
-                <h2>
-                  Your article has
-                  {error ? ' not' : ''}
-                  {' '}
-                  been saved.
-                </h2>
-              )
-              : <div className="App__Loader"><ReactLoading type="cylon" color="#000" /></div>
-        }
+      { getLoader() }
     </>
   );
 }

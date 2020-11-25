@@ -5,7 +5,7 @@ import { setTags } from './NewTagSlice';
 const API_URL = 'http://localhost:3000/api';
 
 const createTag = (title, color) => (dispatch) => axios
-  .post(`${API_URL}/tag`, {
+  .post(`${API_URL}/tags`, {
     tags: [{
       title,
       color,

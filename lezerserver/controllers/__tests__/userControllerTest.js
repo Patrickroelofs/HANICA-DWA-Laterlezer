@@ -37,8 +37,8 @@ describe('User Controller Tests', () => {
     await mongoose.disconnect();
   });
 
-  test('POST /user/:username/tag should return response with status 201', async () => {
-    const response = await request(app).post('/api/user/stanhan/tag')
+  test('POST /tags should return response with status 201', async () => {
+    const response = await request(app).post('/api/tags')
       .send({
         tags: [
           {
@@ -53,8 +53,8 @@ describe('User Controller Tests', () => {
     expect(response.body.success).toEqual(true);
   });
 
-  test('POST /user/:username/tag  should return bad request response, tag already exists', async () => {
-    const response = await request(app).post('/api/user/stanhan/tag')
+  test('POST /tags  should return bad request response, tag already exists', async () => {
+    const response = await request(app).post('/api/tags')
       .send({
         tags: [
           {
@@ -69,8 +69,8 @@ describe('User Controller Tests', () => {
     expect(response.body.success).toEqual(false);
   });
 
-  test('POST /user/:username/tag should return bad request response, user doesnt exist', async () => {
-    const response = await request(app).post('/api/user/stanwew/tag')
+  test('POST /tags should return bad request response, user doesnt exist', async () => {
+    const response = await request(app).post('/api/tags')
       .send({
         tags: [
           {
@@ -85,16 +85,16 @@ describe('User Controller Tests', () => {
     expect(response.body.success).toEqual(false);
   });
 
-  test('GET /user/:username/tag should return bad request response, user doesnt exist', async () => {
-    const response = await request(app).get('/api/user/stantest/tag').set('Username', 'stantest');
+  test('GET /tags should return bad request response, user doesnt exist', async () => {
+    const response = await request(app).get('/api/tags').set('Username', 'stantest');
 
     expect(response.status).toEqual(400);
     expect(response.body.message).toEqual('User does not exists');
     expect(response.body.success).toEqual(false);
   });
 
-  test('GET /user/:username/tag should return all tags from user stanhan and give the right response', async () => {
-    const response = await request(app).get('/api/user/stanhan/tag').set('Username', 'stanhan');
+  test('GET /tags should return all tags from user stanhan and give the right response', async () => {
+    const response = await request(app).get('/api/tags').set('Username', 'stanhan');
     const expectedTags = [{
       title: 'javascript',
       color: '#123122',

@@ -39,10 +39,12 @@ function Reader() {
       <h1 className="font-bold text-3xl pb-4">{article.title}</h1>
       <small className="text-md italic pb-4 block">
         { article.author }
-        ,&nbsp;
+        &nbsp;
         { article.published ? 'published on' : '' }
         &nbsp;
-        { moment(article.published).format('DD-MM-YYYY') }
+        { article.published !== null
+          ? moment(article.published).format('DD-MM-YYYY')
+          : null }
       </small>
       <div>
         { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} /> : '' }

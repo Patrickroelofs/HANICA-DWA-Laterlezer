@@ -36,9 +36,9 @@ function Login() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <p style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</p>
               <label htmlFor="username" className="leading-10">
-                Username
+                Username &nbsp;
+                <span style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
                 <input id="username" name="username" type="string" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" />
               </label>
             </div>

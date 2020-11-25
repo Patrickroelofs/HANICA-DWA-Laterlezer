@@ -17,7 +17,7 @@ module.exports = (app) => {
       const field = Object.entries(error.keyValue)[0][0];
       res.status(400).send(response(`${field} already exists`, null, false));
     } else if (errorNames.includes(error.name)) {
-      res.status(400).send(response(error.message, null, false));
+      res.status(500).send(response(error.message, null, false));
     } else {
       res.status(500).send(response(error.message, null, false));
     }

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 import { useStore } from 'react-redux';
 import Dock from './components/dock/Dock';
@@ -25,25 +24,13 @@ function App() {
               <Dock />
             </div>
             <div className="col-span-4">
-              <BrowserRouter>
-                <Switch>
-                  <Route exact path="/app">
-                    <Nav />
-                  </Route>
-                </Switch>
-              </BrowserRouter>
+              <Nav />
             </div>
           </div>
         </nav>
         <main className="min-h-screen col-span-3 bg-white">
           <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0">
-            <BrowserRouter>
-              <Switch>
-                <Route exact path="/app">
-                  <Articles />
-                </Route>
-              </Switch>
-            </BrowserRouter>
+            <Articles />
           </div>
         </main>
       </div>

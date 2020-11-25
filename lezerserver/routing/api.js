@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController');
 const articleController = require('../controllers/articleController');
+const tagController = require('../controllers/tagController');
 const { auth } = require('../middlewares/auth.middleware');
 
 const router = express();
@@ -16,7 +17,7 @@ router.route('/articles')
 router.get('/articles/:id', articleController.getArticle);
 
 router.route('/tags')
-  .get(userController.getTagsGet)
-  .post(userController.createTagPost);
+  .get(tagController.getTagsGet)
+  .post(tagController.createTagPost);
 
 module.exports = router;

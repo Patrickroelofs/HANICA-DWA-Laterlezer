@@ -1,46 +1,50 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import ReactLoading from 'react-loading';
-import fetch from 'node-fetch'
+import axios from 'axios';
+import chroma from 'chroma-js';
 
-function SaveArticle(props) {
-    const [loaded, setLoaded] = useState(false);
-    const { user } = props;
+import TagSelect from './tagSelect/TagSelect';
 
-    const checkBrowser = () => {
-        if (!!chrome) {
-            chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
-                postArticle(tabs[0].url);
-            });
-        }
+function SaveArticle() {
+  const [loaded, setLoaded] = useState(false);
+  const [tab, setTab] = useState({});
+
+  const postArticle = (selectedTags) => {
+    selectedTags.map((tag) => {
+      tag.title = tag.value;
+      tag.color = chroma(tag.color).hex();
+      return tag;
+    });
+    axios
+      .post('http://localhost:3000/api/articles',
+        JSON.stringify({ url: tab, tags: selectedTags }))
+      .then(() => {
+        setLoaded(true);
+      });
+  };
+
+  const checkBrowser = () => {
+    if (chrome) {
+      chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, (tabs) => {
+        setTab(tabs[0].url);
+      });
     }
+  };
 
-    const postArticle = (url) => {
-        fetch('http://localhost:3000/api/articles', {
-            method: 'POST',
-            body: JSON.stringify({
-                url: url
-            }),
-            headers: {'Content-Type': 'application/json', 'Username': user}
-        }).then(() => {
-            setLoaded(true);
-        }).catch(e => {
-            console.log(e)
-        });
-    };
+  useEffect(() => {
+    checkBrowser();
+  }, []);
 
-    useEffect(() => {
-        checkBrowser()
-    }, [])
-
-    return (<>
-        {
+  return (
+    <>
+      <TagSelect onSave={postArticle} />
+      {
             loaded
-                ?
-                <h2>Your article has been saved.</h2>
-                :
-                <div className="App__Loader"><ReactLoading type="cylon" color="#000" /></div>
+              ? <h2>Your article has been saved.</h2>
+              : <div className="App__Loader"><ReactLoading type="cylon" color="#000" /></div>
         }
-    </>)
+    </>
+  );
 }
 
-export default SaveArticle
+export default SaveArticle;

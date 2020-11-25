@@ -42,3 +42,14 @@ exports.createArticlePost = async (req, res) => {
     }
   });
 };
+
+exports.updateArticle = async (req, res) => {
+  const article = req.user.articles.find((article) => article._id == req.params.id);
+  if (req.body.tags) {
+    const newTags = req.body.tags.filter((tag) => !req.user.tags.find((uTag) => uTag.title === tag.title));
+    req.user.createTag(newTags);
+    article.tags = req.body.tags;
+  }
+  req.user.save();
+  res.json(article);
+}

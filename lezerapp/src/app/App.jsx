@@ -1,13 +1,11 @@
 import React from 'react';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
 import axios from 'axios';
 import { useStore } from 'react-redux';
 import Dock from './components/dock/Dock';
 import Nav from './components/nav/Nav';
 import Articles from './components/articles/Articles';
-import Reader from './components/reader/Reader';
 
 function App() {
   const store = useStore();
@@ -27,7 +25,13 @@ function App() {
               <Dock />
             </div>
             <div className="col-span-4">
-              <Nav />
+              <BrowserRouter>
+                <Switch>
+                  <Route exact path="/app">
+                    <Nav />
+                  </Route>
+                </Switch>
+              </BrowserRouter>
             </div>
           </div>
         </nav>
@@ -37,10 +41,6 @@ function App() {
               <Switch>
                 <Route exact path="/app">
                   <Articles />
-                </Route>
-
-                <Route path="/app/:id">
-                  <Reader />
                 </Route>
               </Switch>
             </BrowserRouter>

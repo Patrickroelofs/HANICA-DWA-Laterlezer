@@ -4,7 +4,7 @@
 import chroma from 'chroma-js';
 
 export default () => ({
-  control: (styles) => ({ ...styles, backgroundColor: 'white' }),
+  control: (styles) => ({ ...styles, backgroundColor: 'white', width: '100%' }),
   option: (styles, {
     data, isDisabled, isFocused, isSelected,
   }) => {

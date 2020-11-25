@@ -31,12 +31,9 @@ function TagSelect() {
     selectedTags.map((tag) => {
       tag.title = tag.value;
       tag.color = chroma(tag.color).hex();
-      console.log(tag);
       return tag;
     });
-    axios.post('http://localhost:3000/api/tag', { tags: selectedTags }).then(({ data }) => {
-      console.log(data);
-    });
+    axios.post('http://localhost:3000/api/tag', { tags: selectedTags });
   };
 
   useEffect(() => {

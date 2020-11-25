@@ -60,10 +60,10 @@ function NewTag() {
   return (
     <form onSubmit={handleSubmit}>
       <p className="pt-6 pb-4 text-xl font-bold">Add a tag</p>
-      <label className="italic inline-block w-8/12 pr-8 shadow-sm box-border text-sm" htmlFor="tagTitle">
+      <label className="italic inline-block w-8/12 pr-8 box-border text-sm" htmlFor="tagTitle">
         Tag title: &nbsp;
         <span style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
-        <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={changeTitle} className="text-base block w-full" />
+        <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={changeTitle} className="text-base block w-full shadow-sm" />
       </label>
       <label htmlFor="showPicker" className="italic inline-block w-4/12 text-sm">
         Tag color:

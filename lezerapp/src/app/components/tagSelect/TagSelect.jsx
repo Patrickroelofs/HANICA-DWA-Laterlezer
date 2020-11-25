@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
+import chroma from 'chroma-js';
 import colourStyles from './colourStyles';
 
 const animatedComponents = makeAnimated();
@@ -27,7 +28,13 @@ function TagSelect() {
   };
 
   const postTags = () => {
-    axios.post('http://localhost:300/api/tag', { selectedTags }).then(({ data }) => {
+    selectedTags.map((tag) => {
+      tag.title = tag.value;
+      tag.color = chroma(tag.color).hex();
+      console.log(tag);
+      return tag;
+    });
+    axios.post('http://localhost:3000/api/tag', { tags: selectedTags }).then(({ data }) => {
       console.log(data);
     });
   };
@@ -52,7 +59,7 @@ function TagSelect() {
         // eslint-disable-next-line prefer-rest-params
         styles={colourStyles()}
       />
-      <button type="submit" onClick={postTags}>Add</button>
+      <button type="submit" onClick={() => postTags()}>Add</button>
     </>
   );
 }

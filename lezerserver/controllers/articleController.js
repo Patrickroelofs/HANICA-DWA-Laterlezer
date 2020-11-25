@@ -26,6 +26,10 @@ exports.createArticlePost = async (req, res) => {
     });
   }
 
+  if (page.error) {
+    res.status(406).send(page.message);
+    return;
+  }
   try {
     req.user.updateOrCreateArticle(page.content, req.body.url, {
       title: page.title,
@@ -41,7 +45,7 @@ exports.createArticlePost = async (req, res) => {
   }
   req.user.save((err) => {
     if (err) {
-      res.status(404).send('User not found');
+      res.status(500).send(err);
     } else {
       res.send('Article created');
     }

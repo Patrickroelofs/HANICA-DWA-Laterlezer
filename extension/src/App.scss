@@ -10,6 +10,7 @@ $paper-color: #ffffff;
 	font-family: 'Merriweather', serif;
 	min-width: 300px;
 	min-height: 200px;
+	flex-wrap: wrap;
 
 	&__Loader div {
 		margin-left: auto;

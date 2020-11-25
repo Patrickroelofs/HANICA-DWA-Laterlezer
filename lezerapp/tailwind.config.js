@@ -3,7 +3,8 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
-      'Merriweather': ['\'Merriweather\'', 'sans-serif']
+      'serif': ['\'Merriweather\'', 'serif'],
+      'sans': ['\'Source Sans Pro\'', 'sans-serif']
     },
     extend: {},
   },

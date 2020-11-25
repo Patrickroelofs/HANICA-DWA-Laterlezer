@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import moment from 'moment';
 import React from 'react';
+import TagPill from '../tagPill/TagPill';
 
 function FullArticle(props) {
   const { article } = props;
 
-  console.log(props);
+  console.log(article);
 
   return (
     <div className="reader">
@@ -20,16 +21,18 @@ function FullArticle(props) {
           <KeyboardArrowRight />
         </a>
       </div>
-      <div className="articleTags pb-6 pt-6">
-        { (article.tags) ? article.tags.map((tag) => <span className="inline-block pt-2 pb-2 pr-3 pl-3 mr-2 text-sm white rounded-3xl font-sans" key={tag.id} style={{ background: tag.color }}>{tag.title}</span>) : <span>No tags found</span> }
+      <div className="articleTags pb-6 pt-16 text-sm">
+        { (article.tags) ? article.tags.map((tag) => <TagPill key={tag.title} data={tag} />) : <span>No tags found</span> }
       </div>
       <h1 className="font-bold text-3xl pb-4">{article.title}</h1>
       <small className="text-md italic pb-4 block">
         { article.author }
-        ,&nbsp;
+              &nbsp;
         { article.published ? 'published on' : '' }
-            &nbsp;
-        { moment(article.published).format('DD-MM-YYYY') }
+              &nbsp;
+        { article.published !== null
+          ? moment(article.published).format('DD-MM-YYYY')
+          : null }
       </small>
       <div>
         { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} /> : '' }

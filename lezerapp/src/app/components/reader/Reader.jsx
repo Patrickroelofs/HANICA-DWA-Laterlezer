@@ -23,7 +23,6 @@ function Reader() {
   const getArticle = () => {
     axios.get(`http://localhost:3000/api/articles/${id}`).then(({ data }) => {
       setArticle(data);
-      console.log(data);
     });
   };
 

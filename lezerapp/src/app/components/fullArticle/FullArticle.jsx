@@ -21,7 +21,7 @@ function FullArticle(props) {
           <KeyboardArrowRight />
         </a>
       </div>
-      <div className="articleTags pb-6 pt-16 text-sm">
+      <div className="articleTags pb-6 pt-6 text-sm">
         { (article.tags) ? article.tags.map((tag) => <TagPill key={tag.title} data={tag} />) : <span>No tags found</span> }
       </div>
       <h1 className="font-bold text-3xl pb-4">{article.title}</h1>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ChromePicker } from 'react-color';
+import chroma from 'chroma-js';
 import createTag from './NewTagAction';
 
 function NewTag() {
@@ -41,6 +42,15 @@ function NewTag() {
     setColor(color2.hex);
   };
 
+  const chromaConversion = (tagColor) => {
+    if (tagColor !== '') {
+      if (chroma.contrast(tagColor, 'white') > 2) {
+        return 'white';
+      }
+    }
+    return 'black';
+  };
+
   useEffect(() => {
     if (color === '') {
       setRandomColor();
@@ -49,29 +59,34 @@ function NewTag() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="tagTitle">
+      <p className="pt-6 pb-4 text-xl font-bold">Add a tag</p>
+      <label className="italic inline-block w-8/12 pr-8 shadow-sm box-border text-sm" htmlFor="tagTitle">
         Tag title: &nbsp;
         <span style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
-        <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={changeTitle} className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md l:text-l border-gray-300" />
+        <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={changeTitle} className="text-base block w-full" />
       </label>
-      <label htmlFor="showPicker">
+      <label htmlFor="showPicker" className="italic inline-block w-4/12 text-sm">
         Tag color:
         <input
           type="button"
           id="showPicker"
           value={color}
-          style={{ backgroundColor: color }}
+          style={{ backgroundColor: color, color: chromaConversion(color) }}
           onClick={changeShowPicker}
-          className="block w-full items-center px-3 py-1 mb-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+          className="text-base block w-full items-center px-3 py-1 mb-3 border border-gray-300 rounded-md shadow-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
         />
       </label>
-      <input type="submit" value="Submit" className="block w-full items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none" />
-      {(showPicker) ? (
-        <ChromePicker
-          color={color}
-          onChange={handleChangeComplete}
-        />
-      ) : null}
+      <div className="inline-block relative w-6/12">
+        <input type="submit" value="Add Tag" className="inline-block items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none" />
+        {(showPicker) ? (
+          <ChromePicker
+            className="font-sans absolute left-full -top-2"
+            color={color}
+            onChange={handleChangeComplete}
+            disableAlpha
+          />
+        ) : null}
+      </div>
       <hr className="my-3" />
     </form>
   );

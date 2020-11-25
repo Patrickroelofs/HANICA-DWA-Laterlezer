@@ -20,7 +20,7 @@ function Articles() {
       <h1 className="font-bold text-xl">Programming</h1>
       <p className="text-sm pt-4">Everything about programming</p>
 
-      <div className="mt-12">
+      <div className="mt-12 mb-64">
         {/* eslint-disable-next-line no-underscore-dangle */}
         { articles.map((article) => <Article key={article._id} article={article} />) }
       </div>

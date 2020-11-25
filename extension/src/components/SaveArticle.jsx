@@ -1,57 +1,73 @@
-import { useState, useEffect } from 'react'
+/* eslint-disable no-undef */
+import React, { useState, useEffect } from 'react';
 import ReactLoading from 'react-loading';
-import fetch from 'node-fetch'
+import axios from 'axios';
+import chroma from 'chroma-js';
 
-function SaveArticle(props) {
-    const [loaded, setLoaded] = useState(false);
-    const [error, setError] = useState('');
-    const { user } = props;
+import TagSelect from './tagSelect/TagSelect';
 
-    const checkBrowser = () => {
-        if (!!chrome) {
-            chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
-                postArticle(tabs[0].url);
-            });
-        }
+function SaveArticle() {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState('');
+  const [tab, setTab] = useState({});
+
+  const postArticle = (selectedTags) => {
+    selectedTags.map((tag) => {
+      tag.title = tag.value;
+      tag.color = chroma(tag.color).hex();
+      return tag;
+    });
+    axios
+      .post('http://localhost:3000/api/articles',
+        { url: tab, tags: selectedTags }, {
+          headers: {
+            Username: localStorage.getItem('username'),
+          },
+        })
+      .then((res) => {
+        if (!res.ok) throw Error(res.statusText);
+        setLoaded(true);
+      }).catch((e) => {
+        setError(e.message);
+        setLoaded(true);
+        console.log(error);
+      });
+  };
+
+  const checkBrowser = () => {
+    if (chrome) {
+      chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, (tabs) => {
+        setTab(tabs[0].url);
+      });
     }
+  };
 
-    const postArticle = (url) => {
-        fetch('http://localhost:3000/api/articles', {
-            method: 'POST',
-            body: JSON.stringify({
-                url: url
-            }),
-            headers: {'Content-Type': 'application/json', 'Username': user}
-        }).then((res) => {
-            if (!res.ok) throw Error(res.statusText);
-            setLoaded(true);
-        }).catch(e => {
-            setError(e.message);
-            setLoaded(true);
-            console.log(error);
-        });
-    };
+  useEffect(() => {
+    checkBrowser();
+  }, []);
 
-    useEffect(() => {
-        checkBrowser()
-    }, [])
-
-    return (<>
-        {
+  return (
+    <>
+      <TagSelect onSave={postArticle} />
+      {
             error
-                ?
-                <h3 style={{color: 'red'}}>{error}</h3>
-                :
-                ''
+              ? <h3 style={{ color: 'red' }}>{error}</h3>
+              : ''
         }
-        {
+      {
             loaded
-                ?
-                <h2>Your article has {error ? 'not' : ''} been saved.</h2>
-                :
-                <div className="App__Loader"><ReactLoading type="cylon" color="#000" /></div>
+              ? (
+                <h2>
+                  Your article has
+                  {error ? ' not' : ''}
+                  {' '}
+                  been saved.
+                </h2>
+              )
+              : <div className="App__Loader"><ReactLoading type="cylon" color="#000" /></div>
         }
-    </>)
+    </>
+  );
 }
 
-export default SaveArticle
+export default SaveArticle;

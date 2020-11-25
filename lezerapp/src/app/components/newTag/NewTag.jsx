@@ -8,6 +8,7 @@ function NewTag() {
   const [title, setTitle] = useState('');
   const [color, setColor] = useState('');
   const [showPicker, setShowPicker] = useState(false);
+  const [response, setResponse] = useState({});
 
   const setRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -20,7 +21,9 @@ function NewTag() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTag(title, color));
+    dispatch(createTag(title, color)).then((res) => {
+      setResponse(res);
+    });
     setTitle('');
     setShowPicker(false);
     setRandomColor();
@@ -46,6 +49,7 @@ function NewTag() {
 
   return (
     <form onSubmit={handleSubmit}>
+      <p style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</p>
       <label htmlFor="tagTitle">
         Tag title:
         <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={changeTitle} className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md l:text-l border-gray-300" />

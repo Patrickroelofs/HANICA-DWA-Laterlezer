@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -7,12 +7,19 @@ import registerUser from './RegisterAction';
 function Register() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const [response, setResponse] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     dispatch(registerUser(e.target.username.value)).then(() => {
       history.push('/app');
+    }).catch((error) => {
+      setResponse({
+        status: error.status,
+        message: error.response.data,
+        success: false,
+      });
     });
   };
 
@@ -28,6 +35,7 @@ function Register() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
+            <p style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</p>
             <div>
               <label htmlFor="username" className="leading-10">
                 Username

@@ -4,6 +4,7 @@ import fetch from 'node-fetch'
 
 function SaveArticle(props) {
     const [loaded, setLoaded] = useState(false);
+    const [error, setError] = useState('');
     const { user } = props;
 
     const checkBrowser = () => {
@@ -21,10 +22,13 @@ function SaveArticle(props) {
                 url: url
             }),
             headers: {'Content-Type': 'application/json', 'Username': user}
-        }).then(() => {
+        }).then((res) => {
+            if (!res.ok) throw Error(res.statusText);
             setLoaded(true);
         }).catch(e => {
-            console.log(e)
+            setError(e.message);
+            setLoaded(true);
+            console.log(error);
         });
     };
 
@@ -34,9 +38,16 @@ function SaveArticle(props) {
 
     return (<>
         {
+            error
+                ?
+                <h3 style={{color: 'red'}}>{error}</h3>
+                :
+                ''
+        }
+        {
             loaded
                 ?
-                <h2>Your article has been saved.</h2>
+                <h2>Your article has {error ? 'not' : ''} been saved.</h2>
                 :
                 <div className="App__Loader"><ReactLoading type="cylon" color="#000" /></div>
         }

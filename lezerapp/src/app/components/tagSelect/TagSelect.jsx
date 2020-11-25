@@ -13,7 +13,8 @@ import chroma from 'chroma-js';
 import colourStyles from './colourStyles';
 
 const animatedComponents = makeAnimated();
-function TagSelect() {
+function TagSelect(props) {
+  const { url, initSelectedTags, onSubmit } = props;
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -33,12 +34,25 @@ function TagSelect() {
       tag.color = chroma(tag.color).hex();
       return tag;
     });
-    axios.post('http://localhost:3000/api/tags', { tags: selectedTags });
+    axios.post(url, { tags: selectedTags }).then((res) => {
+      onSubmit(res);
+    });
   };
 
   useEffect(() => {
     fetchTags();
   }, []);
+
+  useEffect(() => {
+    if (initSelectedTags) {
+      setSelectedTags(initSelectedTags.map((tag) => ({
+        title: tag.title,
+        value: tag.title,
+        label: tag.title,
+        color: tag.color,
+      })));
+    }
+  }, [initSelectedTags]);
 
   const handleChange = (newValue) => {
     setSelectedTags(newValue);
@@ -52,6 +66,7 @@ function TagSelect() {
         isMulti
         isClearable
         onChange={handleChange}
+        value={selectedTags}
         options={tags}
         // eslint-disable-next-line prefer-rest-params
         styles={colourStyles()}

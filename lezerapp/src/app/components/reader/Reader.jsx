@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
-import axios from 'axios';
-import moment from 'moment';
-import TagPill from '../tagPill/TagPill';
 
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useStore } from 'react-redux';
 import './Reader.scss';
+import Dock from '../dock/Dock';
+import FullArticle from '../fullArticle/FullArticle';
+import ArticleSidebar from '../articleSidebar/ArticleSidebar';
 
 function Reader() {
+  const store = useStore();
   const { id } = useParams();
   const [article, setArticle] = useState({});
+
+  axios.interceptors.request.use((config) => {
+    if (store.getState().user) {
+      config.headers.Username = store.getState().user.username;
+    }
+    return config;
+  });
 
   const getArticle = () => {
     axios.get(`http://localhost:3000/api/articles/${id}`).then(({ data }) => {
@@ -17,41 +26,39 @@ function Reader() {
     });
   };
 
+  const tagsUpdated = ({ data }) => {
+    setArticle(data);
+  };
+
   useEffect(() => {
     getArticle();
   }, []);
 
   return (
-    <div className="reader">
-      <div className="flex justify-between">
-        <Link to="/app">
-          <KeyboardArrowLeft />
-          Back
-        </Link>
-        <a rel="noreferrer" target="_blank" href={article.source}>
-          Source
-          <KeyboardArrowRight />
-        </a>
+    <div className="min-h-screen bg-gray-50 font-serif text-sm">
+      <div className="min-h-full md:grid grid-cols-4">
+        <nav className="col-span-1">
+          <div className="grid grid-cols-5 min-h-full">
+            <div className="col-span-1 bg-white relative top-0">
+              <Dock />
+            </div>
+            <div className="col-span-4">
+              <ArticleSidebar
+                initSelectedTags={article.tags}
+                url={`${id}`}
+                onSubmit={tagsUpdated}
+              />
+            </div>
+          </div>
+        </nav>
+        <main className="min-h-screen col-span-3 bg-white">
+          <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0">
+            <FullArticle article={article} />
+          </div>
+        </main>
       </div>
-      <div className="articleTags pb-6 pt-16 text-sm">
-        { (article.tags) ? article.tags.map((tag) => <TagPill key={tag.title} data={tag} />) : <span>No tags found</span> }
-      </div>
-      <h1 className="font-bold text-3xl pb-4">{article.title}</h1>
-      <small className="text-md italic pb-4 block">
-        { article.author }
-        &nbsp;
-        { article.published ? 'published on' : '' }
-        &nbsp;
-        { article.published !== null
-          ? moment(article.published).format('DD-MM-YYYY')
-          : null }
-      </small>
-      <div>
-        { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} /> : '' }
-      </div>
-      {/* eslint-disable-next-line react/no-danger */}
-      <div className="max-w-2xl m-auto mb-64 article" dangerouslySetInnerHTML={{ __html: article.html }} />
     </div>
+
   );
 }
 

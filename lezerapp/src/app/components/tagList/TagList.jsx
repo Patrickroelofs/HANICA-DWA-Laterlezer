@@ -2,8 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import chroma from 'chroma-js';
 
-// import TagSelect from '../tagSelect/TagSelect';
-
 function TagList() {
   const chromaConversion = (color) => {
     if (chroma.contrast(color, 'white') > 2) {

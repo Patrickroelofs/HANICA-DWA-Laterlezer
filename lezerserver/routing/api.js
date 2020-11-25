@@ -14,7 +14,9 @@ router.use(auth);
 router.route('/articles')
   .get(articleController.getArticles)
   .post(articleController.createArticlePost);
-router.get('/articles/:id', articleController.getArticle);
+router.route('/articles/:id')
+  .post(articleController.updateArticle)
+  .get(articleController.getArticle);
 
 router.route('/tags')
   .get(tagController.getTagsGet)

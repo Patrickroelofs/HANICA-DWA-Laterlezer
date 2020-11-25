@@ -18,7 +18,7 @@ function TagSelect() {
   const [selectedTags, setSelectedTags] = useState([]);
 
   const fetchTags = () => {
-    axios.get('http://localhost:3000/api/user/testuser/tag').then(({ data }) => {
+    axios.get('http://localhost:3000/api/tags').then(({ data }) => {
       setTags(data.data.map((tag) => {
         tag.value = tag.title;
         tag.label = tag.title;
@@ -33,7 +33,7 @@ function TagSelect() {
       tag.color = chroma(tag.color).hex();
       return tag;
     });
-    axios.post('http://localhost:3000/api/tag', { tags: selectedTags });
+    axios.post('http://localhost:3000/api/tags', { tags: selectedTags });
   };
 
   useEffect(() => {

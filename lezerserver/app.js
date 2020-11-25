@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const api = require('./routing/api');
+const logger = require('morgan')
 
 const app = express();
 const port = 3000;
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', api);
+app.use(logger('dev'))
 
 // Error middlewares
 require('./middlewares/error.middleware')(app);

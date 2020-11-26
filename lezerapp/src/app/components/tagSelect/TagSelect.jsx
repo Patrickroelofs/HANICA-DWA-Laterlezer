@@ -43,7 +43,6 @@ function TagSelect(props) {
 
   useEffect(() => {
     fetchTags();
-    console.log(`selectedTags: ${selectedTags}`);
   }, []);
 
   useEffect(() => {

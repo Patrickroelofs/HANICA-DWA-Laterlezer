@@ -29,18 +29,21 @@ function TagSelect(props) {
   };
 
   const postTags = () => {
-    selectedTags.map((tag) => {
-      tag.title = tag.value;
-      tag.color = chroma(tag.color).hex();
-      return tag;
-    });
-    axios.post(url, { tags: selectedTags }).then((res) => {
+    if (selectedTags != null) {
+      selectedTags.map((tag) => {
+        tag.title = tag.value;
+        tag.color = chroma(tag.color).hex();
+        return tag;
+      });
+    }
+    axios.post(url, { tags: selectedTags || [] }).then((res) => {
       onSubmit(res);
     });
   };
 
   useEffect(() => {
     fetchTags();
+    console.log(`selectedTags: ${selectedTags}`);
   }, []);
 
   useEffect(() => {

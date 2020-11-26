@@ -26,8 +26,10 @@ userSchema.methods.getTags = function () {
 };
 
 userSchema.methods.createTag = function (data) {
-  if (data === []) throw new CustomError('No tag given', 400);
   data.forEach((newTag) => {
+    if (newTag.title === '') {
+      throw new CustomError('No tag title given', 400);
+    }
     if (this.tags.find((tag) => tag.title === newTag.title) === undefined) {
       this.tags.push(newTag);
     } else {

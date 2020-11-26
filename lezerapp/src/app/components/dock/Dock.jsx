@@ -16,12 +16,12 @@ function Dock() {
   return (
     <section id="dock" className="flex flex-col justify-between min-h-screen md:sticky md:top-0">
       <div className="w-full text-center pt-4">
-        {/* logo here */}
+        <img className="m-auto w-16" alt="" src="/logo512.png" />
       </div>
 
       <div className="pb-8">
         <button type="button" onClick={onLogout} className="text-center w-full mb-4"><Lock /></button>
-        <img className="m-auto rounded-full h-42 w-42" alt="" src="http://placehold.it/48x48" />
+        <img className="m-auto rounded-full w-16" alt="" src="https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png" />
       </div>
     </section>
   );

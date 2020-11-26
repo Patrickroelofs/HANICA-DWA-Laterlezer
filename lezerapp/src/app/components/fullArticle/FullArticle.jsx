@@ -1,13 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
+import { BallBeat } from 'react-pure-loaders';
 import moment from 'moment';
 import BackToTop from 'react-back-to-top-button';
 import TagPill from '../tagPill/TagPill';
 
 function FullArticle(props) {
-  const { article } = props;
+  const { article, loading } = props;
 
+  if (loading) {
+    return (
+      <div className="w-full h-screen relative">
+        <div className="text-center inline-block absolute left-2/4 top-1/3">
+          <BallBeat
+            color="#000"
+            loading={loading}
+          />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="reader">
       <div className="flex justify-between">

@@ -12,6 +12,7 @@ function Reader() {
   const store = useStore();
   const { id } = useParams();
   const [article, setArticle] = useState({});
+  const [loading, setLoading] = useState(false);
 
   axios.interceptors.request.use((config) => {
     if (store.getState().user) {
@@ -21,8 +22,10 @@ function Reader() {
   });
 
   const getArticle = () => {
+    setLoading(true);
     axios.get(`http://localhost:3000/api/articles/${id}`).then(({ data }) => {
       setArticle(data);
+      setLoading(false);
     });
   };
 
@@ -53,7 +56,7 @@ function Reader() {
         </nav>
         <main className="min-h-screen col-span-3 bg-white">
           <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0 prose lg:prose-sm">
-            <FullArticle article={article} />
+            <FullArticle article={article} loading={loading} />
           </div>
         </main>
       </div>

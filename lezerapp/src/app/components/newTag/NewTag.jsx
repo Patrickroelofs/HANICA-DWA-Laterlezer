@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ChromePicker } from 'react-color';
+import useOnclickOutside from 'react-cool-onclickoutside';
 import chroma from 'chroma-js';
 import createTag from './NewTagAction';
 
@@ -57,6 +58,10 @@ function NewTag() {
     }
   }, []);
 
+  const ref = useOnclickOutside(() => {
+    setShowPicker(false);
+  });
+
   return (
     <form onSubmit={handleSubmit}>
       <p className="pt-6 pb-4 text-xl font-bold">Add a tag</p>
@@ -79,12 +84,15 @@ function NewTag() {
       <div className="inline-block relative w-6/12">
         <input type="submit" value="Add Tag" className="inline-block items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none" />
         {(showPicker) ? (
-          <ChromePicker
-            className="font-sans absolute left-full -top-2"
-            color={color}
-            onChange={handleChangeComplete}
-            disableAlpha
-          />
+          <div ref={ref}>
+            <ChromePicker
+              className="font-sans absolute left-full -top-2"
+              color={color}
+              onChange={handleChangeComplete}
+              disableAlpha
+            />
+          </div>
+
         ) : null}
       </div>
       <hr className="my-3" />

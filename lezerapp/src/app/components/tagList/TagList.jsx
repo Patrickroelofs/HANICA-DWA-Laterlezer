@@ -23,7 +23,7 @@ function TagList() {
     axios.get('http://localhost:3000/api/tags').then(({ data }) => {
       dispatch(setTags(data.data));
     });
-  });
+  }, [setTags]);
 
   const tags = useSelector((state) => state.tags);
 

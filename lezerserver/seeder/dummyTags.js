@@ -15,6 +15,18 @@ const tags = [
     title: 'Fun',
     color: '#bcb8d5',
   },
+  {
+    title: 'Sport',
+    color: '#95fa23',
+  },
+  {
+    title: 'Muziek',
+    color: '#123456',
+  },
+  {
+    title: 'Javascript',
+    color: '#654312',
+  },
 ];
 
 module.exports = tags;

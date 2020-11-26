@@ -63,7 +63,7 @@ function NewTag() {
       <label className="italic inline-block w-8/12 pr-8 box-border text-sm" htmlFor="tagTitle">
         Tag title: &nbsp;
         <span style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
-        <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={changeTitle} className="text-base block w-full shadow-sm" />
+        <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={changeTitle} className="text-base block w-full shadow-sm" maxLength="30" required />
       </label>
       <label htmlFor="showPicker" className="italic inline-block w-4/12 text-sm">
         Tag color:

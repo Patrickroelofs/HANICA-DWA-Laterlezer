@@ -12,7 +12,6 @@ function TagList() {
 
   const changeColor = (e, tag) => {
     e.preventDefault();
-    console.log('yep');
     e.target.style.background = chromaConversion(tag.color);
   };
 

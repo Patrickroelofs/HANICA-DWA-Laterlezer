@@ -11,8 +11,7 @@ exports.getArticles = async (req, res) => {
 };
 
 exports.getArticle = async (req, res) => {
-  const article = req.user.articles.find((article) => article._id == req.params.id);
-
+  const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
   res.json(article);
 };
 
@@ -53,7 +52,7 @@ exports.createArticlePost = async (req, res) => {
 };
 
 exports.updateArticle = async (req, res) => {
-  const article = req.user.articles.find((article) => article._id == req.params.id);
+  const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
   if (req.body.tags) {
     const newTags = req.body.tags.filter((tag) => !req.user.tags.find((uTag) => uTag.title === tag.title));
     req.user.createTag(newTags);
@@ -61,4 +60,4 @@ exports.updateArticle = async (req, res) => {
   }
   req.user.save();
   res.json(article);
-}
+};

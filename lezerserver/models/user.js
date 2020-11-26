@@ -26,8 +26,13 @@ userSchema.methods.getTags = function () {
 };
 
 userSchema.methods.createTag = function (data) {
-  if (data === []) throw new CustomError('No tag given', 400);
   data.forEach((newTag) => {
+    if (newTag.title.trim().length === 0) {
+      throw new CustomError('No tag title given', 400);
+    }
+    if (newTag.title.length > 30) {
+      throw new CustomError('Tag title is too long', 400);
+    }
     if (this.tags.find((tag) => tag.title === newTag.title) === undefined) {
       this.tags.push(newTag);
     } else {

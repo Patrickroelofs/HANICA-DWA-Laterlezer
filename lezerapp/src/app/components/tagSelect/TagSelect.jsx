@@ -71,7 +71,7 @@ function TagSelect(props) {
         // eslint-disable-next-line prefer-rest-params
         styles={colourStyles()}
       />
-      <button type="submit" onClick={() => postTags()}>Add</button>
+      <button type="submit" onClick={() => postTags()} className="inline-block mt-4 items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">Add</button>
     </>
   );
 }

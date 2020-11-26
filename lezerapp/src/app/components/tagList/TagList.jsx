@@ -1,8 +1,12 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import chroma from 'chroma-js';
+import axios from 'axios';
+import { setTags } from '../newTag/NewTagSlice';
 
 function TagList() {
+  const dispatch = useDispatch();
+
   const chromaConversion = (color) => {
     if (chroma.contrast(color, 'white') > 2) {
       return 'white';
@@ -12,9 +16,14 @@ function TagList() {
 
   const changeColor = (e, tag) => {
     e.preventDefault();
-    console.log('yep');
     e.target.style.background = chromaConversion(tag.color);
   };
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/api/tags').then(({ data }) => {
+      dispatch(setTags(data.data));
+    });
+  });
 
   const tags = useSelector((state) => state.tags);
 

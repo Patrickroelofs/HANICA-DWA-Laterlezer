@@ -1,11 +1,13 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import moment from 'moment';
-import React from 'react';
+import BackToTop from 'react-back-to-top-button';
 import TagPill from '../tagPill/TagPill';
 
 function FullArticle(props) {
   const { article } = props;
+
   return (
     <div className="reader">
       <div className="flex justify-between">
@@ -35,7 +37,16 @@ function FullArticle(props) {
         { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} /> : '' }
       </div>
       {/* eslint-disable-next-line react/no-danger */}
-      <div className="max-w-2xl m-auto mb-64 article" dangerouslySetInnerHTML={{ __html: article.html }} />
+      <div className="max-w-2xl m-auto mb-64 article " dangerouslySetInnerHTML={{ __html: article.html }} />
+      <BackToTop
+        speed={1250}
+        easing="easeInOutSine"
+        style={{
+          margin: '0', 'margin-right': '18px', 'margin-bottom': '18px', 'font-size': '12px', height: '32px', outline: '0',
+        }}
+      >
+        <span className="text-base font-sans bg-gray-200 text-black p-2 rounded-2xl">Back to top</span>
+      </BackToTop>
     </div>
   );
 }

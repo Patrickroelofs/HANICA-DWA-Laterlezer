@@ -15,7 +15,7 @@ function TagPill(props) {
     <span
       key={props.data.id}
       style={{ background: props.data.color, color: chromaConversion(props.data.color) }}
-      className="inline-block pt-2 pb-2 pr-3 pl-3 mr-2 mb-2 white rounded-3xl font-sans"
+      className="inline-block pt-2 pb-2 pr-3 pl-3 mr-2 mb-1 white rounded-3xl font-sans"
     >
       {props.data.title}
     </span>

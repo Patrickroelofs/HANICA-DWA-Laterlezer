@@ -6,9 +6,6 @@ import TagPill from '../tagPill/TagPill';
 
 function FullArticle(props) {
   const { article } = props;
-
-  console.log(article);
-
   return (
     <div className="reader">
       <div className="flex justify-between">

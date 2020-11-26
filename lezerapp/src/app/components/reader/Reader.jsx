@@ -52,7 +52,7 @@ function Reader() {
           </div>
         </nav>
         <main className="min-h-screen col-span-3 bg-white">
-          <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0">
+          <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0 prose lg:prose-sm">
             <FullArticle article={article} />
           </div>
         </main>

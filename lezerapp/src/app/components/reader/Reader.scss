@@ -1,41 +1,20 @@
-.article {
-    .excerpt{
-        font-weight: bold;
-        font-size: 1.25em;
-    }
-    figure {
-        margin-bottom: 32px;
-        figcaption {
-            font-size: 12px;
-            opacity: 0.45;
-            padding-top: 4px;
+:not(pre) {
+    code {
+        background-color: #F2F2F2;
+        padding: 2px 4px;
+        border-radius: 6px;
+        &::before{
+            display: none;
+        }
+        &::after {
+            display: none;
         }
     }
-    blockquote {
-        :first-child {
-            font-size: 32px;
-            margin: 0;
-        }
-        :last-child {
-            font-size: 16px;
-        }
-    }
+}
 
+pre {
     p {
-        line-height: 1.62;
-        margin-bottom: 32px;
-
-        code {
-            background-color: #F2F2F2;
-            padding: 2px 4px;
-            border-radius: 6px;
-        }
-    }
-    h2{
-        font-weight: bold;
-        margin-top: 36px;
-        font-size: 18px;
-        display: block;
-        margin-bottom: 8px;
+        display: inline;
+        margin: 0;
     }
 }

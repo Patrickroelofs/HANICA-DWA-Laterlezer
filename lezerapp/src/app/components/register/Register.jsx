@@ -14,6 +14,8 @@ function Register() {
 
     dispatch(registerUser(e.target.username.value)).then(() => {
       history.push('/app');
+      // TODO: Beautify this
+      window.location.reload('/app');
     }).catch((error) => {
       setResponse({
         status: error.status,
@@ -46,7 +48,7 @@ function Register() {
               <button type="submit" className="mt-6 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Register Account
               </button>
-              <button type="button" onClick={() => history.push('/login')} className="group relative w-full flex justify-center py-2 px-4 mt-6 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <button type="button" onClick={() => history.push('/app')} className="group relative w-full flex justify-center py-2 px-4 mt-6 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Login
               </button>
             </div>

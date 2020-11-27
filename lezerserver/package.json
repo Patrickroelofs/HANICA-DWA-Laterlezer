@@ -1,11 +1,37 @@
 {
-  "dependencies": {
-    "express": "^4.17.1",
-    "mongoose": "^5.10.15"
-  },
-  "devDependencies": {
-    "eslint": "^7.13.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1"
-  }
+	"dependencies": {
+		"@postlight/mercury-parser": "^2.2.0",
+		"body-parser": "^1.19.0",
+		"cors": "^2.8.5",
+		"express": "^4.17.1",
+		"mongoose": "^5.10.15",
+		"node-fetch": "^2.6.1"
+	},
+	"name": "lezerserver",
+	"version": "1.0.0",
+	"main": "app.js",
+	"devDependencies": {
+		"eslint": "^7.13.0",
+		"eslint-config-airbnb": "^18.2.1",
+		"eslint-plugin-import": "^2.22.1",
+		"jest": "^26.6.3",
+		"morgan": "^1.10.0",
+		"supertest": "^6.0.1"
+	},
+	"scripts": {
+		"test": "jest --verbose --collectCoverage --env=node",
+		"start": "nodemon ./app.js",
+		"seed": "node ./seeder/seed.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HANICA-DWA/sep2020-project-caracal.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/HANICA-DWA/sep2020-project-caracal/issues"
+	},
+	"homepage": "https://github.com/HANICA-DWA/sep2020-project-caracal#readme",
+	"description": ""
 }

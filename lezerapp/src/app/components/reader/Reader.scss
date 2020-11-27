@@ -1,0 +1,20 @@
+:not(pre) {
+    code {
+        background-color: #F2F2F2;
+        padding: 2px 4px;
+        border-radius: 6px;
+        &::before{
+            display: none;
+        }
+        &::after {
+            display: none;
+        }
+    }
+}
+
+pre {
+    p {
+        display: inline;
+        margin: 0;
+    }
+}

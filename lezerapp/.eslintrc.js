@@ -18,6 +18,10 @@ module.exports = {
     'react',
   ],
   rules: {
-    'linebreak-style': 0,
+    'no-plusplus': 0,
+    'react/prop-types': 0,
+    'linebreak-style': 0, // Fixes issues with windows/linux linebreaks
+    'no-param-reassign': 0, // reducers need param-reassigns
+    'max-len': 0, // tailwindcss classes generate long strings
   },
 };

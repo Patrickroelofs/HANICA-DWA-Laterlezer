@@ -13,7 +13,8 @@ function Login() {
     e.preventDefault();
 
     dispatch(loginUser(e.target.username.value)).then(() => {
-      history.push('/app');
+      // TODO: beautify this
+      window.location.reload();
     }).catch((error) => {
       setResponse({
         status: error.status,

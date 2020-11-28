@@ -21,7 +21,8 @@ module.exports = {
     'no-plusplus': 0,
     'react/prop-types': 0,
     'linebreak-style': 0, // Fixes issues with windows/linux linebreaks
-    'no-param-reassign': 0, // reducers need param-reassigns
-    'max-len': 0, // tailwindcss classes generate long strings
+    'no-param-reassign': 0, // Reducers need param-reassigns
+    'max-len': 0, // Tailwindcss classes generate long strings
+    'no-underscore-dangle': 0, // MongoDB adds _id to models
   },
 };

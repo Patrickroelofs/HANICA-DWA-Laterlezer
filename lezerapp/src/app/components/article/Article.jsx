@@ -1,13 +1,10 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint react/prop-types: 0 */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import TagPill from '../tagPill/TagPill';
 import Thumbnail from '../thumbnail/Thumbnail';
+import TagPill from '../tagPill/TagPill';
 
 function Article(props) {
   const { article } = props;
-
   return (
     <Link to={`app/${article._id}`}>
       <article className="grid grid-cols-4 mt-6">

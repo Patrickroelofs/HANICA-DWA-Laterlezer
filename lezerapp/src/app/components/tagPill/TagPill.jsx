@@ -1,11 +1,12 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import chroma from 'chroma-js';
 
 function TagPill(props) {
-  const chromaConversion = (color) => {
-    if (chroma.contrast(color, 'white') > 2) {
+  const { data } = props;
+  const { _id, title, color } = data;
+
+  const chromaConversion = (c) => {
+    if (chroma.contrast(c, 'white') > 2) {
       return 'white';
     }
     return 'black';
@@ -13,11 +14,11 @@ function TagPill(props) {
 
   return (
     <span
-      key={props.data.id}
-      style={{ background: props.data.color, color: chromaConversion(props.data.color) }}
+      key={_id}
+      style={{ background: color, color: chromaConversion(color) }}
       className="inline-block pt-2 pb-2 pr-3 pl-3 mr-2 mb-1 white rounded-3xl font-sans"
     >
-      {props.data.title}
+      {title}
     </span>
   );
 }

@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/role-has-required-aria-props */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
 
 function Tag(props) {
@@ -10,7 +7,7 @@ function Tag(props) {
   const { title, color } = tag;
 
   return (
-    <li id="listbox-item-0" role="option" onClick={() => setSelected(!isSelected)} onFocus={() => setHighlighted(!isHighlighted)} onMouseEnter={() => setHighlighted(true)} onMouseLeave={() => setHighlighted(false)} className={`${isHighlighted ? 'text-white bg-indigo-600' : 'text-gray-900'} cursor-default select-none relative py-2 pl-3 pr-9`}>
+    <li id="listbox-item-0" role="option" aria-selected onKeyPress={(e) => e.code === 'KeyT' && setSelected(!isSelected)} onClick={() => setSelected(!isSelected)} onFocus={() => setHighlighted(!isHighlighted)} onMouseEnter={() => setHighlighted(true)} onMouseLeave={() => setHighlighted(false)} className={`${isHighlighted ? 'text-white bg-indigo-600' : 'text-gray-900'} cursor-default select-none relative py-2 pl-3 pr-9`}>
       <div className="flex items-center">
         <span style={{ backgroundColor: color }} className="flex-shrink-0 h-6 w-6 rounded-full" />
         <span className={`${isSelected ? 'font-semibold' : 'font-normal'} ml-3 block truncate`}>

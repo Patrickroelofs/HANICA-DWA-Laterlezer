@@ -55,7 +55,7 @@ function FullArticle(props) {
         speed={1250}
         easing="easeInOutSine"
         style={{
-          margin: '0', 'margin-right': '18px', 'margin-bottom': '18px', 'font-size': '12px', height: '32px', outline: '0',
+          margin: '0', marginRight: '18px', marginBottom: '18px', fontSize: '12px', height: '32px', outline: '0',
         }}
       >
         <span className="text-base font-sans bg-gray-200 text-black p-2 rounded-2xl">Back to top</span>

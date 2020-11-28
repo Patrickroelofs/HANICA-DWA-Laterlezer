@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/role-has-required-aria-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import React, { useEffect, useState } from 'react';

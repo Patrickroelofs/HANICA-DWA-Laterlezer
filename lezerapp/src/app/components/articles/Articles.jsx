@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Article from '../article/Article';
+import ArticleSkeleton from '../skeleton/ArticleSkeleton';
 
 function Articles() {
   const [articles, setArticles] = useState([]);
@@ -17,11 +18,10 @@ function Articles() {
 
   return (
     <>
-      <h1 className="font-bold text-xl">All Articles</h1>
+      <h1 className="font-bold text-xl">My library</h1>
       <p className="text-sm pt-4">All your saved articles.</p>
-
       <div className="mt-12 mb-64">
-        {/* eslint-disable-next-line no-underscore-dangle */}
+        <ArticleSkeleton />
         { articles.map((article) => <Article key={article._id} article={article} />) }
       </div>
     </>

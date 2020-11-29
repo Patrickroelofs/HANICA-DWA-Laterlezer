@@ -38,14 +38,14 @@ const seedUsers = async () => {
         console.log(`Adding article: ${url}`);
         // Parse url
         const page = await HTMLParser(url);
-        const includedTags = [];
+        let includedTags = [];
         console.group(`Adding tags to article: ${url}`);
         for (let i = 0; i < Math.floor(Math.random() * tags.length); i += 1) {
           const randomTag = tags[Math.floor(Math.random() * tags.length)];
           if (!includedTags.includes(randomTag)) {
             console.log(`Adding tag: ${randomTag.title}, ${randomTag.color}`);
             // Push random tag into the article
-            includedTags.push(randomTag);
+            includedTags = [...includedTags, randomTag];
           }
         }
         console.groupEnd();

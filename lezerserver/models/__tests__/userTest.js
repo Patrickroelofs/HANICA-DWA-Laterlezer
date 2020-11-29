@@ -100,8 +100,7 @@ describe('User Model Tests', () => {
 
     expect(tags.length).toEqual(expectedTags.length);
 
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < tags.length; i++) {
+    for (let i = 0; i < tags.length; i += 1) {
       expect(tags[i].title).toEqual(expectedTags[i].title);
       expect(tags[i].color).toEqual(expectedTags[i].color);
     }

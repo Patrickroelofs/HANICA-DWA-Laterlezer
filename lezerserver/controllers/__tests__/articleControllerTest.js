@@ -16,8 +16,8 @@ describe('Article Model Tests', () => {
     articleController.getArticles({ user }, { json }).then(() => {
       expect(json.mock.calls.length).toBe(1);
       expect(json.mock.calls[0][0]).toMatchObject([
-        { html: null },
-        { html: null },
+        { },
+        { },
       ]);
     });
   });

@@ -14,6 +14,6 @@ const articleSchema = Schema({
   tags: [Tag.schema],
 });
 
-articleSchema.methods.addTag = function (tag) { this.tags.push(tag); };
+articleSchema.methods.addTag = function (tag) { this.tags = [...this.tags, tag]; };
 
 module.exports = model('Article', articleSchema);

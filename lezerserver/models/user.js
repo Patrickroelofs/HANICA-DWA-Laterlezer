@@ -15,9 +15,7 @@ const userSchema = new Schema({
 
 userSchema.statics.getUserByUsername = async function (userName) {
   const user = await this.model('User').findOne({ userName });
-  if (!user) {
-    throw new CustomError('User does not exists', 400);
-  }
+  if (!user) throw new CustomError('User does not exists', 400);
   return user;
 };
 
@@ -34,7 +32,7 @@ userSchema.methods.createTag = function (data) {
       throw new CustomError('Tag title is too long', 400);
     }
     if (this.tags.find((tag) => tag.title === newTag.title) === undefined) {
-      this.tags.push(newTag);
+      this.tags = [...this.tags, newTag];
     } else {
       throw new CustomError('Tag already exists', 400);
     }
@@ -49,11 +47,11 @@ userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
       ...this.articles[key], ...data, html, source,
     };
   } else {
-    this.articles.push({
+    this.articles = [...this.articles, {
       html,
       source,
       ...data,
-    });
+    }];
   }
 };
 

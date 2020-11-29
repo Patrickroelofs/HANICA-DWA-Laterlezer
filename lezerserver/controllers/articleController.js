@@ -3,7 +3,7 @@ const htmlParser = require('../utils/HTMLParser');
 exports.getArticles = async (req, res) => {
   const articles = req.user.articles.reverse().map((article) => {
     const parsedArticle = article;
-    delete parsedArticle.html;
+    parsedArticle.html = undefined;
     return parsedArticle;
   });
   res.json(articles);

@@ -3,9 +3,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const { json, urlencoded } = require('body-parser');
+const logger = require('morgan');
+const compression = require('compression');
 const api = require('./routing/api');
-const logger = require('morgan')
 
 const app = express();
 const port = 3000;
@@ -13,11 +14,13 @@ const port = 3000;
 app.use(cors({ origin: true, credentials: true }));
 app.options('*', cors({ origin: true, credentials: true }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(json());
+app.use(urlencoded({ extended: true }));
+
+app.use(compression());
 
 app.use('/api', api);
-app.use(logger('dev'))
+app.use(logger('dev'));
 
 // Error middlewares
 require('./middlewares/error.middleware')(app);

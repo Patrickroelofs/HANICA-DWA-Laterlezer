@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 const Article = require('./article');
 const Tag = require('./tag');
 const CustomError = require('../utils/custom-error');
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   firstName: String,
   lastName: String,
   userName: String,
@@ -57,6 +57,6 @@ userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
   }
 };
 
-const User = mongoose.model('User', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;

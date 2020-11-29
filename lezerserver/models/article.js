@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 const Tag = require('./tag');
 
-const articleSchema = mongoose.Schema({
+const articleSchema = Schema({
   title: String,
   html: String,
   source: String,
@@ -16,4 +16,4 @@ const articleSchema = mongoose.Schema({
 
 articleSchema.methods.addTag = function (tag) { this.tags.push(tag); };
 
-module.exports = mongoose.model('Article', articleSchema);
+module.exports = model('Article', articleSchema);

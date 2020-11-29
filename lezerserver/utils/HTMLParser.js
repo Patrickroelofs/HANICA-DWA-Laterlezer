@@ -1,3 +1,3 @@
-const Mercury = require('@postlight/mercury-parser');
+const { parse } = require('@postlight/mercury-parser');
 
-module.exports = (url) => Mercury.parse(url);
+module.exports = (url) => parse(url);

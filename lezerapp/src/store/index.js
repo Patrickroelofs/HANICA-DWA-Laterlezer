@@ -1,14 +1,13 @@
+/* eslint-disable no-console */
 import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
-import loginSlice from '../app/components/login/LoginSlice';
-import newTagSlice from '../app/components/newTag/NewTagSlice';
+import tag from './tagSlice';
+import user from './userSlice';
+import article from './articleSlice';
 
-const reducers = combineReducers({
-  user: loginSlice,
-  tags: newTagSlice,
-});
+const reducers = combineReducers({ user, tag, article });
 
 const persistConfig = {
   key: 'root',
@@ -17,9 +16,9 @@ const persistConfig = {
 
 // Logger logs all states after actions
 const loggerMiddleware = (store) => (next) => (action) => {
-  console.log('ACTION:', action.type, action);
+  console.info(`%c ACTION: ${action.type}`, 'color: #730073', action);
   const result = next(action);
-  console.log('STATE AFTER ACTION:', action.type, store.getState());
+  console.info(`%c STATE AFTER ACTION: ${action.type}`, 'color: #228B22', store.getState());
   return result;
 };
 

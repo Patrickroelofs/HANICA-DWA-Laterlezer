@@ -1,66 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ChromePicker } from 'react-color';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import chroma from 'chroma-js';
-import createTag from './NewTagAction';
+import { createTag } from '../../../store/tagSlice';
+import setContrast from '../../../utils/chromaContrast';
 
 function NewTag() {
-  const dispatch = useDispatch();
   const [title, setTitle] = useState('');
-  const [color, setColor] = useState('');
+  const [color, setColor] = useState(chroma.random().hex());
   const [showPicker, setShowPicker] = useState(false);
   const [response, setResponse] = useState({});
 
-  const setRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let randColor = '#';
-    for (let i = 0; i < 6; i++) {
-      randColor += letters[Math.floor(Math.random() * 16)];
-    }
-    setColor(randColor);
-  };
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTag(title, color)).then((res) => {
+    dispatch(createTag(title, chroma(color).hex())).then((res) => {
       setResponse(res);
     });
     setTitle('');
     setShowPicker(false);
-    setRandomColor();
   };
 
-  const changeShowPicker = () => {
-    setShowPicker(!showPicker);
-  };
-
-  const changeTitle = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleChangeComplete = (color2) => {
-    setColor(color2.hex);
-  };
-
-  const chromaConversion = (tagColor) => {
-    if (tagColor !== '') {
-      if (chroma.contrast(tagColor, 'white') > 2) {
-        return 'white';
-      }
-    }
-    return 'black';
-  };
-
-  useEffect(() => {
-    if (color === '') {
-      setRandomColor();
-    }
-  }, []);
-
-  const ref = useOnclickOutside(() => {
-    setShowPicker(false);
-  });
+  const ref = useOnclickOutside(() => setShowPicker(false));
 
   return (
     <form onSubmit={handleSubmit}>
@@ -68,7 +31,7 @@ function NewTag() {
       <label className="italic inline-block w-8/12 pr-8 box-border text-sm" htmlFor="tagTitle">
         Tag title: &nbsp;
         <span style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
-        <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={changeTitle} className="text-base block w-full shadow-sm" maxLength="30" required />
+        <input type="text" id="tagTitle" name="tagTitle" value={title} onChange={(e) => setTitle(e.target.value)} className="text-base block w-full shadow-sm" maxLength="30" required />
       </label>
       <label htmlFor="showPicker" className="italic inline-block w-4/12 text-sm">
         Tag color:
@@ -76,8 +39,8 @@ function NewTag() {
           type="button"
           id="showPicker"
           value={color}
-          style={{ backgroundColor: color, color: chromaConversion(color) }}
-          onClick={changeShowPicker}
+          style={{ backgroundColor: color, color: setContrast(color) }}
+          onClick={() => setShowPicker(!showPicker)}
           className="text-base block w-full items-center px-3 py-1 mb-3 border border-gray-300 rounded-md shadow-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
         />
       </label>
@@ -88,7 +51,7 @@ function NewTag() {
             <ChromePicker
               className="font-sans absolute left-full -top-2"
               color={color}
-              onChange={handleChangeComplete}
+              onChange={(e) => { setColor(e.hex); }}
               disableAlpha
             />
           </div>

@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { get } from 'axios';
 import Article from '../article/Article';
 import ArticleSkeleton from '../skeleton/ArticleSkeleton';
+import { selectArticles, setArticles } from '../../../store/articleSlice';
 
 function Articles() {
-  const [articles, setArticles] = useState([]);
-
-  const getArticles = () => {
-    axios.get('http://localhost:3000/api/articles').then(({ data }) => {
-      setArticles(data);
-    });
-  };
+  const articles = useSelector(selectArticles);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getArticles();
+    get('http://localhost:3000/api/articles').then(({ data }) => {
+      dispatch(setArticles(data));
+    });
   }, []);
 
   return (

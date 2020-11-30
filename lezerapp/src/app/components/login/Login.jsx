@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import loginUser from './LoginAction';
+import { loginUser } from '../../../store/userSlice';
 
 function Login() {
   const dispatch = useDispatch();
@@ -13,8 +13,7 @@ function Login() {
     e.preventDefault();
 
     dispatch(loginUser(e.target.username.value)).then(() => {
-      // TODO: beautify this
-      window.location.reload();
+      history.push('/app');
     }).catch((error) => {
       setResponse({
         status: error.status,

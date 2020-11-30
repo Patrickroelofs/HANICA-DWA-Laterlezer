@@ -1,40 +1,40 @@
 import React, { useEffect, useState } from 'react';
-
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useStore } from 'react-redux';
-import './Reader.scss';
+import { useDispatch, useSelector } from 'react-redux';
 import Dock from '../dock/Dock';
 import FullArticle from '../fullArticle/FullArticle';
 import ArticleSidebar from '../articleSidebar/ArticleSidebar';
+import { selectUsername } from '../../../store/userSlice';
+import { setCurrentArticleId, selectCurrentArticle, setCurrentArticle } from '../../../store/articleSlice';
+import ArticleHeader from '../articleHeader/ArticleHeader';
+
+import './Reader.scss';
 
 function Reader() {
-  const store = useStore();
+  const dispatch = useDispatch();
   const { id } = useParams();
-  const [article, setArticle] = useState({});
-  const [loading, setLoading] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+  const username = useSelector(selectUsername);
+  const article = useSelector(selectCurrentArticle);
 
   axios.interceptors.request.use((config) => {
-    if (store.getState().user) {
-      config.headers.Username = store.getState().user.username;
-    }
+    if (username) config.headers.Username = username;
     return config;
   });
 
-  const getArticle = () => {
+  const fetchArticle = () => {
     setLoading(true);
     axios.get(`http://localhost:3000/api/articles/${id}`).then(({ data }) => {
-      setArticle(data);
+      dispatch(setCurrentArticle(data));
       setLoading(false);
     });
   };
 
-  const tagsUpdated = ({ data }) => {
-    setArticle(data);
-  };
-
   useEffect(() => {
-    getArticle();
+    dispatch(setCurrentArticleId(id));
+    fetchArticle();
   }, []);
 
   return (
@@ -48,14 +48,15 @@ function Reader() {
             <div className="col-span-4">
               <ArticleSidebar
                 initSelectedTags={article.tags}
-                url={`${id}`}
-                onSubmit={tagsUpdated}
+                url={id}
+                onSubmit={({ data }) => dispatch(setCurrentArticle(data))}
               />
             </div>
           </div>
         </nav>
         <main className="min-h-screen col-span-3 bg-white">
           <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0 prose lg:prose-sm">
+            <ArticleHeader article={article} />
             <FullArticle article={article} loading={loading} />
           </div>
         </main>

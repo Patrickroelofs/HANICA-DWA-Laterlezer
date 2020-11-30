@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import registerUser from './RegisterAction';
+import { registerUser } from '../../../store/userSlice';
 
 function Register() {
   const dispatch = useDispatch();
@@ -14,8 +14,6 @@ function Register() {
 
     dispatch(registerUser(e.target.username.value)).then(() => {
       history.push('/app');
-      // TODO: Beautify this
-      window.location.reload('/app');
     }).catch((error) => {
       setResponse({
         status: error.status,

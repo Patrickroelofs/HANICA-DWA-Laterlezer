@@ -1,8 +1,7 @@
 import React from 'react';
 import chroma from 'chroma-js';
 
-function TagPill(props) {
-  const { data } = props;
+function TagPill({ data }) {
   const { _id, title, color } = data;
 
   const chromaConversion = (c) => {

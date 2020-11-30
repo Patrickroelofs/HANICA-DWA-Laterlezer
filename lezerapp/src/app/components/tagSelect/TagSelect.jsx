@@ -12,8 +12,7 @@ import chroma from 'chroma-js';
 import colourStyles from './colourStyles';
 
 const animatedComponents = makeAnimated();
-function TagSelect(props) {
-  const { url, initSelectedTags, onSubmit } = props;
+function TagSelect({ url, initSelectedTags, onSubmit }) {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 

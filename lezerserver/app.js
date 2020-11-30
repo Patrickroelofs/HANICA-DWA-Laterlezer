@@ -11,6 +11,8 @@ const api = require('./routing/api');
 const app = express();
 const port = 3000;
 
+app.use(logger('dev'));
+
 app.use(cors({ origin: true, credentials: true }));
 app.options('*', cors({ origin: true, credentials: true }));
 
@@ -20,7 +22,6 @@ app.use(urlencoded({ extended: true }));
 app.use(compression());
 
 app.use('/api', api);
-app.use(logger('dev'));
 
 // Error middlewares
 require('./middlewares/error.middleware')(app);

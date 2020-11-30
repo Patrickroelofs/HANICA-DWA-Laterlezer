@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
-import { BallBeat } from 'react-pure-loaders';
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import BallBeat from 'react-pure-loaders/build/BallBeat';
 import moment from 'moment';
-import BackToTop from 'react-back-to-top-button';
+import ScrollToTop from 'react-scroll-up';
 import TagPill from '../tagPill/TagPill';
 
 function FullArticle(props) {
@@ -25,12 +26,12 @@ function FullArticle(props) {
     <div className="reader">
       <div className="flex justify-between">
         <Link to="/app">
-          <KeyboardArrowLeft />
+          <KeyboardArrowLeftIcon />
           Back
         </Link>
         <a rel="noreferrer" target="_blank" href={article.source}>
           Source
-          <KeyboardArrowRight />
+          <KeyboardArrowRightIcon />
         </a>
       </div>
       <div className="articleTags pb-6 pt-6 text-sm">
@@ -51,15 +52,16 @@ function FullArticle(props) {
       </div>
       {/* eslint-disable-next-line react/no-danger */}
       <div className="max-w-2xl m-auto mb-64 article " dangerouslySetInnerHTML={{ __html: article.html }} />
-      <BackToTop
-        speed={1250}
+      <ScrollToTop
+        duration={1250}
+        showUnder={160}
         easing="easeInOutSine"
         style={{
           margin: '0', marginRight: '18px', marginBottom: '18px', fontSize: '12px', height: '32px', outline: '0',
         }}
       >
         <span className="text-base font-sans bg-gray-200 text-black p-2 rounded-2xl">Back to top</span>
-      </BackToTop>
+      </ScrollToTop>
     </div>
   );
 }

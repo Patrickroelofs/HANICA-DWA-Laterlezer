@@ -9,15 +9,12 @@ import axios from 'axios';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
 import chroma from 'chroma-js';
-import { useSelector } from 'react-redux';
 import colourStyles from './colourStyles';
-import { selectTags, setTags } from '../../../store/tagSlice';
 
 const animatedComponents = makeAnimated();
 function TagSelect({ url, initSelectedTags, onSubmit }) {
-  const tags = useSelector(selectTags);
-
   const [selectedTags, setSelectedTags] = useState([]);
+  const [tags, setTags] = useState([]);
 
   const fetchTags = () => {
     axios.get('http://localhost:3000/api/tags').then(({ data }) => {

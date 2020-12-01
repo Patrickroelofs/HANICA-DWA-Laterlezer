@@ -17,7 +17,7 @@ function Router() {
   const checkLoggedOut = (comp) => (username ? <Redirect to="/app" /> : comp);
 
   return (
-    <BrowserRouter onUpdate={() => window.scrollTo(0, 0)}>
+    <BrowserRouter>
       <Switch>
         <Route path="/" exact>
           {checkLoggedIn(<Redirect to="/app" />)}

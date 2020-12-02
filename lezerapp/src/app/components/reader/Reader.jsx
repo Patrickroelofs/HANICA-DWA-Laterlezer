@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import loadable from '@loadable/component';
+import BallBeat from 'react-pure-loaders/build/BallBeat';
+
 import Dock from '../dock/Dock';
-import FullArticle from '../fullArticle/FullArticle';
 import ArticleSidebar from '../articleSidebar/ArticleSidebar';
 import { selectUsername } from '../../../store/userSlice';
 import { setCurrentArticleId, selectCurrentArticle, setCurrentArticle } from '../../../store/articleSlice';
@@ -11,11 +13,12 @@ import ArticleHeader from '../articleHeader/ArticleHeader';
 
 import './Reader.scss';
 
+const FullArticle = loadable(() => import('../fullArticle/FullArticle'));
+
 function Reader() {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const [loading, setLoading] = useState(true);
   const username = useSelector(selectUsername);
   const article = useSelector(selectCurrentArticle);
 
@@ -25,10 +28,8 @@ function Reader() {
   });
 
   const fetchArticle = () => {
-    setLoading(true);
     axios.get(`http://localhost:3000/api/articles/${id}`).then(({ data }) => {
       dispatch(setCurrentArticle(data));
-      setLoading(false);
     });
   };
 
@@ -57,7 +58,19 @@ function Reader() {
         <main className="min-h-screen col-span-3 bg-white">
           <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0 prose lg:prose-sm">
             <ArticleHeader article={article} />
-            <FullArticle article={article} loading={loading} />
+            <FullArticle
+              html={article.html}
+              fallback={(
+                <div className="w-full h-screen relative">
+                  <div className="text-center inline-block absolute left-2/4 top-1/3">
+                    <BallBeat
+                      color="#000"
+                      loading
+                    />
+                  </div>
+                </div>
+)}
+            />
           </div>
         </main>
       </div>

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'axios';
 import Article from '../article/Article';
-import ArticleSkeleton from '../skeleton/ArticleSkeleton';
 import { selectArticles, setArticles } from '../../../store/articleSlice';
 
 function Articles() {
@@ -20,8 +19,7 @@ function Articles() {
       <h1 className="font-bold text-xl">My library</h1>
       <p className="text-sm pt-4">All your saved articles.</p>
       <div className="mt-12 mb-64">
-        <ArticleSkeleton />
-        { articles.map((article) => <Article key={article._id} article={article} />) }
+        { articles && articles.map((article) => <Article key={article._id} article={article} />) }
       </div>
     </>
   );

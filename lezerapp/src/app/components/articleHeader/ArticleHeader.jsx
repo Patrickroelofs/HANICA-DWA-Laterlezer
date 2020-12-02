@@ -35,6 +35,9 @@ export default function ArticleHeader() {
           ? moment(article.published).format('DD-MM-YYYY')
           : null }
       </small>
+      <div>
+        { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} /> : '' }
+      </div>
     </>
   );
 }

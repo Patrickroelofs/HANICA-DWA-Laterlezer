@@ -57,6 +57,21 @@ userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
   }
 };
 
+userSchema.methods.getArticlesByTags = function (tags) {
+  const filteredArticles = this.articles.filter((a) => {
+    let counter = 0;
+    tags.forEach((filterTag) => {
+      a.tags.forEach((articleTag) => {
+        if (filterTag === articleTag.title) {
+          counter += 1;
+        }
+      });
+    });
+    return (counter === tags.length) ? a : null;
+  });
+  return filteredArticles;
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

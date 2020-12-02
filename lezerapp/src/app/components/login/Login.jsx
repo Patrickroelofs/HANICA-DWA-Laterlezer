@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import GoogleLogin from 'react-google-login';
 
-import loginUser from './LoginAction';
+import { loginUser, googleAccount } from './LoginAction';
 
 function Login() {
   const dispatch = useDispatch();
@@ -24,6 +25,19 @@ function Login() {
     });
   };
 
+  const successResponseFromGoogle = (googleResponse) => {
+    console.log('success: ', googleResponse);
+
+    dispatch(googleAccount(googleResponse)).then(() => {
+      // TODO: Dont use reload... find something else...
+      window.location.reload();
+    });
+  };
+
+  const failResponseFromGoogle = (googleResponse) => {
+    console.log('fail:', googleResponse);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-12">
@@ -33,6 +47,21 @@ function Login() {
         <h2 className="mt-6 text-center text-2xl font-extrabold text-gray-900">
           Sign in to your account
         </h2>
+        <div className="text-center">
+          <GoogleLogin
+            clientId="366910807736-j7einmtbo7udt56fvfs9hdmvsc1puv5u.apps.googleusercontent.com"
+            buttonText="Continue"
+            onSuccess={successResponseFromGoogle}
+            onFailure={failResponseFromGoogle}
+            cookiePolicy="single_host_origin"
+            isSignedIn={false}
+          />
+        </div>
+
+        <h2 className="text-center text-xl font-extrabold text-gray-900">
+          Or login with
+        </h2>
+        <hr />
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">

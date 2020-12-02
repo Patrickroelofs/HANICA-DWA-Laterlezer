@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import { useStore } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Lock } from '@material-ui/icons';
 
 function Dock() {
+  const store = useStore();
   const history = useHistory();
 
   const onLogout = () => {
@@ -23,7 +25,7 @@ function Dock() {
 
       <div className="pb-8">
         <button type="button" onClick={onLogout} className="text-center w-full mb-4"><Lock /></button>
-        <img className="m-auto rounded-full w-16" alt="" src="https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png" />
+        <img className="m-auto rounded-full w-16" alt="" src={`${store.getState().user.profilePicture ? store.getState().user.profilePicture : 'https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png'} `} />
       </div>
     </section>
   );

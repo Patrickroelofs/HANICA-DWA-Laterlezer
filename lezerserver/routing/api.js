@@ -6,8 +6,8 @@ const { auth } = require('../middlewares/auth.middleware');
 
 const router = express();
 
-router.get('/user/:userName', userController.loginUser);
 router.post('/user', userController.createUser);
+router.get('/user/:userName', userController.loginUser);
 
 router.use(auth);
 

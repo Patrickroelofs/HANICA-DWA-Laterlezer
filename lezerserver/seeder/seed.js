@@ -7,7 +7,7 @@ const User = require('../models/user');
 const users = require('./dummyUsers');
 const articles = require('./dummyArticles');
 const tags = require('./dummyTags');
-const HTMLParser = require('../utils/HTMLParser');
+const { parseHTML } = require('../utils/HTMLParser');
 
 // Make a connection with database
 mongoose.connect('mongodb://localhost:27017/reader', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
@@ -37,7 +37,8 @@ const seedUsers = async () => {
       for (const url of articles) {
         console.log(`Adding article: ${url}`);
         // Parse url
-        const page = await HTMLParser(url);
+        // TODO: Update so it also changes all the imagetags
+        const page = await parseHTML(url);
         let includedTags = [];
         console.group(`Adding tags to article: ${url}`);
         for (let i = 0; i < Math.floor(Math.random() * tags.length); i += 1) {

@@ -17,7 +17,7 @@ const googleAccount = (googleResponse) => (dispatch) => axios
   })
   .then((response) => {
     console.log('Server response: ', response);
-    dispatch(setUsername(response.data.username));
+    dispatch(setUsername(response.data.userName));
     dispatch(setProfilePicture(response.data.profilePicture));
   });
 

@@ -29,7 +29,6 @@ function Login() {
     console.log('success: ', googleResponse);
 
     dispatch(googleAccount(googleResponse)).then(() => {
-      // TODO: Dont use reload... find something else...
       window.location.reload();
     });
   };
@@ -54,7 +53,7 @@ function Login() {
             onSuccess={successResponseFromGoogle}
             onFailure={failResponseFromGoogle}
             cookiePolicy="single_host_origin"
-            isSignedIn={false}
+            isSignedIn
           />
         </div>
 

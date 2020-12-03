@@ -4,10 +4,13 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { BallBeat } from 'react-pure-loaders';
 import moment from 'moment';
 import BackToTop from 'react-back-to-top-button';
+import { useDispatch } from 'react-redux';
+import { setSelectedTags } from '../tagList/TagListSlice';
 import TagPill from '../tagPill/TagPill';
 
 function FullArticle(props) {
   const { article, loading } = props;
+  const dispatch = useDispatch();
 
   if (loading) {
     return (
@@ -21,6 +24,11 @@ function FullArticle(props) {
       </div>
     );
   }
+
+  const clickHandler = (tag) => {
+    dispatch(setSelectedTags([tag.title]));
+  };
+
   return (
     <div className="reader">
       <div className="flex justify-between">
@@ -34,7 +42,11 @@ function FullArticle(props) {
         </a>
       </div>
       <div className="articleTags pb-6 pt-6 text-sm">
-        { (article.tags) ? article.tags.map((tag) => <TagPill key={tag.title} data={tag} />) : <span>No tags found</span> }
+        { (article.tags) ? article.tags.map((tag) => (
+          <Link to="/app" onClick={() => clickHandler(tag)} value={tag}>
+            <TagPill key={tag.title} data={tag} />
+          </Link>
+        )) : <span>No tags found</span> }
       </div>
       <h1 className="font-bold text-3xl pb-4">{article.title}</h1>
       <small className="text-md italic pb-4 block">

@@ -43,7 +43,7 @@ function Articles() {
 
       <div className="mt-12 mb-64">
         {/* eslint-disable-next-line no-underscore-dangle */}
-        { articles.map((article) => <Article key={article._id} article={article} />) }
+        {(articles.length > 0) ? articles.map((article) => <Article key={article._id} article={article} />) : <span>No articles found.</span> }
       </div>
     </>
   );

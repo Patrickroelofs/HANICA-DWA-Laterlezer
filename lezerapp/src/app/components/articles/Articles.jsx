@@ -45,7 +45,7 @@ function Articles() {
       <h1 className="font-bold text-xl">My library</h1>
       <p className="text-sm pt-4">All your saved articles.</p>
       <div className="mt-12 mb-64">
-        { articles && articles.map((article) => <Article key={article._id} article={article} />) }
+        {(articles) ? articles.map((article) => <Article key={article._id} article={article} />) : <span>No articles found.</span> }
       </div>
     </>
   );

@@ -9,6 +9,9 @@ const router = express();
 router.post('/user', userController.createUser);
 router.get('/user/:userName', userController.loginUser);
 
+router.route('/user/oauth/google')
+  .post(userController.OAuthGoogle);
+
 router.use(auth);
 
 router.route('/articles')

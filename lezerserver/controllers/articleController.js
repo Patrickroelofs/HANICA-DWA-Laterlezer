@@ -1,12 +1,12 @@
-const htmlParser = require('../utils/HTMLParser');
+const { lazifyImages } = require('../utils/HTMLParser');
+const response = require('../utils/response');
 
 exports.getArticles = async (req, res) => {
   const articles = req.user.articles.reverse().map((article) => {
     const parsedArticle = article;
-    parsedArticle.html = null;
+    parsedArticle.html = undefined;
     return parsedArticle;
   });
-
   res.json(articles);
 };
 
@@ -15,22 +15,22 @@ exports.getArticle = async (req, res) => {
   res.json(article);
 };
 
-exports.createArticlePost = async (req, res) => {
-  const page = await htmlParser(req.body.url);
-  if (req.body.tags) {
-    req.body.tags.forEach((tag) => {
-      if (tag.__isNew__) {
-        req.user.createTag([tag]);
-      }
-    });
-  }
-
-  if (page.error) {
-    res.status(406).send(page.message);
-    return;
-  }
+exports.createArticlePost = async (req, res, next) => {
   try {
-    req.user.updateOrCreateArticle(page.content, req.body.url, {
+    const { dom, page } = await lazifyImages(req.body.url);
+    if (req.body.tags) {
+      req.body.tags.forEach((tag) => {
+        if (tag.__isNew__) {
+          req.user.createTag([tag]);
+        }
+      });
+    }
+    if (page.error) {
+      res.status(406).send(page.message);
+      return;
+    }
+
+    req.user.updateOrCreateArticle(dom, req.body.url, {
       title: page.title,
       author: page.author,
       published: page.date_published,
@@ -39,21 +39,22 @@ exports.createArticlePost = async (req, res) => {
       description: page.excerpt,
       tags: req.body.tags,
     });
-  } catch (e) {
-    res.status(500).json(e.message);
-  }
-  req.user.save((err) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.send('Article created');
-    }
-  });
-};
 
+    req.user.save((err) => {
+      if (err) {
+        res.status(400).send(response('Color must be in the right format', null, false));
+      } else {
+        res.status(201).send(response('tag created', req.user.tags, true));
+      }
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 exports.updateArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
   if (req.body.tags) {
+    // eslint-disable-next-line max-len
     const newTags = req.body.tags.filter((tag) => !req.user.tags.find((uTag) => uTag.title === tag.title));
     req.user.createTag(newTags);
     article.tags = req.body.tags;

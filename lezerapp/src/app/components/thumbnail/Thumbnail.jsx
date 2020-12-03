@@ -1,11 +1,14 @@
-/* eslint react/prop-types: 0 */
 import React from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-function Thumbnail(props) {
-  const { url } = props;
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
+function Thumbnail({ url }) {
   return (
     <>
-      <div className="w-auto h-36 bg-cover bg-center rounded-xl col-span-1 shadow-xl" style={{ backgroundImage: `url('${url}')` }} />
+      <div className="w-auto h-36 rounded-xl col-span-1 shadow-xl">
+        <LazyLoadImage className="w-auto h-36 rounded-xl object-cover object-center" effect="blur" src={url} />
+      </div>
     </>
   );
 }

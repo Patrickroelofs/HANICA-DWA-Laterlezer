@@ -1,21 +1,12 @@
 import React, { useState } from 'react';
 
-function Login(props) {
-  const { setUser } = props;
+function Login({ setUser }) {
   const [name, setName] = useState('');
-
-  const submit = () => {
-    setUser(name);
-  };
-
-  const changeName = (e) => {
-    setName(e.target.value);
-  };
 
   return (
     <div className="login">
-      <input type="text" placeholder="Username" onChange={changeName} value={name} />
-      <button type="submit" onClick={submit}>Login</button>
+      <input type="text" placeholder="Username" onChange={(e) => setName(e.target.value)} value={name} />
+      <button type="submit" onClick={() => setUser(name)}>Login</button>
     </div>
   );
 }

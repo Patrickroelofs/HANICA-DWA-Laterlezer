@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-underscore-dangle
 let _User;
 
 module.exports.auth = async (req, res, next) => {
@@ -11,6 +10,7 @@ module.exports.auth = async (req, res, next) => {
   }
 };
 
+// eslint-disable-next-line no-return-assign
 module.exports.setUserModel = (userModel) => _User = userModel;
 
 module.exports.setUserModel(require('../models/user'));

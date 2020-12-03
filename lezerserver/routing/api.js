@@ -6,8 +6,8 @@ const { auth } = require('../middlewares/auth.middleware');
 
 const router = express();
 
-router.get('/user/:userName', userController.loginUser);
 router.post('/user', userController.createUser);
+router.get('/user/:userName', userController.loginUser);
 
 router.route('/user/oauth/google')
   .post(userController.OAuthGoogle);

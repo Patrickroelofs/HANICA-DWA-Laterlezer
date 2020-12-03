@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const tagSchema = mongoose.Schema({
+const tagSchema = Schema({
   title: {
     type: String,
     dropDups: true,
@@ -11,4 +11,4 @@ const tagSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Tag', tagSchema);
+module.exports = model('Tag', tagSchema);

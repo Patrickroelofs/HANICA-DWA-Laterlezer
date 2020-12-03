@@ -16,4 +16,11 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
   ],
+  purge: {
+    enabled: true,
+    content: [
+      './src/**/*.js',
+      './src/**/*.jsx',
+    ]
+  },
 };

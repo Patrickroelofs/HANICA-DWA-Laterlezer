@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/role-has-required-aria-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import React, { useEffect, useState } from 'react';
@@ -13,10 +12,9 @@ import chroma from 'chroma-js';
 import colourStyles from './colourStyles';
 
 const animatedComponents = makeAnimated();
-function TagSelect(props) {
-  const { url, initSelectedTags, onSubmit } = props;
-  const [tags, setTags] = useState([]);
+function TagSelect({ url, initSelectedTags, onSubmit }) {
   const [selectedTags, setSelectedTags] = useState([]);
+  const [tags, setTags] = useState([]);
 
   const fetchTags = () => {
     axios.get('http://localhost:3000/api/tags').then(({ data }) => {
@@ -70,7 +68,6 @@ function TagSelect(props) {
         onChange={handleChange}
         value={selectedTags}
         options={tags}
-        // eslint-disable-next-line prefer-rest-params
         styles={colourStyles()}
       />
       <button type="submit" onClick={() => postTags()} className="inline-block mt-4 items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">Save</button>

@@ -12,8 +12,8 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {
-    'linebreak-style': 0,
-    'no-underscore-dangle': 0,
-    'max-len': 0,
+    'linebreak-style': 0, // Fixes issues with windows/linux linebreaks
+    'no-underscore-dangle': 0, // Mocking needs depency injection
+    'func-names': 0, // Mongoose models need es5 nameless functions
   },
 };

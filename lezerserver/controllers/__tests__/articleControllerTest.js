@@ -2,9 +2,18 @@
  * @jest-environment node
  */
 
+const request = require('supertest');
+const app = require('../../app');
 const articleController = require('../articleController');
 
 describe('Article Model Tests', () => {
+  test('Returns error when invalid URL is supplied', async () => {
+    const response = await request(app).post('/api/articles').send({ url: 'fackeurl.nl', tags: [] }).set('Username', 'stanhan');
+    expect(response.status).toBe(406);
+  });
+
+  test('')
+
   test('Get all the articles', () => {
     const user = {
       articles: [
@@ -16,8 +25,8 @@ describe('Article Model Tests', () => {
     articleController.getArticles({ user }, { json }).then(() => {
       expect(json.mock.calls.length).toBe(1);
       expect(json.mock.calls[0][0]).toMatchObject([
-        { html: null },
-        { html: null },
+        { },
+        { },
       ]);
     });
   });
@@ -55,7 +64,7 @@ describe('Article Model Tests', () => {
     });
   });
 
-  xtest('Did not save', () => {
+  test('Did not save', () => {
     const req = { body: { url: 'https://nl.lipsum.com/' } };
     const createArticle = jest.fn((html, url) => 1 + 1);
     const findOne = jest.fn(() => {}).mockResolvedValue({ createArticle, save: (fn) => fn(true) });

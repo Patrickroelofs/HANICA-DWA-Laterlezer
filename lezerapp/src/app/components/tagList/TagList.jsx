@@ -1,43 +1,37 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import chroma from 'chroma-js';
-import axios from 'axios';
-import { setTags } from '../newTag/NewTagSlice';
-import { setSelectedTags } from './TagListSlice';
+import { get } from 'axios';
+import setContrast from '../../../utils/chromaContrast';
+import {
+  setTags, selectTags, selectSelectedTags, setSelectedTags,
+} from '../../../store/tagSlice';
 
 function TagList() {
   const dispatch = useDispatch();
-  const selectedTags = useSelector((state) => state.tagList.selectedTags);
 
-  const chromaConversion = (color) => {
-    if (chroma.contrast(color, 'white') > 2) {
-      return 'white';
-    }
-    return 'black';
-  };
+  const selectedTags = useSelector(selectSelectedTags);
+  const tags = useSelector(selectTags);
 
   const selectTag = (e) => {
-    let tags = [...selectedTags];
+    let tagss = [...selectedTags];
     if (e.target.checked) {
-      tags.push(e.target.value);
+      tagss.push(e.target.value);
     } else {
-      tags = selectedTags.filter((t) => t !== e.target.value);
+      tagss = selectedTags.filter((t) => t !== e.target.value);
     }
-    dispatch(setSelectedTags(tags));
+    dispatch(setSelectedTags(tagss));
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/tags').then(({ data }) => {
+    get('http://localhost:3000/api/tags').then(({ data }) => {
       dispatch(setTags(data.data));
     });
   }, [setTags]);
 
-  const tags = useSelector((state) => state.tags);
-
-  const tagList = tags.tags.map((tag, index) => (
+  const tagList = tags.map((tag, index) => (
     <li key={tag.title} className={`transform hover:scale-105 hover:bg-gray-100 motion-reduce:transform-none transition-transform rounded-lg my-1 ${selectedTags.includes(tag.title) ? 'bg-gray-200' : null}`}>
       <label htmlFor={`Tag-${index}`} className="px-4 py-2 block cursor-pointer">
-        <span className="w-6 h-6 inline-block rounded-full align-middle mr-2" style={{ background: tag.color, color: chromaConversion(tag.color) }} />
+        <span className="w-6 h-6 inline-block rounded-full align-middle mr-2" style={{ background: tag.color, color: setContrast(tag.color) }} />
         <input onChange={selectTag} value={tag.title} hidden type="checkbox" checked={selectedTags.includes(tag.title)} id={`Tag-${index}`} />
         {tag.title}
       </label>

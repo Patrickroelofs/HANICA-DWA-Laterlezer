@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 
-import { loginUser, googleAccount } from './LoginAction';
+import { loginUser, googleAccount } from '../../../store/userSlice';
 
 function Login() {
   const dispatch = useDispatch();
@@ -14,8 +14,7 @@ function Login() {
     e.preventDefault();
 
     dispatch(loginUser(e.target.username.value)).then(() => {
-      // TODO: beautify this
-      window.location.reload();
+      history.push('/app');
     }).catch((error) => {
       setResponse({
         status: error.status,
@@ -26,10 +25,8 @@ function Login() {
   };
 
   const successResponseFromGoogle = (googleResponse) => {
-    console.log('success: ', googleResponse);
-
     dispatch(googleAccount(googleResponse)).then(() => {
-      window.location.reload();
+      history.push('/app');
     });
   };
 

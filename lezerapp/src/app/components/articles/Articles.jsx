@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Article from '../article/Article';
+import { selectArticles, setArticles } from '../../../store/articleSlice';
+import { selectSelectedTags } from '../../../store/tagSlice';
 
 function Articles() {
-  const [articles, setArticles] = useState([]);
-  const selectedTags = useSelector((state) => state.tagList.selectedTags);
+  const dispatch = useDispatch();
+
+  const selectedTags = useSelector(selectSelectedTags);
+  const articles = useSelector(selectArticles);
 
   const getArticles = () => {
     axios.get('http://localhost:3000/api/articles').then(({ data }) => {
-      setArticles(data);
+      dispatch(setArticles(data));
     });
   };
 
@@ -24,12 +28,12 @@ function Articles() {
     });
 
     axios.get(`http://localhost:3000/api/articles/tags/filter?${tags}`).then(({ data }) => {
-      setArticles(data);
+      dispatch(setArticles(data));
     });
   };
 
   useEffect(() => {
-    if (selectedTags.length === 0) {
+    if (selectedTags.length <= 0) {
       getArticles();
     } else {
       getFilteredArticles();
@@ -38,12 +42,10 @@ function Articles() {
 
   return (
     <>
-      <h1 className="font-bold text-xl">All Articles</h1>
+      <h1 className="font-bold text-xl">My library</h1>
       <p className="text-sm pt-4">All your saved articles.</p>
-
       <div className="mt-12 mb-64">
-        {/* eslint-disable-next-line no-underscore-dangle */}
-        {(articles.length > 0) ? articles.map((article) => <Article key={article._id} article={article} />) : <span>No articles found.</span> }
+        {(articles) ? articles.map((article) => <Article key={article._id} article={article} />) : <span>No articles found.</span> }
       </div>
     </>
   );

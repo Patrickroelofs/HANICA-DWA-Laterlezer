@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setUsername } from './LoginSlice';
+import { setUsername, setProfilePicture } from './LoginSlice';
 import { setTags } from '../newTag/NewTagSlice';
 
 const API_URL = 'http://localhost:3000/api';
@@ -11,4 +11,14 @@ const loginUser = (username) => (dispatch) => axios
     dispatch(setTags(response.data.tags));
   });
 
-export default loginUser;
+const googleAccount = (googleResponse) => (dispatch) => axios
+  .post(`${API_URL}/user/oauth/google`, {
+    tokenId: googleResponse.tokenId,
+  })
+  .then((response) => {
+    console.log('Server response: ', response);
+    dispatch(setUsername(response.data.userName));
+    dispatch(setProfilePicture(response.data.profilePicture));
+  });
+
+export { loginUser, googleAccount };

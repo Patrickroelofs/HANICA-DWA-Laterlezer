@@ -1,17 +1,19 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { useStore } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import LockIcon from '@material-ui/icons/Lock';
 import { GoogleLogout } from 'react-google-login';
+import { selectProfilePicture } from '../../../store/userSlice';
 
 function Dock() {
-  const store = useStore();
-  const history = useHistory();
+  const profilePicture = useSelector(selectProfilePicture);
 
   const onLogout = () => {
     localStorage.clear();
-    history.push('/login');
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
 
   return (
@@ -32,7 +34,7 @@ function Dock() {
             <button onClick={renderProps.onClick} disabled={renderProps.disabled} type="button" className="text-center w-full mb-4"><LockIcon /></button>
           )}
         />
-        <img className="m-auto rounded-full w-16" alt="" src={`${store.getState().user.profilePicture ? store.getState().user.profilePicture : 'https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png'} `} />
+        <img className="m-auto rounded-full w-16" alt="" src={`${profilePicture || 'https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png'} `} />
       </div>
     </section>
   );

@@ -25,10 +25,8 @@ function Login() {
   };
 
   const successResponseFromGoogle = (googleResponse) => {
-    console.log('success: ', googleResponse);
-
     dispatch(googleAccount(googleResponse)).then(() => {
-      window.location.reload();
+      history.push('/app');
     });
   };
 

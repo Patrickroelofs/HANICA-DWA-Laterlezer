@@ -1,7 +1,10 @@
 const { parse } = require('@postlight/mercury-parser');
 const { JSDOM } = require('jsdom');
 
-const lazifyImages = (dom) => {
+exports.lazifyImages = async (url) => {
+  const page = await parse(url);
+  const dom = new JSDOM(page.content);
+  dom.serialize();
   const { document } = dom.window;
 
   Array.from(document.getElementsByTagName('img')).forEach((img) => {
@@ -11,7 +14,7 @@ const lazifyImages = (dom) => {
     img.removeAttribute('alt');
     img.removeAttribute('srcset');
   });
-  return dom.window.document.documentElement.outerHTML;
+  return { dom: dom.window.document.documentElement.outerHTML, page };
 };
 
 const splitHTML = (dom) => {
@@ -19,7 +22,7 @@ const splitHTML = (dom) => {
   const pages = [];
 
   Array.from(document.getElementsByTagName('article')).forEach((article) => {
-    pages.push(article);
+    pages.push(article.innerHTML);
   });
   return pages;
 };
@@ -29,7 +32,7 @@ exports.returnHTML = async (url) => {
     const site = await parse(url);
     const dom = new JSDOM(site.content);
     dom.serialize();
-    const lazifyiedDom = lazifyImages(dom);
+    const lazifyiedDom = await lazifyImages(dom);
     const pages = splitHTML(new JSDOM(lazifyiedDom));
     return { pages, site, dom: lazifyiedDom };
   } catch (error) {

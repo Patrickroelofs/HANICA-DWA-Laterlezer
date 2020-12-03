@@ -1,5 +1,4 @@
-const { parse } = require('@postlight/mercury-parser');
-const { returnHTML } = require('../utils/HTMLParser');
+const { lazifyImages } = require('../utils/HTMLParser');
 const response = require('../utils/response');
 
 exports.getArticles = async (req, res) => {
@@ -17,20 +16,8 @@ exports.getArticle = async (req, res) => {
 };
 
 exports.createArticlePost = async (req, res, next) => {
-  // const URLRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-  // eslint-disable-next-line no-unused-expressions
-  // if (req.body.url.match(URLRegex)) {
-  //   res.status(201).json('success');
-  // } else {
-  //   return res.status(406).json('Dat is geen goede URL');
-  // }
   try {
-    // const test = await returnHTML(req.body.url);
-    const test = parse(req.body.url);
-    if (test.error) {
-      return res.status(406).send(response(`${test.message}`, null, false));
-    }
-
+    const { dom, page } = await lazifyImages(req.body.url);
     if (req.body.tags) {
       req.body.tags.forEach((tag) => {
         if (tag.__isNew__) {
@@ -38,29 +25,32 @@ exports.createArticlePost = async (req, res, next) => {
         }
       });
     }
-    req.user.updateOrCreateArticle(test.content, req.body.url, {
-      title: test.title,
-      author: test.author,
-      published: test.date_published,
-      image: test.lead_image_url,
-      links: [test.next_page_url],
-      description: test.excerpt,
-      tags: req.body.tags,
-      pages: [{ test }],
-    });
-    req.user.save(((err) => {
-      if (err) {
-        res.status(400).send(response(`${err}`, null, false));
-      } else {
-        res.status(201).send(response('article created', req.user.articles, true));
-      }
-    }));
-  } catch (error) {
-    next(error);
-  }
-  // TODO: Send websocket response to client about the article
-};
+    if (page.error) {
+      res.status(406).send(page.message);
+      return;
+    }
 
+    req.user.updateOrCreateArticle(dom, req.body.url, {
+      title: page.title,
+      author: page.author,
+      published: page.date_published,
+      image: page.lead_image_url,
+      links: [page.next_page_url],
+      description: page.excerpt,
+      tags: req.body.tags,
+    });
+
+    req.user.save((err) => {
+      if (err) {
+        res.status(400).send(response('Color must be in the right format', null, false));
+      } else {
+        res.status(201).send(response('tag created', req.user.tags, true));
+      }
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 exports.updateArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
   if (req.body.tags) {

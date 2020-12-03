@@ -1,4 +1,4 @@
-const { parseHTML, serializeHTML } = require('../HTMLParser');
+const { parseHTML, LazyifyImages } = require('../HTMLParser');
 
 describe('Test the HTML Parser utility', () => {
   test('It should parse a url to HTML correctly', async () => {
@@ -16,7 +16,7 @@ describe('Test the HTML Parser utility', () => {
 
 describe('Test the HTML Serializer utility', () => {
   test('It should serialize HTML correctly', async () => {
-    const serializedHTML = await serializeHTML('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body><img src="https://placekitten.com/200/300" alt="random kitten"></body></html>');
+    const serializedHTML = await LazyifyImages('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body><img src="https://placekitten.com/200/300" alt="random kitten"></body></html>');
     const expected = '<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body><img class="lazy" data-src="https://placekitten.com/200/300"></body></html>';
     expect(serializedHTML).toBe(expected);
   });

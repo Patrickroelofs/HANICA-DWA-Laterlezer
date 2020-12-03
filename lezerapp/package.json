@@ -31,7 +31,10 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "tailwindcss": "^2.0.1",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^12.2.2"
   },
   "scripts": {
     "build:tailwind": "postcss src/css/tailwind.css -o src/css/tailwind.generated.css",
@@ -59,9 +62,6 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/react": "^11.2.2",
-    "@testing-library/user-event": "^12.2.2",
     "eslint": "^7.14.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",

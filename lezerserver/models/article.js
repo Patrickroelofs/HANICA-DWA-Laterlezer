@@ -11,6 +11,7 @@ const articleSchema = Schema({
   description: String,
   published: String,
   links: [String],
+  pages: [Object],
   tags: [Tag.schema],
 });
 

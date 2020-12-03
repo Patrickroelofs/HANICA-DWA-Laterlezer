@@ -7,17 +7,23 @@ const tagSlice = createSlice({
   name: 'tag',
   initialState: {
     tags: [],
+    selectedTags: [],
   },
   reducers: {
     setTags: (state, action) => {
       state.tags = action.payload;
     },
+    setSelectedTags: (state, action) => {
+      state.selectedTags = action.payload;
+    },
+
   },
 });
 
 export const selectTags = (state) => state.tag.tags;
+export const selectSelectedTags = (state) => state.tag.selectedTags;
 
-export const { setTags } = tagSlice.actions;
+export const { setTags, setSelectedTags } = tagSlice.actions;
 export default tagSlice.reducer;
 
 export const createTag = (title, color) => (dispatch) => post(`${API_URL}/tags`, { tags: [{ title, color }] })

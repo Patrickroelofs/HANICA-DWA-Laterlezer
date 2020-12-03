@@ -81,4 +81,22 @@ describe('Article Model Tests', () => {
       expect(status.mock.calls.length).toBe(400);
     });
   });
+
+  test('Get filtered articles with one tag title', () => {
+    const req = { query: { title: 'Politiek' }, user: { getArticlesByTags: jest.fn(() => []) } };
+    const res = { json: jest.fn(() => {}) };
+    articleController.getArticlesByTags(req, res).then(() => {
+      expect(req.user.getArticlesByTags.mock.calls.length).toBe(1);
+      expect(req.user.getArticlesByTags.mock.calls[0][0]).toEqual(['Politiek']);
+    });
+  });
+
+  test('Get filtered articles with multiple tag titles', () => {
+    const req = { query: { title: ['Politiek', 'Fun'] }, user: { getArticlesByTags: jest.fn(() => []) } };
+    const res = { json: jest.fn(() => {}) };
+    articleController.getArticlesByTags(req, res).then(() => {
+      expect(req.user.getArticlesByTags.mock.calls.length).toBe(1);
+      expect(req.user.getArticlesByTags.mock.calls[0][0]).toEqual(['Politiek', 'Fun']);
+    });
+  });
 });

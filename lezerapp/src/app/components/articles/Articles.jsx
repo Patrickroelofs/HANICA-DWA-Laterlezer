@@ -1,18 +1,44 @@
 import React, { useEffect } from 'react';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { get } from 'axios';
 import Article from '../article/Article';
 import { selectArticles, setArticles } from '../../../store/articleSlice';
+import { selectSelectedTags } from '../../../store/tagSlice';
 
 function Articles() {
-  const articles = useSelector(selectArticles);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    get('http://localhost:3000/api/articles').then(({ data }) => {
+  const selectedTags = useSelector(selectSelectedTags);
+  const articles = useSelector(selectArticles);
+
+  const getArticles = () => {
+    axios.get('http://localhost:3000/api/articles').then(({ data }) => {
       dispatch(setArticles(data));
     });
-  }, []);
+  };
+
+  const getFilteredArticles = () => {
+    let tags = '';
+    selectedTags.forEach((t, i) => {
+      if (i === 0) {
+        tags += `title=${t}`;
+      } else {
+        tags += `&title=${t}`;
+      }
+    });
+
+    axios.get(`http://localhost:3000/api/articles/tags/filter?${tags}`).then(({ data }) => {
+      dispatch(setArticles(data));
+    });
+  };
+
+  useEffect(() => {
+    if (selectedTags.length <= 0) {
+      getArticles();
+    } else {
+      getFilteredArticles();
+    }
+  }, [selectedTags]);
 
   return (
     <>

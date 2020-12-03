@@ -22,8 +22,8 @@ function Article({ article }) {
         <div className="col-span-3 ml-8">
           <div className="articleTags pb-2 text-xs overflow-x-hidden whitespace-nowrap overflow-ellipsis">
             { (tags) ? tags.map((tag) => (
-              <Link to="/app" onClick={() => clickHandler(tag)} value={tag}>
-                <TagPill key={tag.title} data={tag} />
+              <Link key={tag.title} to="/app" onClick={() => clickHandler(tag)} value={tag}>
+                <TagPill data={tag} />
               </Link>
             )) : <span>No tags found</span> }
           </div>

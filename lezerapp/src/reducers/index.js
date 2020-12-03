@@ -4,10 +4,12 @@ import { persistReducer, persistStore } from 'redux-persist';
 
 import loginSlice from '../app/components/login/LoginSlice';
 import newTagSlice from '../app/components/newTag/NewTagSlice';
+import tagListSlice from '../app/components/tagList/TagListSlice';
 
 const reducers = combineReducers({
   user: loginSlice,
   tags: newTagSlice,
+  tagList: tagListSlice,
 });
 
 const persistConfig = {

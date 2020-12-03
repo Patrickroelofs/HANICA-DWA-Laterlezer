@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import chroma from 'chroma-js';
 import axios from 'axios';
 import { setTags } from '../newTag/NewTagSlice';
+import { setSelectedTags } from './TagListSlice';
 
 function TagList() {
   const dispatch = useDispatch();
+  const selectedTags = useSelector((state) => state.tagList.selectedTags);
 
   const chromaConversion = (color) => {
     if (chroma.contrast(color, 'white') > 2) {
@@ -14,9 +16,14 @@ function TagList() {
     return 'black';
   };
 
-  const changeColor = (e, tag) => {
-    e.preventDefault();
-    e.target.style.background = chromaConversion(tag.color);
+  const selectTag = (e) => {
+    let tags = [...selectedTags];
+    if (e.target.checked) {
+      tags.push(e.target.value);
+    } else {
+      tags = selectedTags.filter((t) => t !== e.target.value);
+    }
+    dispatch(setSelectedTags(tags));
   };
 
   useEffect(() => {
@@ -31,7 +38,7 @@ function TagList() {
     <li key={tag.title}>
       <label htmlFor={`Tag-${index}`} className="px-4 py-2 block cursor-pointer">
         <span className="w-6 h-6 inline-block rounded-full align-middle mr-2" style={{ background: tag.color, color: chromaConversion(tag.color) }} />
-        <input onClick={(e) => changeColor.bind(e, tag)} className="hidden" type="checkbox" id={`Tag-${index}`} />
+        <input onChange={selectTag} value={tag.title} hidden type="checkbox" checked={selectedTags.includes(tag.title)} id={`Tag-${index}`} />
         {tag.title}
       </label>
     </li>

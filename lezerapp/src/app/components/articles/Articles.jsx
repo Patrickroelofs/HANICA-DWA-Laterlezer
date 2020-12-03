@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import Article from '../article/Article';
 
 function Articles() {
   const [articles, setArticles] = useState([]);
+  const selectedTags = useSelector((state) => state.tagList.selectedTags);
 
   const getArticles = () => {
     axios.get('http://localhost:3000/api/articles').then(({ data }) => {
@@ -11,9 +13,28 @@ function Articles() {
     });
   };
 
+  const getFilteredArticles = () => {
+    let tags = '';
+    selectedTags.forEach((t, i) => {
+      if (i === 0) {
+        tags += `title=${t}`;
+      } else {
+        tags += `&title=${t}`;
+      }
+    });
+
+    axios.get(`http://localhost:3000/api/articles/tags/filter?${tags}`).then(({ data }) => {
+      setArticles(data);
+    });
+  };
+
   useEffect(() => {
-    getArticles();
-  }, []);
+    if (selectedTags.length === 0) {
+      getArticles();
+    } else {
+      getFilteredArticles();
+    }
+  }, [selectedTags]);
 
   return (
     <>

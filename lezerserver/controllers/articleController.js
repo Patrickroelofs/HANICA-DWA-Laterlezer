@@ -72,3 +72,13 @@ exports.updateArticle = async (req, res) => {
   req.user.save();
   res.json(article);
 };
+
+exports.getArticlesByTags = async (req, res) => {
+  let filterTags;
+  if (!Array.isArray(req.query.title)) {
+    filterTags = req.query.title.split();
+  } else {
+    filterTags = req.query.title;
+  }
+  res.json(req.user.getArticlesByTags(filterTags));
+};

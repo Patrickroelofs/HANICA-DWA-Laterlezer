@@ -18,6 +18,9 @@ router.route('/articles/:id')
   .post(articleController.updateArticle)
   .get(articleController.getArticle);
 
+router.route('/articles/tags/filter')
+  .get(articleController.getArticlesByTags);
+
 router.route('/tags')
   .get(tagController.getTagsGet)
   .post(tagController.createTagPost);

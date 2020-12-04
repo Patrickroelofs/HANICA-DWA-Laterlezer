@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Thumbnail from '../thumbnail/Thumbnail';
 import TagPill from '../tagPill/TagPill';
@@ -30,9 +30,9 @@ function Article({ article }) {
         <div className="col-span-3 ml-8">
           <div className="articleTags pb-2 text-xs overflow-x-hidden whitespace-nowrap overflow-ellipsis">
             { (tags) ? tags.map((tag) => (
-              <NavLink key={tag.title} to="/app" onClick={() => selectTag(tag)} value={tag._id}>
+              <Link key={tag.title} to="/app" onClick={() => selectTag(tag)} value={tag._id}>
                 <TagPill data={tag} />
-              </NavLink>
+              </Link>
             )) : <span>No tags found</span> }
           </div>
           <strong className="font-bold text-md">{ title }</strong>

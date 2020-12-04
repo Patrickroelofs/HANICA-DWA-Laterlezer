@@ -16,13 +16,13 @@ function Article({ article }) {
     dispatch(setSelectedTags([tag.title]));
   };
   return (
-    <Link to={`app/${_id}`} onClick={() => dispatch(setCurrentArticle(article))}>
+    <Link style={{}} to={`app/${_id}`} onClick={() => dispatch(setCurrentArticle(article))}>
       <article className="grid grid-cols-4 mt-6">
         <Thumbnail url={image || 'https://placehold.it/125x100'} />
         <div className="col-span-3 ml-8">
           <div className="articleTags pb-2 text-xs overflow-x-hidden whitespace-nowrap overflow-ellipsis">
             { (tags) ? tags.map((tag) => (
-              <Link key={tag.title} to="/app" onClick={() => clickHandler(tag)} value={tag}>
+              <Link style={{}} key={tag.title} to="/app" onClick={() => clickHandler(tag)} value={tag}>
                 <TagPill data={tag} />
               </Link>
             )) : <span>No tags found</span> }

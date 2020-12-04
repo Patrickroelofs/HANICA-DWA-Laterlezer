@@ -19,6 +19,9 @@ function Login({ setUser }) {
 
   return (
     <div className="login">
+      <strong>Open the extension once on the app to automatically login</strong>
+      <hr />
+      <p>Or login with your username</p>
       <input type="text" placeholder="Username" onChange={(e) => setName(e.target.value)} value={name} />
       <button type="submit" onClick={() => setUser(name)}>Login</button>
     </div>

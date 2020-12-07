@@ -35,6 +35,10 @@ function Router() {
           {checkLoggedIn(<App />)}
         </Route>
 
+        <Route path="/app/status/:status" exact>
+          {checkLoggedIn(<App />)}
+        </Route>
+
         <Route path="/app/:id">
           {checkLoggedIn(<Reader />)}
         </Route>

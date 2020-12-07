@@ -6,7 +6,8 @@ import chroma from 'chroma-js';
 
 import TagSelect from './tagSelect/TagSelect';
 
-function SaveArticle() {
+function SaveArticle(props) {
+  const { setUser } = props;
   const [loaded, setLoaded] = useState('waitForSelect');
   const [error, setError] = useState('');
   const [tab, setTab] = useState({});
@@ -70,6 +71,7 @@ function SaveArticle() {
 
   return (
     <>
+      <button type="button" onClick={() => setUser(null)}>Logout</button>
       { loaded === 'waitForSelect' ? <TagSelect onSave={postArticle} /> : ''}
 
       {

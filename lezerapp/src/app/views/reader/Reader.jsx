@@ -5,15 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import loadable from '@loadable/component';
 import BallBeat from 'react-pure-loaders/build/BallBeat';
 
-import Dock from '../dock/Dock';
-import ArticleSidebar from '../articleSidebar/ArticleSidebar';
+import Dock from '../sharedcomponents/dock/Dock';
+import ArticleSidebar from './components/articleSidebar/ArticleSidebar';
 import { selectUsername } from '../../../store/userSlice';
 import { setCurrentArticleId, selectCurrentArticle, setCurrentArticle } from '../../../store/articleSlice';
-import ArticleHeader from '../articleHeader/ArticleHeader';
+import ArticleHeader from './components/articleHeader/ArticleHeader';
 
 import './Reader.scss';
 
-const FullArticle = loadable(() => import('../fullArticle/FullArticle'));
+const FullArticle = loadable(() => import('./components/fullArticle/FullArticle'));
 
 function Reader() {
   const dispatch = useDispatch();

@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Thumbnail from '../thumbnail/Thumbnail';
-import TagPill from '../tagPill/TagPill';
-import { setCurrentArticle } from '../../../store/articleSlice';
-import { selectSelectedTags, setSelectedTags } from '../../../store/tagSlice';
+import TagPill from '../../../sharedcomponents/tagPill/TagPill';
+import { setCurrentArticle } from '../../../../../store/articleSlice';
+import { selectSelectedTags, setSelectedTags } from '../../../../../store/tagSlice';
 
 function Article({ article }) {
   const {

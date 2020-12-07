@@ -1,5 +1,5 @@
 import React from 'react';
-import setContrast from '../../../utils/chromaContrast';
+import setContrast from '../../../../utils/chromaContrast';
 
 function TagPill({ data }) {
   const { _id, title, color } = data;

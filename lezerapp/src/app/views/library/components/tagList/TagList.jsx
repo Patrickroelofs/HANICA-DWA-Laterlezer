@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'axios';
+import NewTag from '../../../sharedcomponents/newTag/NewTag';
 import setContrast from '../../../../../utils/chromaContrast';
 import {
   setTags, selectTags, selectSelectedTags, setSelectedTags,
@@ -40,7 +41,11 @@ function TagList() {
 
   return (
     <ul id="compositions-list" className="pure-tree main-tree">
-      <h4 className="mb-2 pl-2 font-bold text-base">Tags</h4>
+      <div className="mb-4 mt-6 pl-2 font-bold text-base">
+        <span>Tags</span>
+        <NewTag />
+      </div>
+
       {tagList}
     </ul>
   );

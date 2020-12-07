@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import AddTag from './addTag/AddTag';
+import AddTagToArticle from './addTagToArticle/AddTagToArticle';
 
 function ArticleTopBar() {
   return (
@@ -11,7 +11,7 @@ function ArticleTopBar() {
         {/* Left */}
       </div>
       <div id="center" className="flex justify-center">
-        <AddTag />
+        <AddTagToArticle />
       </div>
       <div id="right" className="flex justify-right">
         {/* Right */}

@@ -9,7 +9,7 @@ import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import TagSelect from '../../tagSelect/TagSelect';
 import { selectCurrentArticle, setCurrentArticle } from '../../../../../../store/articleSlice';
 
-function AddTag() {
+function AddTagToArticle() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const article = useSelector(selectCurrentArticle);
@@ -38,4 +38,4 @@ function AddTag() {
   );
 }
 
-export default AddTag;
+export default AddTagToArticle;

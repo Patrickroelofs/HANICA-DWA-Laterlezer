@@ -1,5 +1,5 @@
 import React from 'react';
-import TagList from '../tagList/TagList';
+import TagList from '../../library/components/tagList/TagList';
 import NewTag from '../newTag/NewTag';
 
 function Nav() {

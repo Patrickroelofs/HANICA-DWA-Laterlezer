@@ -4,9 +4,9 @@ import {
 } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
-import Login from '../app/components/login/Login';
-import Register from '../app/components/register/Register';
-import Reader from '../app/components/reader/Reader';
+import Login from '../app/views/login/Login';
+import Register from '../app/views/register/Register';
+import Reader from '../app/views/reader/Reader';
 import App from '../app/App';
 import { selectUsername } from '../store/userSlice';
 

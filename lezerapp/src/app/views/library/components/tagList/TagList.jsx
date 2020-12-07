@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'axios';
-import setContrast from '../../../utils/chromaContrast';
+import setContrast from '../../../../../utils/chromaContrast';
 import {
   setTags, selectTags, selectSelectedTags, setSelectedTags,
-} from '../../../store/tagSlice';
+} from '../../../../../store/tagSlice';
 
 function TagList() {
   const dispatch = useDispatch();

@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { ChromePicker } from 'react-color';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import chroma from 'chroma-js';
-import { createTag } from '../../../store/tagSlice';
-import setContrast from '../../../utils/chromaContrast';
+import { createTag } from '../../../../store/tagSlice';
+import setContrast from '../../../../utils/chromaContrast';
 
 function NewTag() {
   const [title, setTitle] = useState('');

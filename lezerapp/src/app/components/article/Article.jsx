@@ -1,19 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Thumbnail from '../thumbnail/Thumbnail';
 import TagPill from '../tagPill/TagPill';
 import { setCurrentArticle } from '../../../store/articleSlice';
-import { setSelectedTags } from '../../../store/tagSlice';
+import { selectSelectedTags, setSelectedTags } from '../../../store/tagSlice';
 
 function Article({ article }) {
   const {
     _id, image, tags, title, description,
   } = article;
+  const selectedTags = useSelector(selectSelectedTags);
 
   const dispatch = useDispatch();
-  const clickHandler = (tag) => {
-    dispatch(setSelectedTags([tag.title]));
+
+  const selectTag = (tag) => {
+    let tagss = [...selectedTags];
+    if (!tagss.includes(tag.title)) {
+      tagss.push(tag.title);
+    } else {
+      tagss = selectedTags.filter((t) => t !== tag.title);
+    }
+    dispatch(setSelectedTags(tagss));
   };
   return (
     <Link to={`app/${_id}`} onClick={() => dispatch(setCurrentArticle(article))}>
@@ -22,7 +30,7 @@ function Article({ article }) {
         <div className="col-span-3 ml-8">
           <div className="articleTags pb-2 text-xs overflow-x-hidden whitespace-nowrap overflow-ellipsis">
             { (tags) ? tags.map((tag) => (
-              <Link key={tag.title} to="/app" onClick={() => clickHandler(tag)} value={tag}>
+              <Link key={tag.title} to="/app" onClick={() => selectTag(tag)} value={tag._id}>
                 <TagPill data={tag} />
               </Link>
             )) : <span>No tags found</span> }

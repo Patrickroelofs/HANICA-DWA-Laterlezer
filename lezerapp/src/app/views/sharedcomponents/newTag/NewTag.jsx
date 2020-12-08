@@ -37,7 +37,7 @@ function NewTag() {
       <button ref={addTagRef} onClick={() => toggleAddTagDropdown()} type="button" className={`${showTagDropdown ? 'text-blue-600' : ''} rounded-full bg-gray-200 w-8 h-8 text-center focus:outline-none float-right mr-4 hover:text-blue-600`}><AddIcon /></button>
       { showTagDropdown
         ? (
-          <form ref={addTagRef} onSubmit={handleSubmit} className="absolute top-16 w-96 p-4 bg-white shadow-lg rounded-lg z-10">
+          <form ref={addTagRef} onSubmit={handleSubmit} className="absolute top-6 w-96 p-4 bg-white shadow-lg rounded-lg z-10">
             <label className="italic inline-block w-8/12 pr-8 box-border text-sm" htmlFor="tagTitle">
               Tag title: &nbsp;
               <span style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>

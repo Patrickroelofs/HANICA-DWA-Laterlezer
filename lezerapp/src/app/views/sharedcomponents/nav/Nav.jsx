@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import NewTag from '../newTag/NewTag';
 import TagList from '../../library/components/tagList/TagList';
 
 function Nav() {
@@ -27,7 +26,6 @@ function Nav() {
       </ul>
       <hr />
       <div className="mx-4">
-        <NewTag />
         <TagList />
       </div>
     </section>

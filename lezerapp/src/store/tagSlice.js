@@ -26,16 +26,24 @@ export const selectSelectedTags = (state) => state.tag.selectedTags;
 export const { setTags, setSelectedTags } = tagSlice.actions;
 export default tagSlice.reducer;
 
-export const createTag = (title, color) => (dispatch) => post(`${API_URL}/tags`, { tags: [{ title, color }] })
-  .then(({ data, status }) => {
-    dispatch(setTags(data.data));
-    return {
-      status,
-      message: data.message,
-      success: data.success,
-    };
-  }).catch(({ response }) => ({
-    status: response.status,
-    message: response.data.message,
-    success: response.data.success,
-  }));
+export const createTag = (title, color, parentTag) => (dispatch) => {
+  let tags;
+  if (!parentTag) {
+    tags = { tags: [{ title, color }] };
+  } else {
+    tags = { tags: [{ title, color, parents: [parentTag] }] };
+  }
+  return post(`${API_URL}/tags`, tags)
+    .then(({ data, status }) => {
+      dispatch(setTags(data.data));
+      return {
+        status,
+        message: data.message,
+        success: data.success,
+      };
+    }).catch(({ response }) => ({
+      status: response.status,
+      message: response.data.message,
+      success: response.data.success,
+    }));
+};

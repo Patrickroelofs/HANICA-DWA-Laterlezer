@@ -33,7 +33,7 @@ userSchema.methods.createTag = function (data) {
       throw new CustomError('Tag title is too long', 400);
     }
     if (this.tags.find((tag) => tag.title === newTag.title) === undefined) {
-      this.tags = [...this.tags, newTag];
+      this.tags = [...this.tags, new Tag(newTag)];
     } else {
       throw new CustomError('Tag already exists', 400);
     }

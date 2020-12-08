@@ -9,6 +9,7 @@ const tagSchema = Schema({
     type: String,
     match: /^#(?:[0-9A-Fa-f]{3}){1,2}$/,
   },
+  parents: [this],
 });
 
 module.exports = model('Tag', tagSchema);

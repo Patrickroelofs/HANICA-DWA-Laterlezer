@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MoreVert } from '@material-ui/icons';
+import useOnclickOutside from 'react-cool-onclickoutside';
 import Thumbnail from '../thumbnail/Thumbnail';
 import TagPill from '../../../sharedcomponents/tagPill/TagPill';
 import { setCurrentArticle } from '../../../../../store/articleSlice';
@@ -14,6 +15,9 @@ function Article({ article }) {
     _id, image, tags, title, description,
   } = article;
   const selectedTags = useSelector(selectSelectedTags);
+  const openModelRef = useOnclickOutside(() => {
+    setOptions(false);
+  });
 
   const dispatch = useDispatch();
 
@@ -45,10 +49,10 @@ function Article({ article }) {
               </Link>
             )) : <span>No tags found</span> }
           </div>
-          <strong className="font-bold text-md">{ title }</strong>
-          <div className="relative inline-block text-left float-right">
+          <strong className={`font-bold text-md ${article.readAt && 'text-gray-400'}`}>{ title }</strong>
+          <div className="relative inline-block text-left float-right" ref={openModelRef}>
             <MoreVert onClick={openOptions} />
-            { options && <ArticleDropdown article={article} /> }
+            { options && <ArticleDropdown close={() => setOptions(false)} article={article} /> }
           </div>
           <p className="text-xs mt-4">
             { description }

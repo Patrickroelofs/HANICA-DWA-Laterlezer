@@ -14,15 +14,10 @@ const articleSlice = createSlice({
       state.currentArticleId = action.payload;
     },
     updateArticle: (state, action) => {
-      console.log('test');
-      state.articles.map((article) => {
-        console.log(article._id, action.payload._id);
-        let res = article;
-        if (article._id === action.payload._id) {
-          res = action.payload;
-        }
-        return res;
-      });
+      state.articles = state.articles.map((article) => (article._id === action.payload._id ? action.payload : article));
+    },
+    removeArticle: (state, action) => {
+      state.articles = state.articles.filter((article) => article._id !== action.payload._id);
     },
   },
 });
@@ -32,6 +27,6 @@ export const findCurrentArticle = (state) => state.article.articles.find((articl
 export const selectCurrentArticle = (state) => state.article.currentArticle;
 
 export const {
-  setArticles, setCurrentArticle, setCurrentArticleId, updateArticle,
+  setArticles, setCurrentArticle, setCurrentArticleId, updateArticle, removeArticle,
 } = articleSlice.actions;
 export default articleSlice.reducer;

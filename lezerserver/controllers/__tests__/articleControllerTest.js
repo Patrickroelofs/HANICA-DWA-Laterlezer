@@ -12,8 +12,6 @@ describe('Article Model Tests', () => {
     expect(response.status).toBe(406);
   });
 
-  test('')
-
   test('Get all the articles', () => {
     const user = {
       articles: [

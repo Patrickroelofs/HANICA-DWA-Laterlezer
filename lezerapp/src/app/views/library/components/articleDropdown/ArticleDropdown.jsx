@@ -1,20 +1,21 @@
 import React from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { updateArticle } from '../../../../../store/articleSlice';
+import { updateArticle, removeArticle } from '../../../../../store/articleSlice';
 
 const moment = require('moment');
 
-function ArticleDropdown({ article }) {
+function ArticleDropdown({ article, close }) {
   const dispatch = useDispatch();
 
   const unread = (e) => {
     e.stopPropagation();
     e.preventDefault();
     axios.post(`http://localhost:3000/api/articles/${article._id}/status`, {
-      readAt: null,
+      readAt: article.readAt ? null : moment().toISOString(),
     }).then(({ data }) => {
       dispatch(updateArticle(data));
+      close();
     });
   };
 
@@ -22,9 +23,10 @@ function ArticleDropdown({ article }) {
     e.stopPropagation();
     e.preventDefault();
     axios.post(`http://localhost:3000/api/articles/${article._id}/status`, {
-      archivedAt: moment(),
+      archivedAt: article.archivedAt ? null : moment().toISOString(),
     }).then(({ data }) => {
-      dispatch(updateArticle(data));
+      dispatch(removeArticle(data));
+      close();
     });
   };
 
@@ -40,7 +42,7 @@ function ArticleDropdown({ article }) {
           tabIndex="0"
           onClick={archive}
         >
-          Archive
+          { article.archivedAt ? 'Unarchive' : 'Archive' }
         </span>
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
         <span
@@ -49,7 +51,8 @@ function ArticleDropdown({ article }) {
           role="menuitem"
           onClick={unread}
         >
-          Mark unread
+          Mark
+          { article.readAt ? 'unread' : 'read' }
         </span>
       </div>
     </div>

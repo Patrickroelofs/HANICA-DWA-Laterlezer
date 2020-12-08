@@ -82,7 +82,6 @@ exports.createArticlePost = async (req, res, next) => {
 exports.updateArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
   if (req.body.tags) {
-    console.log(req.params.id);
     // eslint-disable-next-line max-len
     const newTags = req.body.tags.filter((tag) => !req.user.tags.find((uTag) => uTag.title === tag.title));
     req.user.createTag(newTags);

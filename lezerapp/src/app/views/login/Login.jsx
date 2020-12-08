@@ -31,7 +31,9 @@ function Login() {
   };
 
   const failResponseFromGoogle = (googleResponse) => {
-    console.log('fail:', googleResponse);
+    // TODO: Gracefully handle this error
+    // eslint-disable-next-line no-console
+    console.info('fail:', googleResponse);
   };
 
   return (
@@ -71,7 +73,7 @@ function Login() {
           </div>
 
           <div>
-            <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button id="login" type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               Sign in
             </button>
             <button type="submit" onClick={() => history.push('/register')} className="group relative w-full flex justify-center py-2 px-4 mt-6 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

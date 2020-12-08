@@ -33,7 +33,7 @@ export default function ArticleHeader() {
       <div className="articleTags pb-6 pt-6 text-sm">
 
         { (article.tags) ? article.tags.map((tag) => (
-          <button type="button" key={tag.title} onClick={() => clickHandler(tag)}>
+          <button type="button" key={tag.title} onClick={() => clickHandler(tag)} value={tag._id}>
             <TagPill data={tag} />
           </button>
         )) : <span>No tags found</span> }

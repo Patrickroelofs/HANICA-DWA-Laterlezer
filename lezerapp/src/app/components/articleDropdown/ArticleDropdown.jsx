@@ -1,14 +1,20 @@
 import React from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { updateArticle } from '../../../store/articleSlice';
 
 const moment = require('moment');
 
 function ArticleDropdown({ article }) {
+  const dispatch = useDispatch();
+
   const unread = (e) => {
     e.stopPropagation();
     e.preventDefault();
     axios.post(`http://localhost:3000/api/articles/${article._id}/status`, {
       readAt: null,
+    }).then(({ data }) => {
+      dispatch(updateArticle(data));
     });
   };
 
@@ -17,6 +23,8 @@ function ArticleDropdown({ article }) {
     e.preventDefault();
     axios.post(`http://localhost:3000/api/articles/${article._id}/status`, {
       archivedAt: moment(),
+    }).then(({ data }) => {
+      dispatch(updateArticle(data));
     });
   };
 

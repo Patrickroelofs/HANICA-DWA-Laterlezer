@@ -18,11 +18,6 @@ export default function ArticleHeader() {
     dispatch(setSelectedTags([tag.title]));
   };
 
-  // const getLastUrl = () => {
-  //   console.log(history.go);
-  //   return '/';
-  // };
-
   return (
     <>
       <div className="flex justify-between">

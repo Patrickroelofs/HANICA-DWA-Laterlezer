@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import TagList from '../tagList/TagList';
 import NewTag from '../newTag/NewTag';
+import TagList from '../../library/components/tagList/TagList';
 
 function Nav() {
   const { status } = useParams();

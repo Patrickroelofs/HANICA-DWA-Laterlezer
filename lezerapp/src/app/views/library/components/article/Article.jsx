@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MoreVert } from '@material-ui/icons';
 import Thumbnail from '../thumbnail/Thumbnail';
-import TagPill from '../tagPill/TagPill';
-import { setCurrentArticle } from '../../../store/articleSlice';
-import { selectSelectedTags, setSelectedTags } from '../../../store/tagSlice';
+import TagPill from '../../../sharedcomponents/tagPill/TagPill';
+import { setCurrentArticle } from '../../../../../store/articleSlice';
+import { selectSelectedTags, setSelectedTags } from '../../../../../store/tagSlice';
 import ArticleDropdown from '../articleDropdown/ArticleDropdown';
 
 function Article({ article }) {

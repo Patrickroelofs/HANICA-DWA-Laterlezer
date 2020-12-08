@@ -69,8 +69,9 @@ function TagSelect({ url, initSelectedTags, onSubmit }) {
         value={selectedTags}
         options={tags}
         styles={colourStyles()}
+        className="w-4/5"
       />
-      <button type="submit" onClick={() => postTags()} className="inline-block mt-4 items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">Save</button>
+      <button type="submit" onClick={() => postTags()} className="inline-block ml-2 h-9 items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">Save</button>
     </>
   );
 }

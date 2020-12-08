@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { updateArticle } from '../../../store/articleSlice';
+import { updateArticle } from '../../../../../store/articleSlice';
 
 const moment = require('moment');
 

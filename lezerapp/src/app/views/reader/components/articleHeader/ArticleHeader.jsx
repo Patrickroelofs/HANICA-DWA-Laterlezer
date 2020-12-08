@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import { useDispatch, useSelector } from 'react-redux';
-import TagPill from '../tagPill/TagPill';
-import { selectCurrentArticle } from '../../../store/articleSlice';
-import { setSelectedTags } from '../../../store/tagSlice';
+import TagPill from '../../../sharedcomponents/tagPill/TagPill';
+import { selectCurrentArticle } from '../../../../../store/articleSlice';
+import { setSelectedTags } from '../../../../../store/tagSlice';
 
 export default function ArticleHeader() {
   const dispatch = useDispatch();

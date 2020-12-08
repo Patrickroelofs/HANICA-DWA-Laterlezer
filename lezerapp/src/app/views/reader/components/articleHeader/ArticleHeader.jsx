@@ -30,7 +30,7 @@ export default function ArticleHeader() {
       <div className="articleTags pb-6 pt-6 text-sm">
 
         { (article.tags) ? article.tags.map((tag) => (
-          <Link key={tag.title} to="/app" onClick={() => clickHandler(tag)} value={tag}>
+          <Link key={tag.title} to="/app" onClick={() => clickHandler(tag)} value={tag._id}>
             <TagPill data={tag} />
           </Link>
         )) : <span>No tags found</span> }

@@ -6,12 +6,12 @@ import loadable from '@loadable/component';
 import BallBeat from 'react-pure-loaders/build/BallBeat';
 
 import Dock from '../sharedcomponents/dock/Dock';
-import ArticleSidebar from './components/articleSidebar/ArticleSidebar';
 import { selectUsername } from '../../../store/userSlice';
 import { setCurrentArticleId, selectCurrentArticle, setCurrentArticle } from '../../../store/articleSlice';
 import ArticleHeader from './components/articleHeader/ArticleHeader';
 
 import './Reader.scss';
+import ArticleTopBar from './components/articleTopBar/ArticleTopBar';
 
 const FullArticle = loadable(() => import('./components/fullArticle/FullArticle'));
 
@@ -47,15 +47,12 @@ function Reader() {
               <Dock />
             </div>
             <div className="col-span-4">
-              <ArticleSidebar
-                initSelectedTags={article.tags}
-                url={id}
-                onSubmit={({ data }) => dispatch(setCurrentArticle(data))}
-              />
+              {/* Sidebar should be moved to app.jsx file (this entire file needs rework) */}
             </div>
           </div>
         </nav>
         <main className="min-h-screen col-span-3 bg-white">
+          <ArticleTopBar />
           <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0 prose lg:prose-sm">
             <ArticleHeader article={article} />
             <FullArticle

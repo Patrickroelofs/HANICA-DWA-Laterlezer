@@ -34,8 +34,6 @@ articleSchema.methods.read = function (date) {
   } else {
     this.readAt = moment();
   }
-  console.log(date);
-  console.log(this.readAt);
 };
 
 module.exports = model('Article', articleSchema);

@@ -52,7 +52,7 @@ function ArticleDropdown({ article, close }) {
           onClick={unread}
         >
           Mark
-          { article.readAt ? 'unread' : 'read' }
+          { article.readAt ? ' unread' : ' read' }
         </span>
       </div>
     </div>

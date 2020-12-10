@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import TodayIcon from '@material-ui/icons/Today';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
-import TagList from '../../library/components/tagList/TagList';
+import TagHierarchy from '../../library/components/tagHierarchy/TagHierarchy';
 
 function Nav() {
   const { status } = useParams();
@@ -32,7 +32,7 @@ function Nav() {
       </ul>
       <hr />
       <div className="mx-4">
-        <TagList />
+        <TagHierarchy />
       </div>
     </section>
   );

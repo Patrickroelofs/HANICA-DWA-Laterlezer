@@ -10,7 +10,7 @@ exports.getArticles = async (req, res) => {
   }).filter((article) => {
     if (req.query.status) {
       if (req.query.status === 'today') {
-        return moment(article.createdAt).diff(moment(), 'days') === 0;
+        return moment(article.createdAt).diff(moment(), 'days') === 0 && !article.archivedAt;
       }
       if (req.query.status === 'archived') {
         return article.archivedAt;

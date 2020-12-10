@@ -30,15 +30,8 @@ function FullArticle({ html }) {
   return (
     <>
       {/* eslint-disable-next-line react/no-danger */}
-      <div className="max-w-2xl m-auto mb-64 article" dangerouslySetInnerHTML={{ __html: html }} />
-      <ScrollToTop
-        duration={1250}
-        showUnder={160}
-        easing="easeInOutSine"
-        style={{
-          margin: '0', marginRight: '18px', marginBottom: '18px', fontSize: '12px', height: '32px', outline: '0',
-        }}
-      >
+      <div className="max-w-2xl m-auto mb-64 article prose lg:prose-sm" dangerouslySetInnerHTML={{ __html: html }} />
+      <ScrollToTop duration={1250} showUnder={160} easing="easeInOutSine">
         <span className="text-base font-sans bg-gray-200 text-black p-2 rounded-2xl">Back to top</span>
       </ScrollToTop>
     </>

@@ -25,10 +25,7 @@ describe('e2e tests', () => {
   test('User removes all tags from article', async () => {
     await page.click('#addTagsToArticle');
     expect(await page.$$('#tagSelectPopup')).toBeDefined();
-    // if statement if articleTags is defined
-    // if (await page.$$(DELETE_ALL_TAGS_BUTTON)) {
     await page.click(DELETE_ALL_TAGS_BUTTON);
-    // }
     await page.click('#saveTagsToArticle');
     expect(await page.$$('.articleTags:first-child')).toStrictEqual([]);
     await page.click('#addTagsToArticle');

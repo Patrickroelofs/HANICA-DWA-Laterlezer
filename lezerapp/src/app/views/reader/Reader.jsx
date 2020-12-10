@@ -12,6 +12,7 @@ import ArticleHeader from './components/articleHeader/ArticleHeader';
 
 import './Reader.scss';
 import ArticleTopBar from './components/articleTopBar/ArticleTopBar';
+import Nav from '../sharedcomponents/nav/Nav';
 
 const FullArticle = loadable(() => import('./components/fullArticle/FullArticle'));
 
@@ -48,12 +49,13 @@ function Reader() {
             </div>
             <div className="col-span-4">
               {/* Sidebar should be moved to app.jsx file (this entire file needs rework) */}
+              <Nav />
             </div>
           </div>
         </nav>
         <main className="min-h-screen col-span-3 bg-white">
           <ArticleTopBar />
-          <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0 prose lg:prose-sm">
+          <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0">
             <ArticleHeader article={article} />
             <FullArticle
               html={article.html}

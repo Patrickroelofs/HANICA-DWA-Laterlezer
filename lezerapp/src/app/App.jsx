@@ -5,10 +5,12 @@ import { useSelector } from 'react-redux';
 import Dock from './views/sharedcomponents/dock/Dock';
 import Nav from './views/sharedcomponents/nav/Nav';
 import Articles from './views/library/Articles';
-import { selectUsername } from '../store/userSlice';
+import { selectUsername, selectProfilePicture } from '../store/userSlice';
 
 function App() {
   const username = useSelector(selectUsername);
+  const profilePicture = useSelector(selectProfilePicture);
+
   axios.interceptors.request.use((config) => {
     if (username) {
       config.headers.Username = username;
@@ -22,7 +24,7 @@ function App() {
         <nav className="col-span-1">
           <div className="grid grid-cols-5 min-h-full">
             <div className="col-span-1 bg-white relative top-0">
-              <Dock />
+              <Dock profilePicture={profilePicture} />
             </div>
             <div className="col-span-4">
               <Nav />

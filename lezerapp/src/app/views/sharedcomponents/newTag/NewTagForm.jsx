@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ChromePicker } from 'react-color';
@@ -16,7 +15,6 @@ function NewTagForm({ reference, tag }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const clickedTag = tags.find((t) => t.title === tag);
     dispatch(createTag(title, chroma(color).hex(), tag)).then((res) => {
       setResponse(res);
     });

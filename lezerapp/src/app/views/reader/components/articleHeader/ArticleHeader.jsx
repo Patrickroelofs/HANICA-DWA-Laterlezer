@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,18 +10,21 @@ import { setSelectedTags } from '../../../../../store/tagSlice';
 
 export default function ArticleHeader() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const article = useSelector(selectCurrentArticle);
 
   const clickHandler = (tag) => {
+    history.goBack();
     dispatch(setSelectedTags([tag.title]));
   };
+
   return (
     <>
       <div className="flex justify-between">
-        <Link to="/app">
+        <button type="button" onClick={history.goBack}>
           <KeyboardArrowLeftIcon />
           Back
-        </Link>
+        </button>
         <a rel="noreferrer" target="_blank" href={article.source}>
           Source
           <KeyboardArrowRightIcon />
@@ -30,9 +33,9 @@ export default function ArticleHeader() {
       <div className="articleTags pb-6 pt-6 text-sm">
 
         { (article.tags) ? article.tags.map((tag) => (
-          <Link key={tag.title} to="/app" onClick={() => clickHandler(tag)} value={tag._id}>
+          <button type="button" key={tag.title} onClick={() => clickHandler(tag)} value={tag._id}>
             <TagPill data={tag} />
-          </Link>
+          </button>
         )) : <span>No tags found</span> }
       </div>
       <h1 className="font-bold text-3xl pb-4">{article.title}</h1>

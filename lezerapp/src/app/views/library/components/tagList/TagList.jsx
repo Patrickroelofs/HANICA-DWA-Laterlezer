@@ -41,7 +41,7 @@ function TagList() {
 
   return (
     <ul id="compositions-list" className="pure-tree main-tree">
-      <div className="mb-4 mt-6 pl-2 font-bold text-base">
+      <div className="mb-4 mt-6 pl-2 font-bold text-base relative">
         <span>Tags</span>
         <NewTag />
       </div>

@@ -18,8 +18,10 @@ router.route('/articles')
   .get(articleController.getArticles)
   .post(articleController.createArticlePost);
 router.route('/articles/:id')
-  .post(articleController.updateArticle)
-  .get(articleController.getArticle);
+  .get(articleController.getArticle)
+  .post(articleController.updateArticle);
+router.route('/articles/:id/status')
+  .post(articleController.updateStatus);
 
 router.route('/articles/tags/filter')
   .get(articleController.getArticlesByTags);

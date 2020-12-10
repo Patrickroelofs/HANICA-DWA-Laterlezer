@@ -10,6 +10,9 @@ function App() {
 
   const storeUser = (u) => {
     localStorage.setItem('username', u);
+    if (!u) {
+      localStorage.removeItem('username');
+    }
     setUser(u);
   };
 
@@ -22,7 +25,7 @@ function App() {
 
   return (
     <div className="App">
-      { !user ? <Login setUser={storeUser} /> : <SaveArticle user={user} /> }
+      { !user ? <Login setUser={storeUser} /> : <SaveArticle setUser={storeUser} user={user} /> }
     </div>
   );
 }

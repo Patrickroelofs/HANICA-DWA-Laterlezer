@@ -51,10 +51,10 @@ const Articles = () => {
         {!status && 'All your saved articles.'}
       </p>
       <div className="mt-12 mb-64">
-        {(articles) ? articles.map((article) => <Article key={article._id} article={article} />) : <span>No articles found.</span> }
+        {(articles.length > 0) ? articles.map((article) => <Article key={article._id} article={article} />) : <span>No articles found with this filter.</span> }
       </div>
     </>
   );
 };
 
-export default memo(Articles);
+export default memo(Articles, (prevProps, nextProps) => prevProps === nextProps);

@@ -27,6 +27,7 @@ require('./middlewares/error.middleware')(app);
 
 app.listen(port, () => {
   mongoose.connect('mongodb://localhost:27017/reader', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, () => {
+    mongoose.set('debug', true);
     console.info(`App listening at http://localhost:${port}`);
   });
 });

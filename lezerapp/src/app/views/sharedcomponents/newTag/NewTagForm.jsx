@@ -1,25 +1,23 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ChromePicker } from 'react-color';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import chroma from 'chroma-js';
-import { createTag, selectTags } from '../../../../store/tagSlice';
+import { createTag } from '../../../../store/tagSlice';
 import setContrast from '../../../../utils/chromaContrast';
 
-function NewTagForm(props) {
-  const { reference, tag } = props;
+function NewTagForm({ reference, tag }) {
   const [title, setTitle] = useState('');
   const [color, setColor] = useState(chroma.random().hex());
   const [showPicker, setShowPicker] = useState(false);
   const [response, setResponse] = useState({});
   const dispatch = useDispatch();
-  const tags = useSelector(selectTags);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const clickedTag = tags.find((t) => t.title === tag);
-    dispatch(createTag(title, chroma(color).hex(), clickedTag)).then((res) => {
+    // const clickedTag = tags.find((t) => t.title === tag);
+    dispatch(createTag(title, chroma(color).hex(), tag)).then((res) => {
       setResponse(res);
     });
     setTitle('');

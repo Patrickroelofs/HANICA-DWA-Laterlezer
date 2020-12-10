@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Article from './components/article/Article';
 import { selectArticles, setArticles } from '../../../store/articleSlice';
@@ -7,12 +8,13 @@ import { selectSelectedTags } from '../../../store/tagSlice';
 
 function Articles() {
   const dispatch = useDispatch();
+  const { status } = useParams();
 
   const selectedTags = useSelector(selectSelectedTags);
   const articles = useSelector(selectArticles);
 
   const getArticles = () => {
-    axios.get('http://localhost:3000/api/articles').then(({ data }) => {
+    axios.get(`http://localhost:3000/api/articles?status=${status}`).then(({ data }) => {
       dispatch(setArticles(data));
     });
   };
@@ -27,7 +29,7 @@ function Articles() {
       }
     });
 
-    axios.get(`http://localhost:3000/api/articles/tags/filter?${tags}`).then(({ data }) => {
+    axios.get(`http://localhost:3000/api/articles/tags/filter?${tags}&status=${status}`).then(({ data }) => {
       dispatch(setArticles(data));
     });
   };
@@ -38,7 +40,7 @@ function Articles() {
     } else {
       getFilteredArticles();
     }
-  }, [selectedTags]);
+  }, [selectedTags, status]);
 
   return (
     <>

@@ -1,3 +1,4 @@
+const moment = require('moment');
 const { lazifyImages } = require('../utils/HTMLParser');
 const response = require('../utils/response');
 
@@ -6,14 +7,40 @@ exports.getArticles = async (req, res) => {
     const parsedArticle = article;
     parsedArticle.html = undefined;
     return parsedArticle;
+  }).filter((article) => {
+    if (req.query.status) {
+      if (req.query.status === 'today') {
+        return moment(article.createdAt).diff(moment(), 'days') === 0 && !article.archivedAt;
+      }
+      if (req.query.status === 'archived') {
+        return article.archivedAt;
+      }
+    }
+    return !article.archivedAt;
   });
   res.json(articles);
 };
 
 exports.getArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
+  article.read();
+  req.user.save();
+
   res.json(article);
 };
+
+exports.updateStatus = async (req, res) => {
+  const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
+  if (req.body.readAt !== undefined) {
+    article.read(req.body.readAt);
+  }
+  if (req.body.archivedAt !== undefined) {
+    article.archive(req.body.archivedAt);
+  }
+  req.user.save();
+
+  res.json(article);
+}
 
 exports.createArticlePost = async (req, res, next) => {
   try {
@@ -38,6 +65,7 @@ exports.createArticlePost = async (req, res, next) => {
       links: [page.next_page_url],
       description: page.excerpt,
       tags: req.body.tags,
+      createdAt: moment(),
     });
 
     req.user.save((err) => {
@@ -70,5 +98,15 @@ exports.getArticlesByTags = async (req, res) => {
   } else {
     filterTags = req.query.title;
   }
-  res.json(req.user.getArticlesByTags(filterTags));
+  res.json(req.user.getArticlesByTags(filterTags).filter((article) => {
+    if (req.query.status) {
+      if (req.query.status === 'today') {
+        return moment(article.createdAt).diff(moment(), 'days') === 0;
+      }
+      if (req.query.status === 'archived') {
+        return article.archivedAt;
+      }
+    }
+    return !article.archivedAt;
+  }));
 };

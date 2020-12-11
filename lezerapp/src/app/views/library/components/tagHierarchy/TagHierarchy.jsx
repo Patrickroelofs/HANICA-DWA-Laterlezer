@@ -7,7 +7,6 @@ import TagItem from './components/TagItem';
 import {
   setTags, selectTags, selectSelectedTags, setSelectedTags,
 } from '../../../../../store/tagSlice';
-import 'react-contexify/dist/ReactContexify.css';
 import NewTagForm from '../../../sharedcomponents/newTag/NewTagForm';
 
 const TagHierarchy = () => {

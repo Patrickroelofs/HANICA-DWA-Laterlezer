@@ -31,7 +31,7 @@ function Dock() {
           onLogoutSuccess={onLogout}
           onFailure={onLogout}
           render={(renderProps) => (
-            <button onClick={renderProps.onClick} disabled={renderProps.disabled} type="button" className="text-center w-full mb-4"><LockIcon /></button>
+            <button onClick={renderProps.onClick} disabled={renderProps.disabled} type="button" id="logout" className="text-center w-full mb-4"><LockIcon /></button>
           )}
         />
         <img className="m-auto rounded-full w-16" alt="" src={`${profilePicture || 'https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png'} `} />

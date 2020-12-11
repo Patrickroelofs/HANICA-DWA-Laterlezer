@@ -13,7 +13,9 @@ function NewTag() {
 
   return (
     <>
-      <button ref={addTagRef} onClick={() => toggleAddTagDropdown()} type="button" className={`${showTagDropdown ? 'text-blue-600' : ''} rounded-full bg-gray-200 w-8 h-8 text-center focus:outline-none float-right mr-4 hover:text-blue-600`}><AddIcon /></button>
+      <button ref={addTagRef} onClick={() => toggleAddTagDropdown()} type="button" className={`focus:outline-none ${showTagDropdown && 'text-blue-600'} rounded-full bg-gray-200 w-8 h-8 text-center float-right mr-4 hover:text-blue-600`}>
+        <AddIcon />
+      </button>
       { showTagDropdown && <NewTagForm reference={addTagRef} /> }
     </>
   );

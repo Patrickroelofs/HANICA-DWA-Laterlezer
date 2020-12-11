@@ -4,7 +4,6 @@ const Article = require('./article');
 const Tag = require('./tag');
 const CustomError = require('../utils/custom-error');
 
-
 const userSchema = new Schema({
   firstName: String,
   lastName: String,
@@ -58,38 +57,19 @@ userSchema.methods.getArticlesByTags = function (tags) {
 };
 
 userSchema.methods.createTag = async function (data) {
-  // TODO: find the parent and add the child
-  //
-  // const title = await this.model('User').aggregate([{ $match: { 'tags._id': data.parent._id } }]);
-  // const title = await Tag.findOneAndUpdate({ 'tags._id': data.parent._id }, { $push: { children: data.tag } });
-  // const repo = await this.model('User').find({}, { _id: 0, s: { $elemMatch: { _id: data.parent._id } } });
-  // this.model('User').updateOne({ _id: data.parent._id }, { children: data.tag }, { upsert: true });
-  //
-  //
-  // const tree = new TreeModel();
-  // const root = tree.parse(this.tags);
-  // const sport = root.first((node) => {
-  //   root.first((node) => node.model._id === data.parent._id);
-  //   return node.model._id === data.parent._id;
-  // });
-  // console.log(sport);
-  // const user = await this.model('User').findOne({ tags: { $elemMatch: { title: data.parent.title } } });
-  // console.log(user.tags);
-  //
-  //
-  // data.forEach((newTag) => {
-  //   if (newTag.title.trim().length === 0) {
-  //     throw new CustomError('No tag title given', 400);
-  //   }
-  //   if (newTag.title.length > 30) {
-  //     throw new CustomError('Tag title is too long', 400);
-  //   }
-  //   if (this.tags.find((tag) => tag.title === newTag.title) === undefined) {
-  //     this.tags = [...this.tags, new Tag(newTag)];
-  //   } else {
-  //     throw new CustomError('Tag already exists', 400);
-  //   }
-  // });
+  const eachRecursive = (tags) => {
+    tags = tags.map((tag) => {
+      if (data.parent._id.toString() !== tag._id.toString() && tag.children) {
+        eachRecursive(tag.children);
+      } else if (data.parent._id.toString() === tag._id.toString()) {
+        tag.children.push(new Tag(data.tag));
+        return tag;
+      }
+      return tags;
+    });
+  };
+
+  return eachRecursive(this.tags);
 };
 const User = model('User', userSchema);
 

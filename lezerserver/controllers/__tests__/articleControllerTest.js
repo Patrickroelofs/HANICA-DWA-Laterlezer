@@ -129,4 +129,100 @@ describe('Article Controller Tests', () => {
       expect(read.mock.calls.length).toBe(0);
     });
   });
+
+  test('update read status', () => {
+    const archive = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            archive,
+            read,
+          }),
+        },
+      },
+      body: {
+        readAt: '11-12-2020',
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(read.mock.calls.length).toBe(1);
+      expect(read.mock.calls[0][0]).toBe('11-12-2020');
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        archive,
+        read,
+      });
+      expect(archive.mock.calls.length).toBe(0);
+    });
+  });
+
+  test('update archived status', () => {
+    const archive = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            archive,
+            read,
+          }),
+        },
+      },
+      body: {
+        archivedAt: null,
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(archive.mock.calls.length).toBe(1);
+      expect(archive.mock.calls[0][0]).toBe(null);
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        archive,
+        read,
+      });
+      expect(read.mock.calls.length).toBe(0);
+    });
+  });
+
+  test('update read status', () => {
+    const archive = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            archive,
+            read,
+          }),
+        },
+      },
+      body: {
+        readAt: null,
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(read.mock.calls.length).toBe(1);
+      expect(read.mock.calls[0][0]).toBe(null);
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        archive,
+        read,
+      });
+      expect(archive.mock.calls.length).toBe(0);
+    });
+  });
 });

@@ -7,10 +7,10 @@ const app = require('../../app');
 const articleController = require('../articleController');
 
 describe('Article Controller Tests', () => {
-  // test('Returns error when invalid URL is supplied', async () => {
-  //   const response = await request(app).post('/api/articles').send({ url: 'fackeurl.nl', tags: [] }).set('Username', 'stanhan');
-  //   expect(response.status).toBe(406);
-  // });
+  test('Returns error when invalid URL is supplied', async () => {
+    const response = await request(app).post('/api/articles').send({ url: 'fackeurl.nl', tags: [] }).set('Username', 'stanhan');
+    expect(response.status).toBe(406);
+  });
 
   test('Get all the articles', () => {
     const user = {

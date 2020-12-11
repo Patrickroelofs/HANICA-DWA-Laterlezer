@@ -12,7 +12,7 @@ describe('e2e login tests', () => {
     await page.goto('http://localhost:3001');
   });
 
-  xtest('Login with an existing user', async () => {
+  test('Login with an existing user', async () => {
     await page.type('#username', 'testuser');
     await page.click('#login');
     expect(page.url()).toEqual('http://localhost:3001/app');

@@ -27,10 +27,10 @@ const Dock = ({ profilePicture }) => {
           onLogoutSuccess={onLogout}
           onFailure={onLogout}
           render={({ onClick, disabled }) => (
-            <button onClick={onClick} disabled={disabled} type="button" className="text-center w-full mb-4"><LockIcon /></button>
+            <button onClick={onClick} disabled={disabled} type="button" className="focus:outline-none text-center w-full mb-4"><LockIcon /></button>
           )}
         />
-        <img className="m-auto rounded-full w-16" alt="" src={`${profilePicture || 'https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png'} `} />
+        <img className="m-auto rounded-full w-16" alt="profilePicture" src={`${profilePicture || 'https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png'} `} />
       </div>
     </section>
   );

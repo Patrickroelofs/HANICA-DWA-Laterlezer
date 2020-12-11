@@ -6,7 +6,7 @@ import loadable from '@loadable/component';
 import BallBeat from 'react-pure-loaders/build/BallBeat';
 
 import Dock from '../sharedcomponents/dock/Dock';
-import { selectUsername } from '../../../store/userSlice';
+import { selectUsername, selectProfilePicture } from '../../../store/userSlice';
 import { setCurrentArticleId, selectCurrentArticle, setCurrentArticle } from '../../../store/articleSlice';
 import ArticleHeader from './components/articleHeader/ArticleHeader';
 
@@ -22,6 +22,7 @@ function Reader() {
 
   const username = useSelector(selectUsername);
   const article = useSelector(selectCurrentArticle);
+  const profilePicture = useSelector(selectProfilePicture);
 
   axios.interceptors.request.use((config) => {
     if (username) config.headers.Username = username;
@@ -45,7 +46,7 @@ function Reader() {
         <nav className="col-span-1">
           <div className="grid grid-cols-5 min-h-full">
             <div className="col-span-1 bg-white relative top-0">
-              <Dock />
+              <Dock profilePicture={profilePicture} />
             </div>
             <div className="col-span-4">
               {/* Sidebar should be moved to app.jsx file (this entire file needs rework) */}

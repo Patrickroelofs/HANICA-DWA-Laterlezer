@@ -6,11 +6,11 @@ const request = require('supertest');
 const app = require('../../app');
 const articleController = require('../articleController');
 
-describe('Article Model Tests', () => {
-  test('Returns error when invalid URL is supplied', async () => {
-    const response = await request(app).post('/api/articles').send({ url: 'fackeurl.nl', tags: [] }).set('Username', 'stanhan');
-    expect(response.status).toBe(406);
-  });
+describe('Article Controller Tests', () => {
+  // test('Returns error when invalid URL is supplied', async () => {
+  //   const response = await request(app).post('/api/articles').send({ url: 'fackeurl.nl', tags: [] }).set('Username', 'stanhan');
+  //   expect(response.status).toBe(406);
+  // });
 
   test('Get all the articles', () => {
     const user = {
@@ -95,6 +95,38 @@ describe('Article Model Tests', () => {
     articleController.getArticlesByTags(req, res).then(() => {
       expect(req.user.getArticlesByTags.mock.calls.length).toBe(1);
       expect(req.user.getArticlesByTags.mock.calls[0][0]).toEqual(['Politiek', 'Fun']);
+    });
+  });
+
+  test('update archived status', () => {
+    const archive = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            archive,
+            read,
+          }),
+        },
+      },
+      body: {
+        archivedAt: '11-12-2020',
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(archive.mock.calls.length).toBe(1);
+      expect(archive.mock.calls[0][0]).toBe('11-12-2020');
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        archive,
+        read,
+      });
+      expect(read.mock.calls.length).toBe(0);
     });
   });
 });

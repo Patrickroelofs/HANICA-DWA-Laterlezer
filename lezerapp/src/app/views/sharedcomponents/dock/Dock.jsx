@@ -3,8 +3,11 @@ import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import LockIcon from '@material-ui/icons/Lock';
 import { GoogleLogout } from 'react-google-login';
+import { useDispatch } from 'react-redux';
+import { setSelectedTags } from '../../../../store/tagSlice';
 
 const Dock = ({ profilePicture }) => {
+  const dispatch = useDispatch();
   const onLogout = () => {
     localStorage.clear();
     setTimeout(() => {
@@ -12,10 +15,14 @@ const Dock = ({ profilePicture }) => {
     }, 100);
   };
 
+  const clickHandler = () => {
+    dispatch(setSelectedTags([]));
+  };
+
   return (
     <section id="dock" className="flex flex-col justify-between min-h-screen md:sticky md:top-0">
       <div className="w-full text-center pt-4">
-        <Link to="/app">
+        <Link to="/app" onClick={clickHandler}>
           <img className="m-auto w-16" alt="logo" src="/logo512.png" />
         </Link>
       </div>

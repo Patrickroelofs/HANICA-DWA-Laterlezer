@@ -32,6 +32,14 @@ const TagHierarchy = () => {
   const selectTag = (e) => {
     let tagss = [...selectedTags];
     if (e.target.checked) {
+      // Werkt maar op 1 subtag diep, moet waarschijnlijk reversed recursive voor komen. :(
+      tags.forEach((t) => {
+        t.children.forEach((tC) => {
+          if (tC.title === e.target.value) {
+            tagss.push(t.title);
+          }
+        });
+      });
       tagss.push(e.target.value);
     } else {
       tagss = selectedTags.filter((t) => t !== e.target.value);

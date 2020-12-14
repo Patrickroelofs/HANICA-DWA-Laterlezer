@@ -58,18 +58,17 @@ userSchema.methods.getArticlesByTags = function (tags) {
 
 userSchema.methods.createTag = async function (data) {
   const eachRecursive = (tags) => {
-    tags = tags.map((tag) => {
-      if (data.parent._id.toString() !== tag._id.toString() && tag.children) {
+    this.tags = tags.map((tag) => {
+      if (data.parent._id.toString() !== tag._id.toString()) {
         eachRecursive(tag.children);
       } else if (data.parent._id.toString() === tag._id.toString()) {
         tag.children.push(new Tag(data.tag));
         return tag;
       }
-      return tags;
+      return tag;
     });
   };
-
-  return eachRecursive(this.tags);
+  eachRecursive(this.tags);
 };
 const User = model('User', userSchema);
 

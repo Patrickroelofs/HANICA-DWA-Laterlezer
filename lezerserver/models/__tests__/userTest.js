@@ -79,20 +79,19 @@ describe('User Model Tests', () => {
 
   test('User method createTag should add a new tag to the tags list', async () => {
     const testUser = await User.getUserByUsername('stanhan');
-    const newTag = [{
-      title: 'test',
-      color: '#00FF00',
-    }];
+    const newTag = {
+      parent: {
+        _id: '1',
+        title: 'javascript',
+        color: '#00FF00',
+        children: [],
+      },
+    };
     testUser.createTag(newTag);
 
-    expect(testUser.tags).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          title: 'test',
-          color: '#00FF00',
-        }),
-      ]),
-    );
+    expect(testUser.tags[0]).toBeDefined();
+    expect(testUser.tags[0].children).toBeDefined();
+    expect(testUser.tags[0].title).toBe('javascript');
   });
 
   test('User method createTag should throw an error', async () => {

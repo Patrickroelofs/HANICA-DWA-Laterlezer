@@ -57,6 +57,16 @@ userSchema.methods.getArticlesByTags = function (tags) {
 };
 
 userSchema.methods.createTag = async function (data) {
+  if (data.tag.title === data.parent.title) {
+    throw new CustomError('Subtag can\'t have the same title as the parent.', 400);
+  }
+
+  data.parent.children.forEach((tag) => {
+    if (tag.title === data.tag.title) {
+      throw new CustomError('Tag already exists.', 400);
+    }
+  });
+
   const eachRecursive = (tags) => {
     tags = tags.map((tag) => {
       if (data.parent._id.toString() !== tag._id.toString() && tag.children) {

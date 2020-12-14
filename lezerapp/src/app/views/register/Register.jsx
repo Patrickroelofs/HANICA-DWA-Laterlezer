@@ -38,12 +38,12 @@ function Register() {
             <div>
               <label htmlFor="username" className="leading-10">
                 Username &nbsp;
-                <span style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
+                <span id="register-error" style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
                 <input id="username" name="username" type="string" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" />
               </label>
             </div>
             <div>
-              <button type="submit" className="mt-6 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <button type="submit" id="register" className="mt-6 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Register Account
               </button>
               <button type="button" onClick={() => history.push('/app')} className="group relative w-full flex justify-center py-2 px-4 mt-6 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

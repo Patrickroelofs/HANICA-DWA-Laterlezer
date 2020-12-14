@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { lazifyImages } = require('../utils/HTMLParser');
+const { parseHTML } = require('../utils/HTMLParser');
 const response = require('../utils/response');
 
 exports.getArticles = async (req, res) => {
@@ -40,11 +40,11 @@ exports.updateStatus = async (req, res) => {
   req.user.save();
 
   res.json(article);
-}
+};
 
 exports.createArticlePost = async (req, res, next) => {
   try {
-    const { dom, page } = await lazifyImages(req.body.url);
+    const { dom, site } = await parseHTML(req.body.url);
     if (req.body.tags) {
       req.body.tags.forEach((tag) => {
         if (tag.__isNew__) {
@@ -52,18 +52,18 @@ exports.createArticlePost = async (req, res, next) => {
         }
       });
     }
-    if (page.error) {
-      res.status(406).send(page.message);
+    if (site.error) {
+      res.status(406).send(site.message);
       return;
     }
 
-    req.user.updateOrCreateArticle(dom, req.body.url, {
-      title: page.title,
-      author: page.author,
-      published: page.date_published,
-      image: page.lead_image_url,
-      links: [page.next_page_url],
-      description: page.excerpt,
+    req.user.updateOrCreateArticle(dom, site.source, {
+      title: site.title,
+      author: site.author,
+      published: site.date_published,
+      image: site.lead_image_url,
+      links: [site.next_page_url],
+      description: site.excerpt,
       tags: req.body.tags,
       createdAt: moment(),
     });
@@ -101,7 +101,7 @@ exports.getArticlesByTags = async (req, res) => {
   res.json(req.user.getArticlesByTags(filterTags).filter((article) => {
     if (req.query.status) {
       if (req.query.status === 'today') {
-        return moment(article.createdAt).diff(moment(), 'days') === 0;
+        return moment(article.createdAt).diff(moment(), 'days') === 0 && !article.archivedAt;
       }
       if (req.query.status === 'archived') {
         return article.archivedAt;

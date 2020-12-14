@@ -8,8 +8,11 @@ const mongoose = require('mongoose');
 const app = require('../../app'); // path to app.js
 const User = require('../../models/user');
 
+let server;
+
 describe('User Controller Tests', () => {
   beforeAll(async () => {
+    server = request(app);
     await mongoose.disconnect();
     await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
   });
@@ -35,10 +38,11 @@ describe('User Controller Tests', () => {
 
   afterAll(async () => {
     await mongoose.disconnect();
+    server = undefined;
   });
 
   test('POST /tags should return response with status 201', async () => {
-    const response = await request(app).post('/api/tags')
+    const response = await server.post('/api/tags')
       .send({
         tags: [
           {
@@ -54,7 +58,7 @@ describe('User Controller Tests', () => {
   });
 
   test('POST /tags  should return bad request response, tag already exists', async () => {
-    const response = await request(app).post('/api/tags')
+    const response = await server.post('/api/tags')
       .send({
         tags: [
           {
@@ -70,7 +74,7 @@ describe('User Controller Tests', () => {
   });
 
   test('POST /tags should return bad request response, user doesnt exist', async () => {
-    const response = await request(app).post('/api/tags')
+    const response = await server.post('/api/tags')
       .send({
         tags: [
           {
@@ -86,7 +90,7 @@ describe('User Controller Tests', () => {
   });
 
   test('GET /tags should return bad request response, user doesnt exist', async () => {
-    const response = await request(app).get('/api/tags').set('Username', 'stantest');
+    const response = await server.get('/api/tags').set('Username', 'stantest');
 
     expect(response.status).toEqual(400);
     expect(response.body.message).toEqual('User does not exists');
@@ -94,7 +98,7 @@ describe('User Controller Tests', () => {
   });
 
   test('GET /tags should return all tags from user stanhan and give the right response', async () => {
-    const response = await request(app).get('/api/tags').set('Username', 'stanhan');
+    const response = await server.get('/api/tags').set('Username', 'stanhan');
     const expectedTags = [{
       title: 'javascript',
       color: '#123122',
@@ -113,7 +117,7 @@ describe('User Controller Tests', () => {
   });
 
   test('POST /user should return 200, user has been created', async () => {
-    const response = await request(app).post('/api/user', {
+    const response = await server.post('/api/user', {
       userName: 'chef_tony',
     }).set('Accept', 'application/json');
 
@@ -121,7 +125,7 @@ describe('User Controller Tests', () => {
   });
 
   test('POST /user should return 401, user already exists', async () => {
-    const createUserOne = await request(app).post('/api/user')
+    const createUserOne = await server.post('/api/user')
       .send({
         userName: 'stanhan',
       }).set('Accept', 'application/json');

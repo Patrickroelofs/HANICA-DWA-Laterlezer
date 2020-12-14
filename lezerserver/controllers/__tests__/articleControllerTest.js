@@ -2,9 +2,24 @@
  * @jest-environment node
  */
 
+const request = require('supertest');
+const app = require('../../app');
 const articleController = require('../articleController');
 
-describe('Article Model Tests', () => {
+let server;
+
+describe('Article Controller Tests', () => {
+  beforeAll(async () => {
+    server = request(app);
+  });
+  afterAll(() => {
+    server.delete();
+  });
+  test('Returns error when invalid URL is supplied', async () => {
+    const response = await server.post('/api/articles').send({ url: 'localhost', tags: [] }).set('Username', 'testuser');
+    expect(response.status).toBe(406);
+  });
+
   test('Get all the articles', () => {
     const user = {
       articles: [
@@ -16,8 +31,8 @@ describe('Article Model Tests', () => {
     articleController.getArticles({ user }, { json }).then(() => {
       expect(json.mock.calls.length).toBe(1);
       expect(json.mock.calls[0][0]).toMatchObject([
-        { html: null },
-        { html: null },
+        { },
+        { },
       ]);
     });
   });
@@ -55,7 +70,7 @@ describe('Article Model Tests', () => {
     });
   });
 
-  xtest('Did not save', () => {
+  test('Did not save', () => {
     const req = { body: { url: 'https://nl.lipsum.com/' } };
     const createArticle = jest.fn((html, url) => 1 + 1);
     const findOne = jest.fn(() => {}).mockResolvedValue({ createArticle, save: (fn) => fn(true) });
@@ -70,6 +85,152 @@ describe('Article Model Tests', () => {
       expect(createArticle.mock.calls[0][1]).toBe('https://nl.lipsum.com/');
 
       expect(status.mock.calls.length).toBe(400);
+    });
+  });
+
+  test('Get filtered articles with one tag title', () => {
+    const req = { query: { title: 'Politiek' }, user: { getArticlesByTags: jest.fn(() => []) } };
+    const res = { json: jest.fn(() => {}) };
+    articleController.getArticlesByTags(req, res).then(() => {
+      expect(req.user.getArticlesByTags.mock.calls.length).toBe(1);
+      expect(req.user.getArticlesByTags.mock.calls[0][0]).toEqual(['Politiek']);
+    });
+  });
+
+  test('Get filtered articles with multiple tag titles', () => {
+    const req = { query: { title: ['Politiek', 'Fun'] }, user: { getArticlesByTags: jest.fn(() => []) } };
+    const res = { json: jest.fn(() => {}) };
+    articleController.getArticlesByTags(req, res).then(() => {
+      expect(req.user.getArticlesByTags.mock.calls.length).toBe(1);
+      expect(req.user.getArticlesByTags.mock.calls[0][0]).toEqual(['Politiek', 'Fun']);
+    });
+  });
+
+  test('update archived status', () => {
+    const archive = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            archive,
+            read,
+          }),
+        },
+      },
+      body: {
+        archivedAt: '11-12-2020',
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(archive.mock.calls.length).toBe(1);
+      expect(archive.mock.calls[0][0]).toBe('11-12-2020');
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        archive,
+        read,
+      });
+      expect(read.mock.calls.length).toBe(0);
+    });
+  });
+
+  test('update read status', () => {
+    const archive = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            archive,
+            read,
+          }),
+        },
+      },
+      body: {
+        readAt: '11-12-2020',
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(read.mock.calls.length).toBe(1);
+      expect(read.mock.calls[0][0]).toBe('11-12-2020');
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        archive,
+        read,
+      });
+      expect(archive.mock.calls.length).toBe(0);
+    });
+  });
+
+  test('update archived status', () => {
+    const archive = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            archive,
+            read,
+          }),
+        },
+      },
+      body: {
+        archivedAt: null,
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(archive.mock.calls.length).toBe(1);
+      expect(archive.mock.calls[0][0]).toBe(null);
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        archive,
+        read,
+      });
+      expect(read.mock.calls.length).toBe(0);
+    });
+  });
+
+  test('update read status', () => {
+    const archive = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            archive,
+            read,
+          }),
+        },
+      },
+      body: {
+        readAt: null,
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(read.mock.calls.length).toBe(1);
+      expect(read.mock.calls[0][0]).toBe(null);
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        archive,
+        read,
+      });
+      expect(archive.mock.calls.length).toBe(0);
     });
   });
 });

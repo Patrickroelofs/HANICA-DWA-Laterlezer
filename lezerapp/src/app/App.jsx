@@ -1,16 +1,17 @@
 import React from 'react';
 
 import axios from 'axios';
-import { useStore } from 'react-redux';
-import Dock from './components/dock/Dock';
-import Nav from './components/nav/Nav';
-import Articles from './components/articles/Articles';
+import { useSelector } from 'react-redux';
+import Dock from './views/sharedcomponents/dock/Dock';
+import Nav from './views/sharedcomponents/nav/Nav';
+import Articles from './views/library/Articles';
+import { selectUsername } from '../store/userSlice';
 
 function App() {
-  const store = useStore();
+  const username = useSelector(selectUsername);
   axios.interceptors.request.use((config) => {
-    if (store.getState().user) {
-      config.headers.Username = store.getState().user.username;
+    if (username) {
+      config.headers.Username = username;
     }
     return config;
   });

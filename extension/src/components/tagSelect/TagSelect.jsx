@@ -1,18 +1,17 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { get } from 'axios';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
 import colourStyles from './colourStyles';
 
 const animatedComponents = makeAnimated();
-function TagSelect(props) {
-  const { onSave } = props;
+function TagSelect({ onSave }) {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
   const fetchTags = () => {
-    axios.get('http://localhost:3000/api/tags', {
+    get('http://localhost:3000/api/tags', {
       headers: {
         Username: localStorage.getItem('username'),
       },
@@ -29,10 +28,6 @@ function TagSelect(props) {
     fetchTags();
   }, []);
 
-  const handleChange = (newValue) => {
-    setSelectedTags(newValue);
-  };
-
   return (
     <>
       <CreatableSelect
@@ -40,7 +35,7 @@ function TagSelect(props) {
         components={animatedComponents}
         isMulti
         isClearable
-        onChange={handleChange}
+        onChange={(e) => setSelectedTags(e)}
         options={tags}
         styles={colourStyles()}
         style={{ width: '300px' }}

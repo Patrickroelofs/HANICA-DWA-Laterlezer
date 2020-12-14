@@ -19,7 +19,28 @@ describe('User Model Tests', () => {
       userName: 'stanhan',
       password: 'password',
       email: 'stanhan@hotmail.com',
-      articles: [],
+      articles: [{
+        title: 'article 1',
+        tags: [{
+          title: 'Politiek',
+          color: '#00FF00',
+        },
+        {
+          title: 'Buitenland',
+          color: '#00FF00',
+        }],
+      },
+      {
+        title: 'article 2',
+        tags: [{
+          title: 'Politiek',
+          color: '#00FF00',
+        },
+        {
+          title: 'Fun',
+          color: '#00FF00',
+        }],
+      }],
       tags: [{
         title: 'javascript',
         color: '#00FF00',
@@ -100,10 +121,43 @@ describe('User Model Tests', () => {
 
     expect(tags.length).toEqual(expectedTags.length);
 
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < tags.length; i++) {
+    for (let i = 0; i < tags.length; i += 1) {
       expect(tags[i].title).toEqual(expectedTags[i].title);
       expect(tags[i].color).toEqual(expectedTags[i].color);
     }
+  });
+
+  test('User method getArticlesByTags should return all articles with the Poltiek tag', async () => {
+    const testUser = await User.getUserByUsername('stanhan');
+    const articles = await testUser.getArticlesByTags(['Politiek']);
+    expect(articles.length).toEqual(2);
+    articles.forEach((a) => {
+      expect(a.tags).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: 'Politiek',
+          }),
+        ]),
+      );
+    });
+  });
+
+  test('User method getArticlesByTags should return all articles with the Poltiek and Fun tag', async () => {
+    const testUser = await User.getUserByUsername('stanhan');
+    const articles = await testUser.getArticlesByTags(['Politiek', 'Fun']);
+    expect(articles.length).toEqual(1);
+
+    articles.forEach((a) => {
+      expect(a.tags).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: 'Fun',
+          }),
+          expect.objectContaining({
+            title: 'Politiek',
+          }),
+        ]),
+      );
+    });
   });
 });

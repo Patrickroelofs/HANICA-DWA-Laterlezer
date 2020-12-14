@@ -1,12 +1,13 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import ReactLoading from 'react-loading';
-import axios from 'axios';
+import BallBeat from 'react-pure-loaders/build/BallBeat';
+import { post } from 'axios';
 import chroma from 'chroma-js';
 
 import TagSelect from './tagSelect/TagSelect';
 
-function SaveArticle() {
+function SaveArticle(props) {
+  const { setUser } = props;
   const [loaded, setLoaded] = useState('waitForSelect');
   const [error, setError] = useState('');
   const [tab, setTab] = useState({});
@@ -18,19 +19,17 @@ function SaveArticle() {
       tag.color = chroma(tag.color).hex();
       return tag;
     });
-    axios
-      .post('http://localhost:3000/api/articles',
-        { url: tab, tags: selectedTags }, {
-          headers: {
-            Username: localStorage.getItem('username'),
-          },
-        })
+    post('http://localhost:3000/api/articles',
+      { url: tab, tags: selectedTags }, {
+        headers: {
+          Username: localStorage.getItem('username'),
+        },
+      })
       .then(() => {
         setLoaded(true);
       }).catch((e) => {
         setError(e.message);
         setLoaded(true);
-        console.log(error);
       });
   };
 
@@ -54,7 +53,14 @@ function SaveArticle() {
       );
     }
     if (loaded === false) {
-      return <div className="App__Loader"><ReactLoading type="cylon" color="#000" /></div>;
+      return (
+        <div className="App__Loader">
+          <BallBeat
+            color="#000"
+            loading
+          />
+        </div>
+      );
     }
     return '';
   };
@@ -65,6 +71,7 @@ function SaveArticle() {
 
   return (
     <>
+      <button type="button" onClick={() => setUser(null)}>Logout</button>
       { loaded === 'waitForSelect' ? <TagSelect onSave={postArticle} /> : ''}
 
       {

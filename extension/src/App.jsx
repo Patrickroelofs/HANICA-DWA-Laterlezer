@@ -1,14 +1,18 @@
 /* eslint-disable no-undef */
-import './App.scss';
 import React, { useState, useEffect } from 'react';
 import SaveArticle from './components/SaveArticle';
 import Login from './components/Login';
+
+import './App.scss';
 
 function App() {
   const [user, setUser] = useState('');
 
   const storeUser = (u) => {
     localStorage.setItem('username', u);
+    if (!u) {
+      localStorage.removeItem('username');
+    }
     setUser(u);
   };
 
@@ -21,7 +25,7 @@ function App() {
 
   return (
     <div className="App">
-      { !user ? <Login setUser={storeUser} /> : <SaveArticle user={user} /> }
+      { !user ? <Login setUser={storeUser} /> : <SaveArticle setUser={storeUser} user={user} /> }
     </div>
   );
 }

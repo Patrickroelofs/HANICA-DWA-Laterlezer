@@ -1,13 +1,14 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 const Article = require('./article');
 const Tag = require('./tag');
 const CustomError = require('../utils/custom-error');
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   firstName: String,
   lastName: String,
   userName: String,
   password: String,
+  profilePicture: String,
   email: String,
   articles: [Article.schema],
   tags: [Tag.schema],
@@ -15,9 +16,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.getUserByUsername = async function (userName) {
   const user = await this.model('User').findOne({ userName });
-  if (!user) {
-    throw new CustomError('User does not exists', 400);
-  }
+  if (!user) throw new CustomError('User does not exists', 400);
   return user;
 };
 
@@ -34,7 +33,7 @@ userSchema.methods.createTag = function (data) {
       throw new CustomError('Tag title is too long', 400);
     }
     if (this.tags.find((tag) => tag.title === newTag.title) === undefined) {
-      this.tags.push(newTag);
+      this.tags = [...this.tags, newTag];
     } else {
       throw new CustomError('Tag already exists', 400);
     }
@@ -49,14 +48,29 @@ userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
       ...this.articles[key], ...data, html, source,
     };
   } else {
-    this.articles.push({
+    this.articles = [...this.articles, {
       html,
       source,
       ...data,
-    });
+    }];
   }
 };
 
-const User = mongoose.model('User', userSchema);
+userSchema.methods.getArticlesByTags = function (tags) {
+  const filteredArticles = this.articles.filter((a) => {
+    let counter = 0;
+    tags.forEach((filterTag) => {
+      a.tags.forEach((articleTag) => {
+        if (filterTag === articleTag.title) {
+          counter += 1;
+        }
+      });
+    });
+    return (counter === tags.length) ? a : null;
+  });
+  return filteredArticles;
+};
+
+const User = model('User', userSchema);
 
 module.exports = User;

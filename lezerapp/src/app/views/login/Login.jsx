@@ -66,7 +66,7 @@ function Login() {
             <div>
               <label htmlFor="username" className="leading-10">
                 Username &nbsp;
-                <span style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
+                <span id="login-error" style={(response.success) ? { color: 'green' } : { color: 'red' }}>{response.message}</span>
                 <input id="username" name="username" type="string" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" />
               </label>
             </div>

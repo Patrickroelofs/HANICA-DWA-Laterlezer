@@ -24,7 +24,7 @@ function TagList() {
   };
 
   useEffect(() => {
-    get('http://localhost:3000/api/tags').then(({ data }) => {
+    get('http://localhost:3000/api/tags', { withCredentials: true }).then(({ data }) => {
       dispatch(setTags(data.data));
     });
   }, [setTags]);

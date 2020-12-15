@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 
 import { loginUser, googleAccount } from '../../../store/userSlice';
+import { openWebSocket } from '../../../utils/serverCommunication';
 
 function Login() {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ function Login() {
     e.preventDefault();
 
     dispatch(loginUser(e.target.username.value)).then(() => {
+      openWebSocket();
       history.push('/app');
     }).catch((error) => {
       setResponse({

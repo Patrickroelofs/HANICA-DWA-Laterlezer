@@ -28,10 +28,10 @@ exports.createUser = async (req, res, next) => {
 exports.loginUser = async (req, res, next) => {
   try {
     const user = await User.findOne({ userName: req.params.userName });
-
     if (user === null) {
       res.status(401).send('User not found');
     } else {
+      req.session.username = req.params.userName;
       res.send({
         username: user.userName,
         tags: user.tags,

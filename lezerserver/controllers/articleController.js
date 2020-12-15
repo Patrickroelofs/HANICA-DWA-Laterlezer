@@ -70,9 +70,9 @@ exports.createArticlePost = async (req, res, next) => {
 
     req.user.save((err) => {
       if (err) {
-        res.status(400).send(response('Color must be in the right format', null, false));
+        res.status(400).send(response('Something went wrong', null, false));
       } else {
-        res.status(201).send(response('tag created', req.user.tags, true));
+        res.status(201).send(response('Article created', req.user.articles[0]._id, true));
       }
     });
   } catch (e) {

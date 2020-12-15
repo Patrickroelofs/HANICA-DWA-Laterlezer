@@ -1,3 +1,5 @@
+import { store } from '../store';
+
 const port = 3000;
 const serverHostname = `${window.location.hostname}:${port}`;
 
@@ -10,11 +12,13 @@ export function openWebSocket() {
     theSocket.onclose = null;
     theSocket.close();
   }
+  const state = store.getState();
+  const user = state.user.username;
   console.log('Opening socket for', `ws://${serverHostname}`);
   theSocket = new WebSocket(`ws://${serverHostname}`);
 
   theSocket.onopen = () => {
-    theSocket.send(JSON.stringify({ type: 'OPEN CONNECTION' }));
+    theSocket.send(JSON.stringify({ type: 'OPEN CONNECTION', user }));
   };
 
   theSocket.onmessage = async (messageEvent) => {

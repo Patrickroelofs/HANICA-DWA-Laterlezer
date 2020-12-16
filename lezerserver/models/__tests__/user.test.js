@@ -24,10 +24,12 @@ describe('User Model Tests', () => {
         tags: [{
           title: 'Politiek',
           color: '#00FF00',
+          children: [],
         },
         {
           title: 'Buitenland',
           color: '#00FF00',
+          children: [],
         }],
       },
       {
@@ -35,15 +37,18 @@ describe('User Model Tests', () => {
         tags: [{
           title: 'Politiek',
           color: '#00FF00',
+          children: [],
         },
         {
           title: 'Fun',
           color: '#00FF00',
+          children: [],
         }],
       }],
       tags: [{
         title: 'javascript',
         color: '#00FF00',
+        children: [],
       }],
     });
   });
@@ -81,8 +86,14 @@ describe('User Model Tests', () => {
     const testUser = await User.getUserByUsername('stanhan');
     const newTag = {
       parent: {
-        _id: '1',
+        _id: '4',
         title: 'javascript',
+        color: '#00FF00',
+        children: [],
+      },
+      tag: {
+        _id: '44',
+        title: 'testchild',
         color: '#00FF00',
         children: [],
       },
@@ -95,19 +106,26 @@ describe('User Model Tests', () => {
   });
 
   test('User method createTag should throw an error', async () => {
-    let thrownError;
     try {
       const testUser = await User.getUserByUsername('stanhan');
-      const newTag = [{
-        title: 'javascript',
-        color: '#00FF00',
-      }];
+      const newTag = {
+        tag: {
+          _id: 32,
+          title: 'javascript',
+          color: '#00FF00',
+          children: [],
+        },
+        parent: {
+          _id: 0,
+          title: '',
+          children: [],
+        },
+      };
       testUser.createTag(newTag);
     } catch (error) {
-      thrownError = error;
+      expect(error.message).toEqual('Tag already exists');
+      expect(error.status).toEqual(400);
     }
-    expect(thrownError.message).toEqual('Tag already exists');
-    expect(thrownError.status).toEqual(400);
   });
   test('User method getTags should return all user tags', async () => {
     const testUser = await User.getUserByUsername('stanhan');
@@ -116,6 +134,7 @@ describe('User Model Tests', () => {
       {
         title: 'javascript',
         color: '#00FF00',
+        children: [],
       }];
 
     expect(tags.length).toEqual(expectedTags.length);

@@ -22,7 +22,7 @@ function App() {
   });
 
   return (
-    <div className="App">
+    <div className="App w-96 h-96">
       { !user ? <Login setUser={storeUser} /> : <SaveArticle setUser={storeUser} user={user} /> }
     </div>
   );

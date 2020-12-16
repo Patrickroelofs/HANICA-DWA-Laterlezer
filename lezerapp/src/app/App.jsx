@@ -6,6 +6,7 @@ import Dock from './views/sharedcomponents/dock/Dock';
 import Nav from './views/sharedcomponents/nav/Nav';
 import Articles from './views/library/Articles';
 import { selectUsername } from '../store/userSlice';
+import AddArticle from './views/sharedcomponents/addArticle/AddArticle';
 
 function App() {
   const username = useSelector(selectUsername);
@@ -30,6 +31,7 @@ function App() {
           </div>
         </nav>
         <main className="min-h-screen col-span-3 bg-white">
+          <AddArticle />
           <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0">
             <Articles />
           </div>

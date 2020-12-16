@@ -57,7 +57,7 @@ exports.createArticlePost = async (req, res, next) => {
       return;
     }
 
-    req.user.updateOrCreateArticle(dom, site.source, {
+    req.user.updateOrCreateArticle(dom, site.url, {
       title: site.title,
       author: site.author,
       published: site.date_published,
@@ -70,9 +70,9 @@ exports.createArticlePost = async (req, res, next) => {
 
     req.user.save((err) => {
       if (err) {
-        res.status(400).send(response('Color must be in the right format', null, false));
+        res.status(400).send(response('Something went wrong', null, false));
       } else {
-        res.status(201).send(response('tag created', req.user.tags, true));
+        res.status(201).send(response('Article created', req.user.articles.reverse()[0]._id, true));
       }
     });
   } catch (e) {

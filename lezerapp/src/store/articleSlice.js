@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { get } from 'axios';
+
+const API_URL = 'http://localhost:3000/api';
 
 const articleSlice = createSlice({
   name: 'article',
@@ -30,3 +33,6 @@ export const {
   setArticles, setCurrentArticle, setCurrentArticleId, updateArticle, removeArticle,
 } = articleSlice.actions;
 export default articleSlice.reducer;
+
+export const getArticles = (status) => (dispatch) => get(`${API_URL}/articles?status=${status}`)
+  .then(({ data }) => dispatch(setArticles(data)));

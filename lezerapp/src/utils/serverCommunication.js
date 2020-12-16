@@ -1,4 +1,5 @@
 import { store } from '../store';
+import { getArticles } from '../store/articleSlice';
 
 const port = 3000;
 const serverHostname = `${window.location.hostname}:${port}`;
@@ -18,12 +19,15 @@ export function openWebSocket() {
   theSocket = new WebSocket(`ws://${serverHostname}`);
 
   theSocket.onopen = () => {
-    theSocket.send(JSON.stringify({ type: 'OPEN CONNECTION', user }));
+    theSocket.send(JSON.stringify({ type: 'NEW CONNECTION', user }));
   };
 
   theSocket.onmessage = async (messageEvent) => {
     const messageObj = JSON.parse(messageEvent.data);
     switch (messageObj.type) {
+      case 'NEW ARTICLE':
+        store.dispatch(getArticles(undefined));
+        break;
       default:
         break;
     }

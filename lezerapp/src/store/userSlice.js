@@ -22,7 +22,7 @@ export const selectProfilePicture = (state) => state.user.profilePicture;
 export const { setUsername, setProfilePicture } = userSlice.actions;
 export default userSlice.reducer;
 
-export const loginUser = (username) => (dispatch) => get(`${API_URL}/user/${username}`, { withCredentials: true })
+export const loginUser = (username) => (dispatch) => get(`${API_URL}/user/${username}`)
   .then(({ data }) => dispatch(setUsername(data.username)));
 
 export const registerUser = (username) => (dispatch) => post(`${API_URL}/user`, { userName: username })

@@ -85,7 +85,7 @@ function SaveArticle(props) {
       </div>
       <div className="w-full bg-gray-100 p-6 absolute bottom-0">
         <span className="align-middle leading-8">
-          Logged in as:
+          <span className="font-bold pr-1">Logged in as:</span>
           { localStorage.getItem('username') }
         </span>
         <button type="button" onClick={() => setUser(null)} className="float-right inline-block px-4 py-2 text-xs font-medium text-center text-white uppercase transition bg-red-500 rounded-full shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none">Logout</button>

@@ -12,11 +12,6 @@ const ws = require('ws');
 const api = require('./routing/api');
 
 const app = express();
-const httpServer = http.createServer(app);
-const webSocketServer = new ws.Server({
-  noServer: true,
-  path: '',
-});
 const port = 3000;
 app.use(logger('dev'));
 app.use(cors({ origin: true, credentials: true }));
@@ -31,6 +26,12 @@ app.use('/api', api);
 
 // Error middlewares
 require('./middlewares/error.middleware')(app);
+
+const httpServer = http.createServer(app);
+const webSocketServer = new ws.Server({
+  noServer: true,
+  path: '',
+});
 
 httpServer.on('upgrade', (req, networkSocket, head) => {
   webSocketServer.handleUpgrade(req, networkSocket, head, (websocket) => {

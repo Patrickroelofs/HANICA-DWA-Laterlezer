@@ -8,7 +8,7 @@ const OPEN_ADD_TAGS_DROPDOWN = '.css-tlfecz-indicatorContainer';
 
 jest.setTimeout(30000);
 
-describe('e2e tests', () => {
+xdescribe('e2e tests', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: false, slowMo: 50 });
     page = await browser.newPage();

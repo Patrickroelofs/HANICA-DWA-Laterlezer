@@ -56,7 +56,9 @@ userSchema.methods.getArticlesByTags = function (tags) {
   return filteredArticles;
 };
 
-userSchema.methods.createTag = async function (data) {
+// eslint-disable-next-line consistent-return
+userSchema.methods.createTag = function (data) {
+  if (!data.parent) return this.tags.push(data.tag);
   if (data.tag.title === data.parent.title) {
     throw new CustomError('Subtag can\'t have the same title as the parent.', 400);
   }

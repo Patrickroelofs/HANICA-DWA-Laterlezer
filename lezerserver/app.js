@@ -1,7 +1,7 @@
 /* eslint no-console: ["off", { allow: ["warn"] }] */
+/* eslint-disable no-param-reassign */
 
 const express = require('express');
-const session = require('express-session');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { json, urlencoded } = require('body-parser');
@@ -27,12 +27,6 @@ app.use(urlencoded({ extended: true }));
 
 app.use(compression());
 
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false,
-}));
-
 app.use('/api', api);
 
 // Error middlewares
@@ -44,12 +38,26 @@ httpServer.on('upgrade', (req, networkSocket, head) => {
   });
 });
 
-webSocketServer.on('connection', (ws, req) => {
-  console.log(`CONNECTION CREATED: ${req}`);
-  console.log(req.session);
-  ws.on('message', (msg) => {
+webSocketServer.on('connection', (websocket, req) => {
+  console.log('CONNECTION CREATED');
+  websocket.on('message', (msg) => {
     const msgObject = JSON.parse(msg);
     console.log(msgObject);
+
+    switch (msgObject.type) {
+      case 'NEW CONNECTION':
+        websocket.userName = msgObject.user;
+        break;
+      case 'NEW ARTICLE':
+        webSocketServer.clients.forEach((client) => {
+          if (client.userName === websocket.userName) {
+            client.send(JSON.stringify({ type: 'NEW ARTICLE' }));
+          }
+        });
+        break;
+      default:
+        break;
+    }
   });
 });
 

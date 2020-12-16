@@ -31,7 +31,6 @@ exports.loginUser = async (req, res, next) => {
     if (user === null) {
       res.status(401).send('User not found');
     } else {
-      req.session.username = req.params.userName;
       res.send({
         username: user.userName,
         tags: user.tags,

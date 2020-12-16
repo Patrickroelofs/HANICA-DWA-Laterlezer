@@ -7,7 +7,7 @@ function Thumbnail({ url }) {
   return (
     <>
       <div className="w-auto h-36 rounded-xl col-span-1 shadow-xl">
-        <LazyLoadImage className="w-auto h-36 rounded-xl object-cover object-center" effect="blur" src={url} />
+        <LazyLoadImage className="w-full h-36 rounded-xl object-cover object-center" effect="blur" src={url} />
       </div>
     </>
   );

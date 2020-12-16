@@ -41,7 +41,7 @@ function Article({ article }) {
     <Link to={`/app/${_id}`} onClick={() => dispatch(setCurrentArticle(article))}>
       <article className="grid grid-cols-4 mt-6">
         <div className={`${article.readAt && 'opacity-70 filter-grayscale'}`}>
-          <Thumbnail url={image || 'https://placehold.it/125x100'} />
+          <Thumbnail url={image || '/not-found.png'} />
         </div>
         <div className="col-span-3 ml-8">
           <div className="articleTags pb-2 text-xs overflow-x-hidden whitespace-nowrap overflow-ellipsis">

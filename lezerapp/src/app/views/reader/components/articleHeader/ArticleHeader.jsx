@@ -53,7 +53,11 @@ export default function ArticleHeader() {
         )
         : null }
       <div>
-        { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} /> : '' }
+        {
+          article.html && article.image !== null && !article.html.includes(article.image)
+            ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} />
+            : null
+        }
       </div>
     </>
   );

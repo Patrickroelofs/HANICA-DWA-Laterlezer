@@ -10,12 +10,7 @@ exports.getArticles = async (req, res) => {
     return parsedArticle;
   }).filter((article) => {
     if (req.query.status) {
-      if (req.query.status === 'today') {
-        return moment(article.createdAt).diff(moment(), 'days') === 0 && !article.archivedAt;
-      }
-      if (req.query.status === 'archived') {
-        return article.archivedAt;
-      }
+      return article.checkStatus(req.query.status);
     }
     return !article.archivedAt;
   });
@@ -98,12 +93,7 @@ exports.getArticlesByTags = async (req, res) => {
   }
   res.json(req.user.getArticlesByTags(filterTags).sort((a, b) => b.createdAt - a.createdAt).filter((article) => {
     if (req.query.status) {
-      if (req.query.status === 'today') {
-        return moment(article.createdAt).diff(moment(), 'days') === 0 && !article.archivedAt;
-      }
-      if (req.query.status === 'archived') {
-        return article.archivedAt;
-      }
+      return article.checkStatus(req.query.status);
     }
     return !article.archivedAt;
   }));

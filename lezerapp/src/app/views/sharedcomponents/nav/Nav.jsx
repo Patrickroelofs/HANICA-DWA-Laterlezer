@@ -30,6 +30,24 @@ function Nav() {
             Today
           </li>
         </Link>
+        <Link to="/app/status/week" onClick={clickHandler}>
+          <li className={`hover:bg-gray-100 p-3 ${status === 'week' ? 'bg-gray-200 font-bold' : null} align-middle`}>
+            <TodayIcon className="opacity-60 mr-4 align-middle" />
+            This week
+          </li>
+        </Link>
+        <Link to="/app/status/month" onClick={clickHandler}>
+          <li className={`hover:bg-gray-100 p-3 ${status === 'month' ? 'bg-gray-200 font-bold' : null} align-middle`}>
+            <TodayIcon className="opacity-60 mr-4 align-middle" />
+            This month
+          </li>
+        </Link>
+        <Link to="/app/status/year" onClick={clickHandler}>
+          <li className={`hover:bg-gray-100 p-3 ${status === 'year' ? 'bg-gray-200 font-bold' : null} align-middle`}>
+            <TodayIcon className="opacity-60 mr-4 align-middle" />
+            This year
+          </li>
+        </Link>
         <Link to="/app/status/archived" onClick={clickHandler}>
           <li className={`hover:bg-gray-100 p-3 ${status === 'archived' ? 'bg-gray-200 font-bold' : null} align-middle`}>
             <ArchiveIcon className="opacity-60 mr-4 align-middle" />

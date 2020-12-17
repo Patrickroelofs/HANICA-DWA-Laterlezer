@@ -22,24 +22,24 @@ xdescribe('e2e tests', () => {
     expect(await page.$$('#center')).toBeDefined();
   });
 
-  test('User removes all tags from article', async () => {
-    await page.click('#addTagsToArticle');
-    expect(await page.$$('#tagSelectPopup')).toBeDefined();
-    await page.click(DELETE_ALL_TAGS_BUTTON);
-    await page.click('#saveTagsToArticle');
-    expect(await page.$$('.articleTags:first-child')).toStrictEqual([]);
-    await page.click('#addTagsToArticle');
-  });
+  // test('User removes all tags from article', async () => {
+  //   await page.click('#addTagsToArticle');
+  //   expect(await page.$$('#tagSelectPopup')).toBeDefined();
+  //   await page.click(DELETE_ALL_TAGS_BUTTON);
+  //   await page.click('#saveTagsToArticle');
+  //   expect(await page.$$('.articleTags:first-child')).toStrictEqual([]);
+  //   await page.click('#addTagsToArticle');
+  // });
 
   test('User adds tag to article', async () => {
     await page.click('#addTagsToArticle');
     expect(await page.$$('#tagSelectPopup')).toBeDefined();
-    await page.waitForSelector(OPEN_ADD_TAGS_DROPDOWN);
-    if (await page.$$(OPEN_ADD_TAGS_DROPDOWN)) {
-      await page.click(OPEN_ADD_TAGS_DROPDOWN);
-    }
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Enter');
+    await page.waitForSelector('#center > #tagSelectPopup > .mx-3 > .focus:outline-none:nth-child(1) > .inline-block')
+    await page.click('#center > #tagSelectPopup > .mx-3 > .focus:outline-none:nth-child(1) > .inline-block')
+
+    await page.waitForSelector('.min-h-screen #saveTagsToArticle')
+    await page.click('.min-h-screen #saveTagsToArticle')
+
     await page.click('#saveTagsToArticle');
     expect(await page.$$('.articleTags:first-child')).toBeDefined();
   });

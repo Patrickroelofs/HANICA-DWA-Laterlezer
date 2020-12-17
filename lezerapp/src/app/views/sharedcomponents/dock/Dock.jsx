@@ -1,19 +1,25 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LockIcon from '@material-ui/icons/Lock';
 import { GoogleLogout } from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import { setSelectedTags } from '../../../../store/tagSlice';
+import { closeWebSocket, openWebSocket } from '../../../../utils/serverCommunication';
 
 const Dock = ({ profilePicture }) => {
   const dispatch = useDispatch();
   const onLogout = () => {
+    closeWebSocket();
     localStorage.clear();
     setTimeout(() => {
       window.location.reload();
     }, 100);
   };
+
+  useEffect(() => {
+    openWebSocket();
+  }, []);
 
   const clickHandler = () => {
     dispatch(setSelectedTags([]));

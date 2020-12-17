@@ -4,7 +4,8 @@ import BallBeat from 'react-pure-loaders/build/BallBeat';
 import { post } from 'axios';
 import chroma from 'chroma-js';
 
-import TagSelect from './tagSelect/TagSelect';
+// import TagSelect from './tagSelect/TagSelect';
+import TagListSelect from './tagListSelect/TagListSelect';
 
 function SaveArticle(props) {
   const { setUser } = props;
@@ -74,7 +75,7 @@ function SaveArticle(props) {
   return (
     <>
       <div className="p-6">
-        { loaded === 'waitForSelect' ? <TagSelect onSave={postArticle} /> : ''}
+        { loaded === 'waitForSelect' ? <TagListSelect onSave={postArticle} /> : ''}
 
         {
               error

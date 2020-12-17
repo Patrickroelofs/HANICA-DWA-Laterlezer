@@ -13,10 +13,6 @@ const Articles = () => {
   const selectedTags = useSelector(selectSelectedTags);
   const articles = useSelector(selectArticles);
 
-  useEffect(() => {
-    dispatch(getArticles(status));
-  }, []);
-
   const getFilteredArticles = () => {
     let tags = '';
     selectedTags.forEach((t, i) => {
@@ -34,7 +30,7 @@ const Articles = () => {
 
   useEffect(() => {
     if (selectedTags.length <= 0) {
-      getArticles();
+      dispatch(getArticles(status));
     } else {
       getFilteredArticles();
     }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { MoreVert } from '@material-ui/icons';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import Thumbnail from '../thumbnail/Thumbnail';
 import TagPill from '../../../sharedcomponents/tagPill/TagPill';
@@ -21,7 +21,9 @@ function Article({ article }) {
 
   const dispatch = useDispatch();
 
-  const selectTag = (tag) => {
+  const selectTag = (tag, e) => {
+    e.stopPropagation();
+    e.preventDefault();
     let tagss = [...selectedTags];
     if (!tagss.includes(tag.title)) {
       tagss.push(tag.title);
@@ -46,14 +48,14 @@ function Article({ article }) {
         <div className="col-span-3 ml-8">
           <div className="articleTags pb-2 text-xs overflow-x-hidden whitespace-nowrap overflow-ellipsis">
             { (tags) ? tags.map((tag) => (
-              <Link key={tag.title} to="/app" onClick={() => selectTag(tag)} value={tag._id}>
+              <button type="button" className="focus:outline-none" key={tag._id} onClick={(e) => selectTag(tag, e)} value={tag._id}>
                 <TagPill data={tag} />
-              </Link>
+              </button>
             )) : <span>No tags found</span> }
           </div>
           <strong className={`font-bold text-md ${article.readAt && 'opacity-40'}`}>{ title }</strong>
           <div className="relative inline-block text-left float-right" ref={openModelRef}>
-            <MoreVert onClick={openOptions} />
+            <MoreVertIcon onClick={openOptions} />
             { options && <ArticleDropdown close={() => setOptions(false)} article={article} /> }
           </div>
           <p className={`${article.readAt && 'opacity-40'} text-xs mt-4`}>

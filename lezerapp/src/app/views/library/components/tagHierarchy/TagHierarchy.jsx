@@ -1,0 +1,92 @@
+import React, { memo, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { get } from 'axios';
+import useOnclickOutside from 'react-cool-onclickoutside';
+import NewTag from '../../../sharedcomponents/newTag/NewTag';
+import TagItem from './components/TagItem';
+import {
+  setTags, selectTags, selectSelectedTags, setSelectedTags,
+} from '../../../../../store/tagSlice';
+import NewTagForm from '../../../sharedcomponents/newTag/NewTagForm';
+
+const TagHierarchy = () => {
+  const tags = useSelector(selectTags);
+
+  const [showTagDropdown, setShowTagDropdown] = useState(false);
+  const toggleAddTagDropdown = () => setShowTagDropdown(!showTagDropdown);
+  const dispatch = useDispatch();
+  const [clickedTagTitle, setClickedTag] = useState();
+
+  const selectedTags = useSelector(selectSelectedTags);
+
+  const addTagRef = useOnclickOutside(() => {
+    setShowTagDropdown(false);
+    setClickedTag('');
+  });
+
+  const handleClick = (e) => {
+    setClickedTag(e);
+    toggleAddTagDropdown();
+  };
+
+  const isSelected = (tag) => selectedTags.find((t) => tag._id.toString() === t._id.toString());
+
+  const selectTag = (tagss) => {
+    if (isSelected(tagss[0])) {
+      dispatch(setSelectedTags(selectedTags.filter((t) => !tagss.find((tag) => tag._id === t._id.toString()))));
+    } else {
+      dispatch(setSelectedTags([
+        ...selectedTags,
+        ...tagss,
+      ]));
+    }
+  };
+
+  useEffect(() => {
+    get('http://localhost:3000/api/tags').then(({ data }) => {
+      dispatch(setTags(data.data));
+    });
+  }, [setTags]);
+
+  const tagHierarchyGenerator = (tagz, pickedTag) => {
+    tagz = tagz.map((t) => {
+      const onClick = (parents) => {
+        parents.push(t);
+        pickedTag(parents);
+      };
+      const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} />)];
+      if (t.children) {
+        result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
+      }
+      return result;
+    });
+    return tagz;
+  };
+
+  const renderParents = () => tags.map((t) => {
+    const onClick = (parents) => {
+      parents.push(t);
+      selectTag(parents);
+    };
+    const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} />)];
+    if (t.children) {
+      result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
+    }
+    return result;
+  });
+
+  return (
+    <>
+      <div className="mb-4 mt-6 pl-2 font-bold text-base">
+        <span>Tags</span>
+        { showTagDropdown && <NewTagForm reference={addTagRef} tag={clickedTagTitle} /> }
+        <NewTag />
+      </div>
+      <ul id="compositions-list" className="pure-tree main-tree">
+        {renderParents()}
+      </ul>
+    </>
+  );
+};
+
+export default memo(TagHierarchy);

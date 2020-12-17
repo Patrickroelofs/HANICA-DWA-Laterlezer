@@ -5,7 +5,9 @@ const API_URL = 'http://localhost:3000/api';
 
 const articleSlice = createSlice({
   name: 'article',
-  initialState: {},
+  initialState: {
+    articles: [],
+  },
   reducers: {
     setArticles: (state, action) => {
       state.articles = action.payload;

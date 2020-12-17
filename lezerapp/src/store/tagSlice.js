@@ -8,6 +8,7 @@ const tagSlice = createSlice({
   initialState: {
     tags: [],
     selectedTags: [],
+    articleTags: [],
   },
   reducers: {
     setTags: (state, action) => {
@@ -16,17 +17,19 @@ const tagSlice = createSlice({
     setSelectedTags: (state, action) => {
       state.selectedTags = action.payload;
     },
-
+    setArticleTags: (state, action) => {
+      state.articleTags = action.payload;
+    },
   },
 });
 
 export const selectTags = (state) => state.tag.tags;
 export const selectSelectedTags = (state) => state.tag.selectedTags;
 
-export const { setTags, setSelectedTags } = tagSlice.actions;
+export const { setTags, setSelectedTags, setArticleTags } = tagSlice.actions;
 export default tagSlice.reducer;
 
-export const createTag = (title, color) => (dispatch) => post(`${API_URL}/tags`, { tags: [{ title, color }] })
+export const createTag = (title, color, parent) => (dispatch) => post(`${API_URL}/tags`, { tag: { title, color }, parent })
   .then(({ data, status }) => {
     dispatch(setTags(data.data));
     return {

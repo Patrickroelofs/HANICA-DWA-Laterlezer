@@ -19,6 +19,7 @@
 	"main": "app.js",
 	"devDependencies": {
 		"acorn": "^8.0.4",
+		"cross-env": "^7.0.3",
 		"eslint": "^7.14.0",
 		"eslint-config-airbnb": "^18.2.1",
 		"eslint-plugin-import": "^2.22.1",
@@ -29,7 +30,7 @@
 		"supertest": "^6.0.1"
 	},
 	"scripts": {
-		"test": "jest --verbose --collectCoverage --env=node",
+		"test": "cross-env NODE_ENV=test jest --config jest.config.js",
 		"start": "nodemon ./app.js",
 		"seed": "node ./seeder/seed.js"
 	},

@@ -62,10 +62,17 @@ webSocketServer.on('connection', (websocket, req) => {
   });
 });
 
-httpServer.listen(port, () => {
-  mongoose.connect('mongodb://localhost:27017/reader', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, () => {
-    console.info(`App listening at http://localhost:${port}`);
+if (process.env.NODE_ENV === 'test') {
+  const listener = httpServer.listen(() => {
+    console.info(`listening on port: ${listener.address().port}`);
   });
-});
+} else {
+  httpServer.listen(port, () => {
+    mongoose.connect('mongodb://localhost:27017/reader', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, () => {
+      mongoose.set('debug', true);
+      console.info(`App listening at http://localhost:${port}`);
+    });
+  });
+}
 
 module.exports = app;

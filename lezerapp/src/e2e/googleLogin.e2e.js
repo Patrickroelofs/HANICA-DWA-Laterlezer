@@ -11,7 +11,7 @@ function delay(time) {
   });
 }
 
-describe('E2E Test: Google Account', () => {
+xdescribe('E2E Test: Google Account', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: false, slowMo: 50 });
     page = await browser.newPage();

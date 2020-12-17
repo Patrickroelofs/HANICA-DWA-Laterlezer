@@ -5,7 +5,7 @@ import { post } from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SendIcon from '@material-ui/icons/Send';
-import LoopIcon from '@material-ui/icons/Loop';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { selectUsername } from '../../../../store/userSlice';
 
 function AddArticle() {
@@ -37,7 +37,7 @@ function AddArticle() {
           <input name="input" placeholder="Add article" type="text" className="transition-shadow focus:shadow-lg bg-white w-full h-10 px-5 pr-10 rounded-full text-sm focus:outline-none" />
           <button type="submit" className="absolute right-0 top-5 mt-3 mr-4 focus:outline-none transition-all hover:text-blue-700">
             {sendingArticle
-              ? <LoopIcon className="animate-spin" />
+              ? <AutorenewIcon className="animate-spin" />
               : <SendIcon />
             }
           </button>

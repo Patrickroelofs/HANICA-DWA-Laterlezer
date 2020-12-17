@@ -50,3 +50,12 @@ export function sendMessage(message) {
   const ws = getWebSocket();
   ws.send(JSON.stringify(message));
 }
+
+export function closeWebSocket() {
+  try {
+    const ws = getWebSocket();
+    ws.close();
+  } catch (e) {
+    console.log(e.message);
+  }
+}

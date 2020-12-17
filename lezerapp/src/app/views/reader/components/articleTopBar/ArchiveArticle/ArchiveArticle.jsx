@@ -9,7 +9,7 @@ import { selectCurrentArticle } from '../../../../../../store/articleSlice';
 
 function ArchiveArticle() {
   const article = useSelector(selectCurrentArticle);
-  const [archived, setArchived] = useState();
+  const [archived, setArchived] = useState(false);
 
   const archive = () => {
     axios.post(`http://localhost:3000/api/articles/${article._id}/status`, {

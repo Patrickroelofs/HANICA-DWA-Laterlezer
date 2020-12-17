@@ -1,9 +1,10 @@
+/* eslint-disable max-len */
 const moment = require('moment');
 const { parseHTML } = require('../utils/HTMLParser');
 const response = require('../utils/response');
 
 exports.getArticles = async (req, res) => {
-  const articles = req.user.articles.reverse().map((article) => {
+  const articles = req.user.articles.sort((a, b) => b.createdAt - a.createdAt).map((article) => {
     const parsedArticle = article;
     parsedArticle.html = undefined;
     return parsedArticle;
@@ -82,7 +83,6 @@ exports.createArticlePost = async (req, res, next) => {
 exports.updateArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
   if (req.body.tags) {
-    // eslint-disable-next-line max-len
     const newTags = req.body.tags.filter((tag) => !req.user.tags.find((uTag) => uTag.title === tag.title));
     req.user.createTag(newTags);
     article.tags = req.body.tags;
@@ -98,7 +98,7 @@ exports.getArticlesByTags = async (req, res) => {
   } else {
     filterTags = req.query.title;
   }
-  res.json(req.user.getArticlesByTags(filterTags).filter((article) => {
+  res.json(req.user.getArticlesByTags(filterTags).sort((a, b) => b.createdAt - a.createdAt).filter((article) => {
     if (req.query.status) {
       if (req.query.status === 'today') {
         return moment(article.createdAt).diff(moment(), 'days') === 0 && !article.archivedAt;

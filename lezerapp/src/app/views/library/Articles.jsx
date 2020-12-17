@@ -30,7 +30,7 @@ function Articles() {
     });
 
     axios.get(`http://localhost:3000/api/articles/tags/filter?${tags}&status=${status}`).then(({ data }) => {
-      dispatch(setArticles(data.reverse()));
+      dispatch(setArticles(data));
     });
   };
 

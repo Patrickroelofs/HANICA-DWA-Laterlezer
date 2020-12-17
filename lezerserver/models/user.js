@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const { Schema, model } = require('mongoose');
 const Article = require('./article');
 const Tag = require('./tag');
@@ -25,22 +26,6 @@ userSchema.statics.getUserByUsername = async function (userName) {
 
 userSchema.methods.getTags = function () {
   return this.tags;
-};
-
-userSchema.methods.createTag = function (data) {
-  data.forEach((newTag) => {
-    if (newTag.title.trim().length === 0) {
-      throw new CustomError('No tag title given', 400);
-    }
-    if (newTag.title.length > 30) {
-      throw new CustomError('Tag title is too long', 400);
-    }
-    if (this.tags.find((tag) => tag.title === newTag.title) === undefined) {
-      this.tags = [...this.tags, newTag];
-    } else {
-      throw new CustomError('Tag already exists', 400);
-    }
-  });
 };
 
 userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
@@ -74,6 +59,32 @@ userSchema.methods.getArticlesByTags = function (tags) {
   return filteredArticles;
 };
 
+// eslint-disable-next-line consistent-return
+userSchema.methods.createTag = function (data) {
+  if (!data.parent) return this.tags.push(data.tag);
+  if (data.tag.title === data.parent.title) {
+    throw new CustomError('Subtag can\'t have the same title as the parent.', 400);
+  }
+
+  data.parent.children.forEach((tag) => {
+    if (tag.title === data.tag.title) {
+      throw new CustomError('Tag already exists.', 400);
+    }
+  });
+
+  const eachRecursive = (tags) => {
+    this.tags = tags.map((tag) => {
+      if (data.parent._id.toString() !== tag._id.toString()) {
+        eachRecursive(tag.children);
+      } else if (data.parent._id.toString() === tag._id.toString()) {
+        tag.children.push(new Tag(data.tag));
+        return tag;
+      }
+      return tag;
+    });
+  };
+  eachRecursive(this.tags);
+};
 const User = model('User', userSchema);
 
 module.exports = User;

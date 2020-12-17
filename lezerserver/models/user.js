@@ -7,7 +7,10 @@ const CustomError = require('../utils/custom-error');
 const userSchema = new Schema({
   firstName: String,
   lastName: String,
-  userName: String,
+  userName: {
+    type: String,
+    maxlength: 30,
+  },
   password: String,
   profilePicture: String,
   email: String,

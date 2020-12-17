@@ -44,17 +44,19 @@ function SaveArticle(props) {
   const getLoader = () => {
     if (loaded === true) {
       return (
-        <h2>
-          Your article has
-          {error ? ' not' : ''}
-          {' '}
-          been saved.
-        </h2>
+        <div className="w-full h-full p-6 text-center font-bold text-lg">
+          <h2>
+            Your article has
+            {error ? ' not' : ''}
+            {' '}
+            been saved.
+          </h2>
+        </div>
       );
     }
     if (loaded === false) {
       return (
-        <div className="App__Loader">
+        <div className="App__Loader text-center">
           <BallBeat
             color="#000"
             loading
@@ -71,15 +73,23 @@ function SaveArticle(props) {
 
   return (
     <>
-      <button type="button" onClick={() => setUser(null)}>Logout</button>
-      { loaded === 'waitForSelect' ? <TagSelect onSave={postArticle} /> : ''}
+      <div className="p-6">
+        { loaded === 'waitForSelect' ? <TagSelect onSave={postArticle} /> : ''}
 
-      {
-            error
-              ? <h3 style={{ color: 'red' }}>{error}</h3>
-              : ''
-        }
-      { getLoader() }
+        {
+              error
+                ? <h3 className="text-red-500 text-center font-bold">{error}</h3>
+                : ''
+          }
+        { getLoader() }
+      </div>
+      <div className="w-full bg-gray-100 p-6 absolute bottom-0">
+        <span className="align-middle leading-8">
+          <span className="font-bold pr-1">Logged in as:</span>
+          { localStorage.getItem('username') }
+        </span>
+        <button type="button" onClick={() => setUser(null)} className="float-right inline-block px-4 py-2 text-xs font-medium text-center text-white uppercase transition bg-red-500 rounded-lg shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none">Logout</button>
+      </div>
     </>
   );
 }

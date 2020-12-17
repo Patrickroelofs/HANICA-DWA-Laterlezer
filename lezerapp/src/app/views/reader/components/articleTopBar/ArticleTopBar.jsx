@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import AddTagToArticle from './addTagToArticle/AddTagToArticle';
+import ArchiveArticle from './ArchiveArticle/ArchiveArticle';
 
 function ArticleTopBar() {
   return (
@@ -12,6 +13,7 @@ function ArticleTopBar() {
       </div>
       <div id="center" className="flex justify-center">
         <AddTagToArticle />
+        <ArchiveArticle />
       </div>
       <div id="right" className="flex justify-right">
         {/* Right */}

@@ -29,14 +29,17 @@ const TagHierarchy = () => {
     toggleAddTagDropdown();
   };
 
-  const selectTag = (e) => {
-    let tagss = [...selectedTags];
-    if (e.target.checked) {
-      tagss.push(e.target.value);
+  const isSelected = (tag) => selectedTags.find((t) => tag._id.toString() === t._id.toString());
+
+  const selectTag = (tagss) => {
+    if (isSelected(tagss[0])) {
+      dispatch(setSelectedTags(selectedTags.filter((t) => !tagss.find((tag) => tag._id === t._id.toString()))));
     } else {
-      tagss = selectedTags.filter((t) => t !== e.target.value);
+      dispatch(setSelectedTags([
+        ...selectedTags,
+        ...tagss,
+      ]));
     }
-    dispatch(setSelectedTags(tagss));
   };
 
   useEffect(() => {
@@ -45,16 +48,32 @@ const TagHierarchy = () => {
     });
   }, [setTags]);
 
-  const tagHierarchyGenerator = (tagz) => {
+  const tagHierarchyGenerator = (tagz, pickedTag) => {
     tagz = tagz.map((t) => {
-      const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={selectTag} selectedTags={selectedTags} />)];
+      const onClick = (parents) => {
+        parents.push(t);
+        pickedTag(parents);
+      };
+      const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} />)];
       if (t.children) {
-        result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children)}</ul>);
+        result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
       }
       return result;
     });
     return tagz;
   };
+
+  const renderParents = () => tags.map((t) => {
+    const onClick = (parents) => {
+      parents.push(t);
+      selectTag(parents);
+    };
+    const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} />)];
+    if (t.children) {
+      result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
+    }
+    return result;
+  });
 
   return (
     <>
@@ -64,7 +83,7 @@ const TagHierarchy = () => {
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">
-        {tagHierarchyGenerator(tags)}
+        {renderParents()}
       </ul>
     </>
   );

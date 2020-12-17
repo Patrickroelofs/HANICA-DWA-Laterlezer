@@ -27,7 +27,7 @@ export default function ArticleHeader() {
   useEffect(() => {
     setPreviouslySelectedTags(selectedTags);
     dispatch(setArticleTags(article.tags.map((tag) => tag.title)));
-    dispatch(setSelectedTags(article.tags.map((tag) => tag.title)));
+    dispatch(setSelectedTags(article.tags));
   }, []);
 
   const goBack = () => {

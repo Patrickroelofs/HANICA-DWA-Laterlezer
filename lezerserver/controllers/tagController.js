@@ -2,7 +2,7 @@ const response = require('../utils/response');
 
 exports.createTagPost = async (req, res, next) => {
   try {
-    req.user.createTag(req.body);
+    await req.user.createTag(req.body);
     req.user.save((err) => {
       if (err) {
         res.status(400).send(response('Color must be in the right format', null, false));

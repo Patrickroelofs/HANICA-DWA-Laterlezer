@@ -36,4 +36,20 @@ articleSchema.methods.read = function (date) {
   }
 };
 
+articleSchema.methods.checkStatus = function (status) {
+  if (status === 'today') {
+    return moment(this.createdAt).diff(moment(), 'days') === 0 && !this.archivedAt;
+  } if (status === 'week') {
+    return moment(this.createdAt).diff(moment(), 'weeks') === 0 && !this.archivedAt;
+  } if (status === 'month') {
+    return moment(this.createdAt).diff(moment(), 'months') === 0 && !this.archivedAt;
+  } if (status === 'year') {
+    return moment(this.createdAt).diff(moment(), 'years') === 0 && !this.archivedAt;
+  }
+  if (status === 'archived') {
+    return this.archivedAt;
+  }
+  return true;
+}
+
 module.exports = model('Article', articleSchema);

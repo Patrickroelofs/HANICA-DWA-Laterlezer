@@ -57,20 +57,26 @@ function Reader() {
         <main className="min-h-screen col-span-3 bg-white">
           <ArticleTopBar />
           <div className="container max-w-5xl mx-auto p-16 pt-8 pb-0">
-            <ArticleHeader article={article} />
-            <FullArticle
-              html={article.html}
-              fallback={(
-                <div className="w-full h-screen relative">
-                  <div className="text-center inline-block absolute left-2/4 top-1/3">
-                    <BallBeat
-                      color="#000"
-                      loading
-                    />
-                  </div>
-                </div>
-)}
-            />
+            { article
+              ? (
+                <>
+                  <ArticleHeader article={article} />
+                  <FullArticle
+                    html={article.html}
+                    fallback={(
+                      <div className="w-full h-screen relative">
+                        <div className="text-center inline-block absolute left-2/4 top-1/3">
+                          <BallBeat
+                            color="#000"
+                            loading
+                          />
+                        </div>
+                      </div>
+                  )}
+                  />
+                </>
+              )
+              : null}
           </div>
         </main>
       </div>

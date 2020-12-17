@@ -88,9 +88,7 @@ userSchema.methods.createTag = function (data) {
 
 // eslint-disable-next-line consistent-return
 userSchema.methods.deleteTag = function (data) {
-  console.log('data', data);
   if (!data.parent) {
-    console.log('iets');
     // eslint-disable-next-line no-return-assign
     return this.tags = this.tags.filter((t) => data.tag._id.toString() !== t._id.toString());
   }

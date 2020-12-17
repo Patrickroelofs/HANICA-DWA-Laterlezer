@@ -5,7 +5,7 @@ let page;
 
 jest.setTimeout(30000);
 
-describe('e2e register tests', () => {
+xdescribe('e2e register tests', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: false, slowMo: 200 });
     page = await browser.newPage();

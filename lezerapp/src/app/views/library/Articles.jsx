@@ -23,9 +23,9 @@ const Articles = () => {
     let tags = '';
     selectedTags.forEach((t, i) => {
       if (i === 0) {
-        tags += `title=${t}`;
+        tags += `title=${t.title}`;
       } else {
-        tags += `&title=${t}`;
+        tags += `&title=${t.title}`;
       }
     });
 

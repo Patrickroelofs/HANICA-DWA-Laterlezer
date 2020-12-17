@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Article from './components/article/Article';
-import { selectArticles, setArticles } from '../../../store/articleSlice';
+import { getArticles, selectArticles, setArticles } from '../../../store/articleSlice';
 import { selectSelectedTags } from '../../../store/tagSlice';
 
 const Articles = () => {
@@ -12,12 +12,6 @@ const Articles = () => {
 
   const selectedTags = useSelector(selectSelectedTags);
   const articles = useSelector(selectArticles);
-
-  const getArticles = () => {
-    axios.get(`http://localhost:3000/api/articles?status=${status}`).then(({ data }) => {
-      dispatch(setArticles(data));
-    });
-  };
 
   const getFilteredArticles = () => {
     let tags = '';
@@ -36,7 +30,7 @@ const Articles = () => {
 
   useEffect(() => {
     if (selectedTags.length <= 0) {
-      getArticles();
+      dispatch(getArticles(status));
     } else {
       getFilteredArticles();
     }

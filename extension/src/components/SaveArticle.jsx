@@ -4,11 +4,11 @@ import BallBeat from 'react-pure-loaders/build/BallBeat';
 import { post } from 'axios';
 import chroma from 'chroma-js';
 
-// import TagSelect from './tagSelect/TagSelect';
 import TagListSelect from './tagListSelect/TagListSelect';
+import { openWebSocket, sendMessage } from '../utils/serverCommunication';
 
 function SaveArticle(props) {
-  const { setUser } = props;
+  const { setUser, user } = props;
   const [loaded, setLoaded] = useState('waitForSelect');
   const [error, setError] = useState('');
   const [tab, setTab] = useState({});
@@ -28,6 +28,7 @@ function SaveArticle(props) {
       })
       .then(() => {
         setLoaded(true);
+        sendMessage({ type: 'NEW ARTICLE' });
       }).catch((e) => {
         setError(e.message);
         setLoaded(true);
@@ -70,6 +71,7 @@ function SaveArticle(props) {
 
   useEffect(() => {
     checkBrowser();
+    openWebSocket(user);
   }, []);
 
   return (

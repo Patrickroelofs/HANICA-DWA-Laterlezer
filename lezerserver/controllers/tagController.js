@@ -23,3 +23,8 @@ exports.getTagsGet = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.deleteTagsPut = async (req) => {
+  await req.user.deleteTag(req.body);
+  await req.user.save();
+};

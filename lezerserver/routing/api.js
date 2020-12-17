@@ -28,6 +28,7 @@ router.route('/articles/tags/filter')
 
 router.route('/tags')
   .get(tagController.getTagsGet)
-  .post(tagController.createTagPost);
+  .post(tagController.createTagPost)
+  .put(tagController.deleteTagsPut);
 
 module.exports = router;

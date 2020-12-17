@@ -85,6 +85,29 @@ userSchema.methods.createTag = function (data) {
   };
   eachRecursive(this.tags);
 };
+
+// eslint-disable-next-line consistent-return
+userSchema.methods.deleteTag = function (data) {
+  console.log('data', data);
+  if (!data.parent) {
+    console.log('iets');
+    // eslint-disable-next-line no-return-assign
+    return this.tags = this.tags.filter((t) => data.tag._id.toString() !== t._id.toString());
+  }
+  const eachRecursive = (tags) => {
+    this.tags = tags.map((tag) => {
+      if (data.parent._id.toString() !== tag._id.toString()) {
+        eachRecursive(tag.children);
+      } else if (data.parent._id.toString() === tag._id.toString()) {
+        // eslint-disable-next-line no-return-assign,no-param-reassign
+        tag.children = tag.children.filter((t) => (data.tag._id.toString() !== t._id.toString()));
+      }
+      return tag;
+    });
+  };
+  eachRecursive(this.tags);
+};
+
 const User = model('User', userSchema);
 
 module.exports = User;

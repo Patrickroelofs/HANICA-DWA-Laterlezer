@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import chroma from 'chroma-js';
@@ -59,13 +57,13 @@ function TagListSelect() {
       ]).flat();
       const childIds = childrenIds(selTags[0]);
       const parentIds = selTags.filter((tag) => {
-          const hasSelectedChild = childrenIds(tag).filter((id) => {
-              if (!selTags.find((selTag) => id === selTag._id) && !childIds.includes(id)) {
-                  return selectedTags.find((selTag) => id === selTag._id.toString())
-              }
-              return false;
-          });
-          return hasSelectedChild.length === 0;
+        const hasSelectedChild = childrenIds(tag).filter((id) => {
+          if (!selTags.find((selTag) => id === selTag._id) && !childIds.includes(id)) {
+            return selectedTags.find((selTag) => id === selTag._id.toString());
+          }
+          return false;
+        });
+        return hasSelectedChild.length === 0;
       }).map((tag) => tag._id.toString());
       const ids = [...childIds, ...parentIds];
       setSelectedTags(selectedTags.filter((t) => !ids.includes(t._id.toString())));

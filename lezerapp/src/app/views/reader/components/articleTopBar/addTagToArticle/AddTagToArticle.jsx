@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import useOnClickOutside from 'react-cool-onclickoutside';
-import { LocalOffer } from '@material-ui/icons';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import { selectCurrentArticle, setCurrentArticle } from '../../../../../../store/articleSlice';
 import TagListSelect from '../../tagListSelect/TagListSelect';
 
@@ -21,7 +21,7 @@ function AddTagToArticle() {
 
   return (
     <>
-      <button id="addTagsToArticle" ref={tagRef} onClick={() => toggleTagDropdown()} type="button" className={`${isTagDropdownOpen ? 'text-blue-600' : ''} block w-16 h-16 focus:outline-none hover:text-blue-600`}><LocalOffer /></button>
+      <button id="addTagsToArticle" ref={tagRef} onClick={() => toggleTagDropdown()} type="button" className={`${isTagDropdownOpen ? 'text-blue-600' : ''} block w-16 h-16 focus:outline-none hover:text-blue-600`}><LocalOfferIcon /></button>
       { isTagDropdownOpen
         ? (
           <div ref={tagRef} id="tagSelectPopup" className="absolute flex top-12 p-4 bg-white shadow-lg rounded-lg">

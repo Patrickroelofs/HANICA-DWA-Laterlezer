@@ -24,10 +24,17 @@ app.use('/api', api);
 // Error middlewares
 require('./middlewares/error.middleware')(app);
 
-app.listen(port, () => {
-  mongoose.connect('mongodb://localhost:27017/reader', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, () => {
-    console.info(`App listening at http://localhost:${port}`);
+if (process.env.NODE_ENV === 'test') {
+  const listener = app.listen(() => {
+    console.info(`listening on port: ${listener.address().port}`);
   });
-});
+} else {
+  app.listen(port, () => {
+    mongoose.connect('mongodb://localhost:27017/reader', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, () => {
+      mongoose.set('debug', true);
+      console.info(`App listening at http://localhost:${port}`);
+    });
+  });
+}
 
 module.exports = app;

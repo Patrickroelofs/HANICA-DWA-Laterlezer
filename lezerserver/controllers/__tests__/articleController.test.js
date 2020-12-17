@@ -2,24 +2,9 @@
  * @jest-environment node
  */
 
-const request = require('supertest');
-const app = require('../../app');
 const articleController = require('../articleController');
 
-let server;
-
 describe('Article Controller Tests', () => {
-  beforeAll(async () => {
-    server = request(app);
-  });
-  afterAll(() => {
-    server.delete();
-  });
-  test('Returns error when invalid URL is supplied', async () => {
-    const response = await server.post('/api/articles').send({ url: 'localhost', tags: [] }).set('Username', 'testuser');
-    expect(response.status).toBe(406);
-  });
-
   test('Get all the articles', () => {
     const user = {
       articles: [

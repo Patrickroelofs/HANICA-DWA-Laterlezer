@@ -42,7 +42,7 @@ function TagSelect({ onSave }) {
       />
       <div className="w-1/4 inline-block pl-2">
         <button
-          className="w-full bg-indigo-600 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-500 transition ease-in-out duration-300"
+          className="focus:outline-none w-full bg-indigo-600 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-500 transition ease-in-out duration-300"
           type="submit"
           onClick={() => onSave(selectedTags)}
         >

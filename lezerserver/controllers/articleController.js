@@ -83,8 +83,11 @@ exports.updateArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
   if (req.body.tags) {
     // eslint-disable-next-line max-len
-    const newTags = req.body.tags.filter((tag) => !req.user.tags.find((uTag) => uTag.title === tag.title));
-    req.user.createTag(newTags);
+    // const newTags = req.body.tags.filter((tag) => !req.user.tags.find((uTag) => uTag.title === tag.title));
+    // console.log('tags', newTags);
+    // if (newTags) {
+    //   req.user.createTag(newTags);
+    // }
     article.tags = req.body.tags;
   }
   req.user.save();

@@ -86,7 +86,7 @@ function SaveArticle(props) {
           }
         { getLoader() }
       </div>
-      <div className="w-full bg-gray-100 p-6 absolute bottom-0">
+      <div className="w-full bg-gray-100 p-6">
         <span className="align-middle leading-8">
           <span className="font-bold pr-1">Logged in as:</span>
           { localStorage.getItem('username') }

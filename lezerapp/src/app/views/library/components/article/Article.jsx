@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import useOnclickOutside from 'react-cool-onclickoutside';
+import he from 'he';
 import Thumbnail from '../thumbnail/Thumbnail';
 import TagPill from '../../../sharedcomponents/tagPill/TagPill';
 import { setCurrentArticle } from '../../../../../store/articleSlice';
@@ -59,7 +60,7 @@ function Article({ article }) {
             { options && <ArticleDropdown close={() => setOptions(false)} article={article} /> }
           </div>
           <p className={`${article.readAt && 'opacity-40'} text-xs mt-4`}>
-            { description }
+            { he.decode(description) }
           </p>
         </div>
       </article>

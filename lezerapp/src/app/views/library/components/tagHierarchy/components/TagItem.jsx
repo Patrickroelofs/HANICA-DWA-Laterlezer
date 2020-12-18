@@ -1,5 +1,6 @@
 import React from 'react';
-import AddIcon from '@material-ui/icons/Add';
+import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
+import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import setContrast from '../../../../../../utils/chromaContrast';
 
 export default ({
@@ -26,11 +27,18 @@ export default ({
         />
         {tag.title}
         <button
-          className="focus:outline-none opacity-0 group-hover:opacity-100 w-6 h-6 float-right bg-gray-200 rounded-full"
+          className="ml-2 focus:outline-none opacity-0 hover:text-blue-600 group-hover:opacity-100 w-6 h-6 float-right "
           type="submit"
-          onClick={() => handleClick(tag)}
+          onClick={() => handleClick(tag, 'edit')}
         >
-          <AddIcon fontSize="small" />
+          <EditRoundedIcon />
+        </button>
+        <button
+          className="focus:outline-none opacity-0 hover:text-blue-600 group-hover:opacity-100 w-6 h-6 float-right"
+          type="submit"
+          onClick={() => handleClick(tag, 'add')}
+        >
+          <AddCircleOutlineRoundedIcon />
         </button>
       </label>
     </li>

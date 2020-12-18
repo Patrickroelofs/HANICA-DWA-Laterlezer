@@ -3,21 +3,33 @@ import { useDispatch } from 'react-redux';
 import { ChromePicker } from 'react-color';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import chroma from 'chroma-js';
-import { createTag } from '../../../../store/tagSlice';
+import { createTag, updateTag } from '../../../../store/tagSlice';
 import setContrast from '../../../../utils/chromaContrast';
 
-function NewTagForm({ reference, tag }) {
-  const [title, setTitle] = useState('');
-  const [color, setColor] = useState(chroma.random().hex());
+function NewTagForm({
+  reference, parent, tag = {}, mode,
+}) {
+  const [title, setTitle] = useState(tag.title || '');
+  const [color, setColor] = useState(tag.color || chroma.random().hex());
   const [showPicker, setShowPicker] = useState(false);
   const [response, setResponse] = useState({});
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTag(title, chroma(color).hex(), tag)).then((res) => {
-      setResponse(res);
-    });
+    if (mode === 'edit') {
+      const newTag = {
+        children: tag.children, _id: tag._id, title, color,
+      };
+      dispatch(updateTag(newTag)).then((res) => {
+        setResponse(res);
+      });
+    } else {
+      dispatch(createTag(title, chroma(color).hex(), parent)).then((res) => {
+        setResponse(res);
+      });
+    }
+
     setTitle('');
     setShowPicker(false);
   };

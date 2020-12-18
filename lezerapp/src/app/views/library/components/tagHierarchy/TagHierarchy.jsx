@@ -11,22 +11,35 @@ import NewTagForm from '../../../sharedcomponents/newTag/NewTagForm';
 
 const TagHierarchy = () => {
   const tags = useSelector(selectTags);
+  const selectedTags = useSelector(selectSelectedTags);
 
   const [showTagDropdown, setShowTagDropdown] = useState(false);
-  const toggleAddTagDropdown = () => setShowTagDropdown(!showTagDropdown);
-  const dispatch = useDispatch();
-  const [clickedTagTitle, setClickedTag] = useState();
+  const [clickedTag, setClickedTag] = useState();
+  const [parentTag, setParentTag] = useState();
+  const [mode, setMode] = useState();
 
-  const selectedTags = useSelector(selectSelectedTags);
+  const dispatch = useDispatch();
 
   const addTagRef = useOnclickOutside(() => {
     setShowTagDropdown(false);
     setClickedTag('');
+    setParentTag('');
   });
 
-  const handleClick = (e) => {
-    setClickedTag(e);
-    toggleAddTagDropdown();
+  const handleClick = (e, m) => {
+    switch (m) {
+      case 'edit':
+        setMode(m);
+        setClickedTag(e);
+        break;
+      case 'add':
+        setMode(m);
+        setParentTag(e);
+        break;
+      default:
+        break;
+    }
+    setShowTagDropdown(!showTagDropdown);
   };
 
   const isSelected = (tag) => selectedTags.find((t) => tag._id.toString() === t._id.toString());
@@ -79,7 +92,7 @@ const TagHierarchy = () => {
     <>
       <div className="mb-4 mt-6 pl-2 font-bold text-base">
         <span>Tags</span>
-        { showTagDropdown && <NewTagForm reference={addTagRef} tag={clickedTagTitle} /> }
+        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} /> }
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">

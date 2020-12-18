@@ -6,7 +6,6 @@ const _Article = require('../models/article');
 
 exports.getArticles = async (req, res) => {
   const tags = req.query.tags && req.query.tags.split(',');
-  console.log(tags);
   const articles = req.user.articles.filter((article) => {
     if (req.query.status) {
       return article.checkStatus(req.query.status);

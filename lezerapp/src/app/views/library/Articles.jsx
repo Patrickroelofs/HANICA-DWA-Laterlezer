@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Article from './components/article/Article';
 import { getArticles, selectArticles, setArticles } from '../../../store/articleSlice';
-import { selectSelectedTags } from '../../../store/tagSlice';
+import { selectSelectedTags, selectTags } from '../../../store/tagSlice';
 
 const Articles = () => {
   const dispatch = useDispatch();
@@ -12,6 +12,7 @@ const Articles = () => {
 
   const selectedTags = useSelector(selectSelectedTags);
   const articles = useSelector(selectArticles);
+  const allTags = useSelector(selectTags);
 
   const getFilteredArticles = () => {
     let tags = '';
@@ -34,7 +35,7 @@ const Articles = () => {
     } else {
       getFilteredArticles();
     }
-  }, [selectedTags, status]);
+  }, [selectedTags, status, allTags]);
 
   return (
     <>

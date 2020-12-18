@@ -6,7 +6,7 @@ import chroma from 'chroma-js';
 import { createTag } from '../../../../store/tagSlice';
 import setContrast from '../../../../utils/chromaContrast';
 
-function NewTagForm({ reference, tag }) {
+function NewTagForm({ reference, tag, position }) {
   const [title, setTitle] = useState('');
   const [color, setColor] = useState(chroma.random().hex());
   const [showPicker, setShowPicker] = useState(false);
@@ -29,6 +29,7 @@ function NewTagForm({ reference, tag }) {
       ref={reference}
       onSubmit={handleSubmit}
       className="absolute top-16 w-96 p-4 bg-white shadow-lg rounded-lg z-10"
+      style={{ top: position.y, left: position.x }}
     >
       <label className="italic inline-block w-8/12 pr-8 box-border text-sm" htmlFor="tagTitle">
         Tag title: &nbsp;

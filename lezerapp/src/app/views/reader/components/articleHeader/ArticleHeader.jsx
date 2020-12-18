@@ -57,18 +57,26 @@ export default function ArticleHeader() {
         )) }
       </div>
       <h1 className="font-bold text-3xl pb-4">{article.title}</h1>
-      { article.author && article.published && (
-      <small className="text-md italic pb-4 block">
-        { article.author }
+      { article.author !== null || article.published !== null
+        ? (
+          <small className="text-md italic pb-4 block">
+            { article.author }
               &nbsp;
-        { article.published && 'published on' }
+            { article.published ? 'published on' : '' }
               &nbsp;
-        { article.published !== null && moment(article.published).format('DD-MM-YYYY')}
-      </small>
-      )}
-
-      { article.html && !article.html.includes(article.image) ? <img className="rounded-xl mb-8 shadow-xl" alt="header" src={article.image} /> : '' }
-
+            { article.published !== null
+              ? moment(article.published).format('DD-MM-YYYY')
+              : null }
+          </small>
+        )
+        : null }
+      <div>
+        {
+          article.html && article.image !== null && !article.html.includes(article.image)
+            ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} />
+            : null
+        }
+      </div>
     </>
   );
 }

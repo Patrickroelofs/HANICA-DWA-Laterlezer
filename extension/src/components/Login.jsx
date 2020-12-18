@@ -29,7 +29,7 @@ function Login({ setUser }) {
   };
 
   chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-    if (tabs[0].selected === true && tabs[0].url === 'http://localhost:3001/app') {
+    if (tabs[0].selected === true && tabs[0].url.indexOf('localhost:3001/app')) {
       chrome.tabs.executeScript({
         code: 'JSON.parse(localStorage.getItem(\'persist:root\')).user',
       }, googleLogin);

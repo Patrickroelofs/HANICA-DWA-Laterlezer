@@ -58,7 +58,7 @@ function TagList() {
   const tagList = tags
     .filter((t) => t.parents.length <= 0)
     .map((tag, index) => (
-      <li onContextMenu={displayTagMenu} key={tag._id} className={`transform hover:scale-105 hover:bg-gray-100 motion-reduce:transform-none transition-transform rounded-lg my-1 ${selectedTags.includes(tag.title) ? 'bg-gray-200' : null}`}>
+      <li key={tag._id} className={`transform hover:scale-105 hover:bg-gray-100 motion-reduce:transform-none transition-transform rounded-lg my-1 ${selectedTags.includes(tag.title) ? 'bg-gray-200' : null}`}>
         <label htmlFor={`Tag-${index}`} className="px-4 py-2 block cursor-pointer">
           <span className="w-6 h-6 inline-block rounded-full align-middle mr-2" style={{ background: tag.color, color: setContrast(tag.color) }} />
           <input onChange={selectTag} value={tag.title} hidden type="checkbox" checked={selectedTags.includes(tag.title)} id={`Tag-${index}`} />

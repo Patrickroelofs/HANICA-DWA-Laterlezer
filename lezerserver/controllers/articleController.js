@@ -1,20 +1,16 @@
+/* eslint-disable max-len */
 const moment = require('moment');
 const { parseHTML } = require('../utils/HTMLParser');
 const response = require('../utils/response');
 
 exports.getArticles = async (req, res) => {
-  const articles = req.user.articles.reverse().map((article) => {
+  const articles = req.user.articles.sort((a, b) => b.createdAt - a.createdAt).map((article) => {
     const parsedArticle = article;
     parsedArticle.html = undefined;
     return parsedArticle;
   }).filter((article) => {
     if (req.query.status) {
-      if (req.query.status === 'today') {
-        return moment(article.createdAt).diff(moment(), 'days') === 0 && !article.archivedAt;
-      }
-      if (req.query.status === 'archived') {
-        return article.archivedAt;
-      }
+      return article.checkStatus(req.query.status);
     }
     return !article.archivedAt;
   });
@@ -95,14 +91,9 @@ exports.getArticlesByTags = async (req, res) => {
   } else {
     filterTags = req.query.title;
   }
-  res.json(req.user.getArticlesByTags(filterTags).filter((article) => {
+  res.json(req.user.getArticlesByTags(filterTags).sort((a, b) => b.createdAt - a.createdAt).filter((article) => {
     if (req.query.status) {
-      if (req.query.status === 'today') {
-        return moment(article.createdAt).diff(moment(), 'days') === 0 && !article.archivedAt;
-      }
-      if (req.query.status === 'archived') {
-        return article.archivedAt;
-      }
+      return article.checkStatus(req.query.status);
     }
     return !article.archivedAt;
   }));

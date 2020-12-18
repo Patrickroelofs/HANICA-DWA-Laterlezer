@@ -71,7 +71,7 @@ function NewTagForm({
       <div className="inline-block relative w-6/12">
         <input
           type="submit"
-          value="Add Tag"
+          value="Save Tag"
           className="inline-block items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
         />
         {(showPicker) ? (

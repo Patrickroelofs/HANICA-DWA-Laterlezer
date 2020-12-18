@@ -26,9 +26,9 @@ function Article({ article }) {
     e.preventDefault();
     let tagss = [...selectedTags];
     if (!tagss.includes(tag.title)) {
-      tagss.push(tag.title);
+      tagss.push(tag);
     } else {
-      tagss = selectedTags.filter((t) => t !== tag.title);
+      tagss = selectedTags.filter((t) => t.title !== tag.title);
     }
     dispatch(setSelectedTags(tagss));
   };

@@ -38,3 +38,13 @@ exports.updateTagPut = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.deleteTagsDelete = async (req, res, next) => {
+  try {
+    await req.user.deleteTag(req.body);
+    await req.user.save();
+    res.status(200).send(response(`all tags from ${req.user.userName} after deleting the tag `, req.user.tags, true));
+  } catch (error) {
+    next(error);
+  }
+};

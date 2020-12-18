@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { post, put } from 'axios';
+import axios, { post, put } from 'axios';
 import { getArticles } from './articleSlice';
 
 const API_URL = 'http://localhost:3000/api';
@@ -46,6 +46,20 @@ export const updateTag = (tag) => (dispatch) => put(`${API_URL}/tags`, tag)
   }));
 
 export const createTag = (title, color, parent) => (dispatch) => post(`${API_URL}/tags`, { tag: { title, color }, parent })
+  .then(({ data, status }) => {
+    dispatch(setTags(data.data));
+    return {
+      status,
+      message: data.message,
+      success: data.success,
+    };
+  }).catch(({ response }) => ({
+    status: response.status,
+    message: response.data.message,
+    success: response.data.success,
+  }));
+
+export const deleteTag = (tag) => (dispatch) => axios.delete(`${API_URL}/tags`, { data: { tag } })
   .then(({ data, status }) => {
     dispatch(setTags(data.data));
     return {

@@ -17,6 +17,7 @@ const TagHierarchy = () => {
   const [clickedTag, setClickedTag] = useState();
   const [parentTag, setParentTag] = useState();
   const [mode, setMode] = useState();
+  const [position, setPosition] = useState();
 
   const dispatch = useDispatch();
 
@@ -26,19 +27,20 @@ const TagHierarchy = () => {
     setParentTag('');
   });
 
-  const handleClick = (e, m) => {
+  const handleClick = (tag, e, m) => {
     switch (m) {
       case 'edit':
         setMode(m);
-        setClickedTag(e);
+        setClickedTag(tag);
         break;
       case 'add':
         setMode(m);
-        setParentTag(e);
+        setParentTag(tag);
         break;
       default:
         break;
     }
+    setPosition({ x: e.clientX, y: e.clientY });
     setShowTagDropdown(!showTagDropdown);
   };
 
@@ -92,7 +94,7 @@ const TagHierarchy = () => {
     <>
       <div className="mb-4 mt-6 pl-2 font-bold text-base">
         <span>Tags</span>
-        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} /> }
+        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} /> }
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">

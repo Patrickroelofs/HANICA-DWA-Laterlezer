@@ -7,7 +7,7 @@ import { createTag, updateTag } from '../../../../store/tagSlice';
 import setContrast from '../../../../utils/chromaContrast';
 
 function NewTagForm({
-  reference, parent, tag = {}, mode,
+  reference, parent, tag = {}, mode, position,
 }) {
   const [title, setTitle] = useState(tag.title || '');
   const [color, setColor] = useState(tag.color || chroma.random().hex());
@@ -41,6 +41,7 @@ function NewTagForm({
       ref={reference}
       onSubmit={handleSubmit}
       className="absolute top-16 w-96 p-4 bg-white shadow-lg rounded-lg z-10"
+      style={{ top: position.y, left: position.x }}
     >
       <label className="italic inline-block w-8/12 pr-8 box-border text-sm" htmlFor="tagTitle">
         Tag title: &nbsp;

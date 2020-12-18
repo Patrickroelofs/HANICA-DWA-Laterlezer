@@ -100,10 +100,8 @@ const setChildrenInArray = function (tag) {
 
 const findParent = function (tag, allTags) {
   let tagParent = '';
-  console.log(this.tags);
   const eachRecursive = (tags) => {
     tags.forEach((parent) => {
-      console.log('e', parent);
       // eslint-disable-next-line consistent-return
       parent.children.forEach((child) => {
         if (child._id.toString() === tag._id.toString()) {

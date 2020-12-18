@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import AddIcon from '@material-ui/icons/Add';
+import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import NewTagForm from './NewTagForm';
 
 function NewTag() {
@@ -17,8 +17,8 @@ function NewTag() {
 
   return (
     <>
-      <button ref={addTagRef} onClick={(e) => toggleAddTagDropdown(e)} type="button" className={`focus:outline-none ${showTagDropdown && 'text-blue-600'} rounded-full bg-gray-200 w-8 h-8 text-center float-right mr-4 hover:text-blue-600`}>
-        <AddIcon />
+      <button ref={addTagRef} onClick={(e) => toggleAddTagDropdown(e)} type="button" className={`focus:outline-none ${showTagDropdown && 'text-green-600'} w-8 h-8 text-center float-right mr-4 hover:text-green-600`}>
+        <AddCircleOutlineRoundedIcon fontSize="large" />
       </button>
       { showTagDropdown && <NewTagForm reference={addTagRef} position={position} /> }
     </>

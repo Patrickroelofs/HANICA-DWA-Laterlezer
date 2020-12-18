@@ -26,7 +26,6 @@ const TagHierarchy = () => {
   });
 
   const handleClick = (tag, e) => {
-    console.log(e);
     setPosition({ x: e.clientX, y: e.clientY });
     setClickedTag(tag);
     toggleAddTagDropdown();

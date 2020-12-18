@@ -38,7 +38,7 @@ function Login({ setUser, setAutoLoggedIn }) {
   });
 
   return (
-    <div className="login p-8 text-center">
+    <div className="login p-8 mb-8 text-center">
       <strong className="text-lg py-6 block">Open the extension once on the app to automatically login</strong>
       <hr />
       <p className="text-base py-6 block font-medium">Or login with your username</p>

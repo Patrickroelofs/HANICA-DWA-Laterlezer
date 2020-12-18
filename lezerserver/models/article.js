@@ -50,6 +50,11 @@ articleSchema.methods.checkStatus = function (status) {
     return this.archivedAt;
   }
   return true;
-}
+};
+
+articleSchema.methods.deleteTags = function (deletingTags) {
+  // eslint-disable-next-line max-len,no-return-assign
+  deletingTags.forEach((tag) => this.tags = this.tags.filter((deletingTag) => (tag._id.toString() !== deletingTag._id.toString())));
+};
 
 module.exports = model('Article', articleSchema);

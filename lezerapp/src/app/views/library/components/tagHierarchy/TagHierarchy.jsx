@@ -16,6 +16,7 @@ const TagHierarchy = () => {
   const toggleAddTagDropdown = () => setShowTagDropdown(!showTagDropdown);
   const dispatch = useDispatch();
   const [clickedTagTitle, setClickedTag] = useState();
+  const [position, setPosition] = useState();
 
   const selectedTags = useSelector(selectSelectedTags);
 
@@ -24,8 +25,9 @@ const TagHierarchy = () => {
     setClickedTag('');
   });
 
-  const handleClick = (e) => {
-    setClickedTag(e);
+  const handleClick = (tag, e) => {
+    setPosition({ x: e.clientX, y: e.clientY });
+    setClickedTag(tag);
     toggleAddTagDropdown();
   };
 
@@ -79,7 +81,7 @@ const TagHierarchy = () => {
     <>
       <div className="mb-4 mt-6 pl-2 font-bold text-base">
         <span>Tags</span>
-        { showTagDropdown && <NewTagForm reference={addTagRef} tag={clickedTagTitle} /> }
+        { showTagDropdown && <NewTagForm reference={addTagRef} tag={clickedTagTitle} position={position} /> }
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">

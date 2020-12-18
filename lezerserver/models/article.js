@@ -45,11 +45,12 @@ articleSchema.methods.checkStatus = function (status) {
     return moment(this.createdAt).diff(moment(), 'months') === 0 && !this.archivedAt;
   } if (status === 'year') {
     return moment(this.createdAt).diff(moment(), 'years') === 0 && !this.archivedAt;
-  }
-  if (status === 'archived') {
+  } if (status === 'archived') {
     return this.archivedAt;
+  } if (status === undefined) {
+    return moment(this.createdAt) && !this.archivedAt;
   }
   return true;
-}
+};
 
 module.exports = model('Article', articleSchema);

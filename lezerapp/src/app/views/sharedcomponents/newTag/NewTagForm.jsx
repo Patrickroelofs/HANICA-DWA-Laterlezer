@@ -3,21 +3,33 @@ import { useDispatch } from 'react-redux';
 import { ChromePicker } from 'react-color';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import chroma from 'chroma-js';
-import { createTag } from '../../../../store/tagSlice';
+import { createTag, updateTag } from '../../../../store/tagSlice';
 import setContrast from '../../../../utils/chromaContrast';
 
-function NewTagForm({ reference, tag }) {
-  const [title, setTitle] = useState('');
-  const [color, setColor] = useState(chroma.random().hex());
+function NewTagForm({
+  reference, parent, tag = {}, mode, position,
+}) {
+  const [title, setTitle] = useState(tag.title || '');
+  const [color, setColor] = useState(tag.color || chroma.random().hex());
   const [showPicker, setShowPicker] = useState(false);
   const [response, setResponse] = useState({});
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTag(title, chroma(color).hex(), tag)).then((res) => {
-      setResponse(res);
-    });
+    if (mode === 'edit') {
+      const newTag = {
+        children: tag.children, _id: tag._id, title, color,
+      };
+      dispatch(updateTag(newTag)).then((res) => {
+        setResponse(res);
+      });
+    } else {
+      dispatch(createTag(title, chroma(color).hex(), parent)).then((res) => {
+        setResponse(res);
+      });
+    }
+
     setTitle('');
     setShowPicker(false);
   };
@@ -29,6 +41,7 @@ function NewTagForm({ reference, tag }) {
       ref={reference}
       onSubmit={handleSubmit}
       className="absolute top-16 w-96 p-4 bg-white shadow-lg rounded-lg z-10"
+      style={{ top: position.y, left: position.x }}
     >
       <label className="italic inline-block w-8/12 pr-8 box-border text-sm" htmlFor="tagTitle">
         Tag title: &nbsp;
@@ -58,7 +71,7 @@ function NewTagForm({ reference, tag }) {
       <div className="inline-block relative w-6/12">
         <input
           type="submit"
-          value="Add Tag"
+          value="Save Tag"
           className="inline-block items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
         />
         {(showPicker) ? (

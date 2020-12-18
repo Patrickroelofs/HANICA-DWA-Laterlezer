@@ -23,3 +23,28 @@ exports.getTagsGet = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.updateTagPut = async (req, res, next) => {
+  try {
+    await req.user.updateTag(req.body);
+    req.user.save((err) => {
+      if (err) {
+        res.status(400).send(response('Color must be in the right format', null, false));
+      } else {
+        res.status(202).send(response('tag updated', req.user.tags, true));
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteTagsDelete = async (req, res, next) => {
+  try {
+    await req.user.deleteTag(req.body);
+    await req.user.save();
+    res.status(200).send(response(`all tags from ${req.user.userName} after deleting the tag `, req.user.tags, true));
+  } catch (error) {
+    next(error);
+  }
+};

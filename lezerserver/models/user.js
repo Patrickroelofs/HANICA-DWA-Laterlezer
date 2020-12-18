@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+/* eslint-disable no-param-reassign */
+/* eslint-disable array-callback-return */
 const { Schema, model } = require('mongoose');
 const Article = require('./article');
 const Tag = require('./tag');
@@ -44,6 +45,33 @@ userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
   }
 };
 
+userSchema.methods.updateTag = async function (newTag) {
+  const eachRecursive = (tags) => {
+    this.tags = tags.map((tag) => {
+      if (newTag._id.toString() !== tag._id.toString()) {
+        eachRecursive(tag.children);
+      } else if (newTag._id.toString() === tag._id.toString()) {
+        tag.title = newTag.title;
+        tag.color = newTag.color;
+        return newTag;
+      }
+      return tag;
+    });
+  };
+  eachRecursive(this.tags);
+
+  this.articles.map((a) => {
+    a.tags = a.tags.map((t) => {
+      if (t._id.toString() === newTag._id.toString()) {
+        t.title = newTag.title;
+        t.color = newTag.color;
+        return t;
+      }
+      return t;
+    });
+  });
+};
+
 userSchema.methods.getArticlesByTags = function (tags) {
   const filteredArticles = this.articles.filter((a) => {
     let counter = 0;
@@ -61,7 +89,11 @@ userSchema.methods.getArticlesByTags = function (tags) {
 
 // eslint-disable-next-line consistent-return
 userSchema.methods.createTag = function (data) {
+  if (data.tag.title.length > 29) {
+    throw new CustomError('Tag title is too long.', 400);
+  }
   if (!data.parent) return this.tags.push(data.tag);
+
   if (data.tag.title === data.parent.title) {
     throw new CustomError('Subtag can\'t have the same title as the parent.', 400);
   }
@@ -85,6 +117,65 @@ userSchema.methods.createTag = function (data) {
   };
   eachRecursive(this.tags);
 };
+
+const setChildrenInArray = function (tag) {
+  const children = [tag[0]];
+  const eachRecursive = (tags) => {
+    tags.forEach((child) => {
+      children.push(child);
+      eachRecursive(child.children);
+    });
+  };
+  eachRecursive(tag[0].children);
+  return children;
+};
+
+const findParent = function (tag, allTags) {
+  let tagParent = '';
+  const eachRecursive = (tags) => {
+    tags.forEach((parent) => {
+      // eslint-disable-next-line consistent-return
+      parent.children.forEach((child) => {
+        if (child._id.toString() === tag._id.toString()) {
+          tagParent = parent;
+        }
+        eachRecursive(parent.children);
+      });
+    });
+  };
+  eachRecursive(allTags);
+  return tagParent;
+};
+
+// eslint-disable-next-line consistent-return
+userSchema.methods.deleteTag = function (data) {
+  const parent = findParent(data.tag, this.tags);
+  if (!parent) {
+    const children = setChildrenInArray(this.tags.filter((t) => (data.tag._id.toString() === t._id.toString())));
+    this.articles.forEach((article) => {
+      article.deleteTags(children);
+    });
+    // eslint-disable-next-line no-return-assign
+    return this.tags = this.tags.filter((t) => (data.tag._id.toString() !== t._id.toString()));
+  }
+  const eachRecursive = (tags) => {
+    this.tags = tags.map((tag) => {
+      if (parent._id.toString() !== tag._id.toString()) {
+        eachRecursive(tag.children);
+      } else if (parent._id.toString() === tag._id.toString()) {
+        const children = setChildrenInArray(tag.children.filter((t) => (data.tag._id.toString() === t._id.toString())));
+        this.articles.forEach((article) => {
+          article.deleteTags(children);
+        });
+        // eslint-disable-next-line no-return-assign,no-param-reassign
+        tag.children = tag.children.filter((t) => (data.tag._id.toString() !== t._id.toString()));
+      }
+      return tag;
+    });
+  };
+  eachRecursive(this.tags);
+};
+
 const User = model('User', userSchema);
 
 module.exports = User;

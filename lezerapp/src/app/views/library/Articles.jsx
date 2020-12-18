@@ -1,9 +1,8 @@
 import React, { memo, useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Article from './components/article/Article';
-import { getArticles, selectArticles, setArticles } from '../../../store/articleSlice';
+import { getArticles, selectArticles } from '../../../store/articleSlice';
 import { selectSelectedTags, selectTags } from '../../../store/tagSlice';
 
 const Articles = () => {
@@ -16,27 +15,11 @@ const Articles = () => {
 
   const [statusDescription, setStatusDescription] = useState('');
 
-  const getFilteredArticles = () => {
-    let tags = '';
-    selectedTags.forEach((t, i) => {
-      if (i === 0) {
-        tags += `title=${t.title}`;
-      } else {
-        tags += `&title=${t.title}`;
-      }
-    });
-
-    axios.get(`http://localhost:3000/api/articles/tags/filter?${tags}&status=${status}`).then(({ data }) => {
-      dispatch(setArticles(data));
-    });
-  };
+  useEffect(() => {
+    dispatch(getArticles(status, selectedTags));
+  }, [selectedTags, status, allTags]);
 
   useEffect(() => {
-    if (selectedTags.length <= 0) {
-      dispatch(getArticles(status));
-    } else {
-      getFilteredArticles();
-    }
     switch (status) {
       case 'archived':
         setStatusDescription('All your archived articles.');
@@ -54,7 +37,7 @@ const Articles = () => {
         setStatusDescription('All your saved articles.');
         break;
     }
-  }, [selectedTags, status, allTags]);
+  }, [status]);
 
   return (
     <>

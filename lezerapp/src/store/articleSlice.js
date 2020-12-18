@@ -36,5 +36,9 @@ export const {
 } = articleSlice.actions;
 export default articleSlice.reducer;
 
-export const getArticles = (status) => (dispatch) => get(`${API_URL}/articles?status=${status}`)
-  .then(({ data }) => dispatch(setArticles(data)));
+export const getArticles = (status, tags = []) => (dispatch) => {
+  const joinedTags = tags.map((t) => t.title).join(',');
+  console.log(joinedTags);
+  get(`${API_URL}/articles?status=${status}&tags=${joinedTags}`)
+    .then(({ data }) => dispatch(setArticles(data)));
+};

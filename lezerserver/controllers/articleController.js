@@ -2,17 +2,19 @@
 const moment = require('moment');
 const { parseHTML } = require('../utils/HTMLParser');
 const response = require('../utils/response');
+const _Article = require('../models/article');
 
 exports.getArticles = async (req, res) => {
-  const articles = req.user.articles.sort((a, b) => b.createdAt - a.createdAt).map((article) => {
-    const parsedArticle = article;
-    parsedArticle.html = undefined;
-    return parsedArticle;
-  }).filter((article) => {
+  const tags = req.query.tags && req.query.tags.split(',');
+  const articles = req.user.articles.filter((article) => {
     if (req.query.status) {
       return article.checkStatus(req.query.status);
     }
     return !article.archivedAt;
+  }).filter(_Article.filterWithTags(tags)).sort((a, b) => b.createdAt - a.createdAt).map((article) => {
+    const parsedArticle = article;
+    parsedArticle.html = undefined;
+    return parsedArticle;
   });
   res.json(articles);
 };
@@ -82,19 +84,4 @@ exports.updateArticle = async (req, res) => {
   }
   req.user.save();
   res.json(article);
-};
-
-exports.getArticlesByTags = async (req, res) => {
-  let filterTags;
-  if (!Array.isArray(req.query.title)) {
-    filterTags = req.query.title.split();
-  } else {
-    filterTags = req.query.title;
-  }
-  res.json(req.user.getArticlesByTags(filterTags).sort((a, b) => b.createdAt - a.createdAt).filter((article) => {
-    if (req.query.status) {
-      return article.checkStatus(req.query.status);
-    }
-    return !article.archivedAt;
-  }));
 };

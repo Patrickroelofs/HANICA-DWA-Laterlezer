@@ -53,6 +53,21 @@ articleSchema.methods.checkStatus = function (status) {
   return true;
 };
 
+articleSchema.statics.filterWithTags = function (tags) {
+  return (a) => {
+    if (!tags) return true;
+    let counter = 0;
+    tags.forEach((filterTag) => {
+      a.tags.forEach((articleTag) => {
+        if (filterTag === articleTag.title) {
+          counter += 1;
+        }
+      });
+    });
+    return counter === tags.length;
+  };
+};
+
 articleSchema.methods.deleteTags = function (deletingTags) {
   // eslint-disable-next-line max-len,no-return-assign
   deletingTags.forEach((tag) => this.tags = this.tags.filter((deletingTag) => (tag._id.toString() !== deletingTag._id.toString())));

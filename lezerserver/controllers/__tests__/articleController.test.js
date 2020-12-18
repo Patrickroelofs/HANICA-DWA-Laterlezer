@@ -74,20 +74,50 @@ describe('Article Controller Tests', () => {
   });
 
   test('Get filtered articles with one tag title', () => {
-    const req = { query: { title: 'Politiek' }, user: { getArticlesByTags: jest.fn(() => []) } };
+    const req = {
+      query: { tags: 'Politiek' },
+      user: {
+        articles: [
+          {
+            title: 'Test article',
+            tags: [{ title: 'Politiek' }],
+          },
+          {
+            title: 'Test article 2',
+            tags: [{ title: 'Sport' }],
+          },
+        ],
+      },
+    };
     const res = { json: jest.fn(() => {}) };
-    articleController.getArticlesByTags(req, res).then(() => {
-      expect(req.user.getArticlesByTags.mock.calls.length).toBe(1);
-      expect(req.user.getArticlesByTags.mock.calls[0][0]).toEqual(['Politiek']);
+    articleController.getArticles(req, res).then(() => {
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0].length).toEqual(1);
+      expect(res.json.mock.calls[0][0][0].title).toEqual('Test article');
     });
   });
 
-  test('Get filtered articles with multiple tag titles', () => {
-    const req = { query: { title: ['Politiek', 'Fun'] }, user: { getArticlesByTags: jest.fn(() => []) } };
+  test('Get filtered articles with two tag titles', () => {
+    const req = {
+      query: { tags: 'Sport,Nieuws' },
+      user: {
+        articles: [
+          {
+            title: 'Test article',
+            tags: [{ title: 'Politiek' }],
+          },
+          {
+            title: 'Test article 2',
+            tags: [{ title: 'Sport' }, { title: 'Nieuws' }],
+          },
+        ],
+      },
+    };
     const res = { json: jest.fn(() => {}) };
-    articleController.getArticlesByTags(req, res).then(() => {
-      expect(req.user.getArticlesByTags.mock.calls.length).toBe(1);
-      expect(req.user.getArticlesByTags.mock.calls[0][0]).toEqual(['Politiek', 'Fun']);
+    articleController.getArticles(req, res).then(() => {
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0].length).toEqual(1);
+      expect(res.json.mock.calls[0][0][0].title).toEqual('Test article 2');
     });
   });
 

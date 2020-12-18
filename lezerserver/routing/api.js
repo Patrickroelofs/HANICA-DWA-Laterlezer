@@ -23,9 +23,6 @@ router.route('/articles/:id')
 router.route('/articles/:id/status')
   .post(articleController.updateStatus);
 
-router.route('/articles/tags/filter')
-  .get(articleController.getArticlesByTags);
-
 router.route('/tags')
   .get(tagController.getTagsGet)
   .post(tagController.createTagPost)

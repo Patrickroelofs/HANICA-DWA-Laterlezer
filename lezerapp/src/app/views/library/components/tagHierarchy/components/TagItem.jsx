@@ -28,7 +28,7 @@ export default ({
         <button
           className="focus:outline-none opacity-0 group-hover:opacity-100 w-6 h-6 float-right bg-gray-200 rounded-full"
           type="submit"
-          onClick={() => handleClick(tag)}
+          onClick={(e) => handleClick(tag, e)}
         >
           <AddIcon fontSize="small" />
         </button>

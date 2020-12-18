@@ -22,7 +22,7 @@ function App() {
   });
 
   return (
-    <div className="App w-96 h-96">
+    <div className="App max-h-96 overflow-x-hidden overflow-y-visible" style={{ width: '36rem' }}>
       { !user
         ? <Login setUser={storeUser} />
         : <SaveArticle setUser={storeUser} user={user} /> }

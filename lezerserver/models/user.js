@@ -85,6 +85,7 @@ userSchema.methods.createTag = function (data) {
   };
   eachRecursive(this.tags);
 };
+
 const User = model('User', userSchema);
 
 module.exports = User;

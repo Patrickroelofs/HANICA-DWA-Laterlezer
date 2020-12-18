@@ -1,9 +1,8 @@
 import React, { memo, useEffect } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Article from './components/article/Article';
-import { getArticles, selectArticles, setArticles } from '../../../store/articleSlice';
+import { getArticles, selectArticles } from '../../../store/articleSlice';
 import { selectSelectedTags } from '../../../store/tagSlice';
 
 const Articles = () => {
@@ -13,27 +12,8 @@ const Articles = () => {
   const selectedTags = useSelector(selectSelectedTags);
   const articles = useSelector(selectArticles);
 
-  const getFilteredArticles = () => {
-    let tags = '';
-    selectedTags.forEach((t, i) => {
-      if (i === 0) {
-        tags += `title=${t.title}`;
-      } else {
-        tags += `&title=${t.title}`;
-      }
-    });
-
-    axios.get(`http://localhost:3000/api/articles/tags/filter?${tags}&status=${status}`).then(({ data }) => {
-      dispatch(setArticles(data));
-    });
-  };
-
   useEffect(() => {
-    if (selectedTags.length <= 0) {
-      dispatch(getArticles(status));
-    } else {
-      getFilteredArticles();
-    }
+    dispatch(getArticles(status, selectedTags));
   }, [selectedTags, status]);
 
   return (

@@ -52,4 +52,19 @@ articleSchema.methods.checkStatus = function (status) {
   return true;
 }
 
+articleSchema.statics.filterWithTags = function (tags) {
+  return (a) => {
+    if (!tags) return true;
+    let counter = 0;
+    tags.forEach((filterTag) => {
+      a.tags.forEach((articleTag) => {
+        if (filterTag === articleTag.title) {
+          counter += 1;
+        }
+      });
+    });
+    return counter === tags.length;
+  };
+}
+
 module.exports = model('Article', articleSchema);

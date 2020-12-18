@@ -68,7 +68,7 @@ function TagListSelect({ onSave }) {
             <button
               type="button"
               key={tag._id}
-              className={`focus:outline-none ${isSelected(tag) ? '' : 'opacity-20'}`}
+              className={`mr-1 mt-1 focus:outline-none ${isSelected(tag) ? '' : 'opacity-20'}`}
               onClick={() => selectTags([tag])}
               value={tag._id}
             >

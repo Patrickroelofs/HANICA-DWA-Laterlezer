@@ -4,8 +4,8 @@ import BallBeat from 'react-pure-loaders/build/BallBeat';
 import { post } from 'axios';
 import chroma from 'chroma-js';
 
-import TagListSelect from './tagListSelect/TagListSelect';
-import { openWebSocket, sendMessage } from '../utils/serverCommunication';
+import TagListSelect from '../tagListSelect/TagListSelect';
+import { openWebSocket, sendMessage } from '../../utils/serverCommunication';
 
 function SaveArticle(props) {
   const { setUser, user } = props;

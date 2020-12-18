@@ -6,6 +6,7 @@ import makeAnimated from 'react-select/animated';
 import colourStyles from './colourStyles';
 
 const animatedComponents = makeAnimated();
+
 function TagSelect({ onSave }) {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);

@@ -45,16 +45,12 @@ articleSchema.methods.checkStatus = function (status) {
     return moment(this.createdAt).diff(moment(), 'months') === 0 && !this.archivedAt;
   } if (status === 'year') {
     return moment(this.createdAt).diff(moment(), 'years') === 0 && !this.archivedAt;
-  }
-  if (status === 'archived') {
+  } if (status === 'archived') {
     return this.archivedAt;
+  } if (status === undefined) {
+    return moment(this.createdAt) && !this.archivedAt;
   }
   return true;
-};
-
-articleSchema.methods.deleteTags = function (deletingTags) {
-  // eslint-disable-next-line max-len,no-return-assign
-  deletingTags.forEach((tag) => this.tags = this.tags.filter((deletingTag) => (tag._id.toString() !== deletingTag._id.toString())));
 };
 
 articleSchema.statics.filterWithTags = function (tags) {
@@ -70,6 +66,11 @@ articleSchema.statics.filterWithTags = function (tags) {
     });
     return counter === tags.length;
   };
-}
+};
+
+articleSchema.methods.deleteTags = function (deletingTags) {
+  // eslint-disable-next-line max-len,no-return-assign
+  deletingTags.forEach((tag) => this.tags = this.tags.filter((deletingTag) => (tag._id.toString() !== deletingTag._id.toString())));
+};
 
 module.exports = model('Article', articleSchema);

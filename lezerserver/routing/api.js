@@ -26,6 +26,7 @@ router.route('/articles/:id/status')
 router.route('/tags')
   .get(tagController.getTagsGet)
   .post(tagController.createTagPost)
+  .put(tagController.updateTagPut)
   .delete(tagController.deleteTagsDelete);
 
 module.exports = router;

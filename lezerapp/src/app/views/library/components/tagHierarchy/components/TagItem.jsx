@@ -11,18 +11,10 @@ export default ({
       key={tag._id}
       className={`transform hover:scale-105 hover:bg-gray-100 motion-reduce:transform-none transition-transform rounded-lg my-1 ${isSelected(tag) && 'bg-gray-200'}`}
     >
-      <label htmlFor={`Tag-${tag._id}`} className="group px-4 py-2 block cursor-pointer">
+      <button type="button" onClick={() => selectTag(tag)} className="group px-4 py-2 focus:outline-none cursor-pointer w-full text-left">
         <span
           className="w-6 h-6 inline-block rounded-full align-middle mr-2"
           style={{ background: tag.color, color: setContrast(tag.color) }}
-        />
-        <input
-          onChange={selectTag}
-          value={tag.title}
-          hidden
-          type="checkbox"
-          id={`Tag-${tag._id}`}
-          checked={isSelected(tag)}
         />
         {tag.title}
         <button
@@ -32,7 +24,7 @@ export default ({
         >
           <AddIcon fontSize="small" />
         </button>
-      </label>
+      </button>
     </li>
   );
 };

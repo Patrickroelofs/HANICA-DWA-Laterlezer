@@ -10,6 +10,7 @@ import {
   selectSelectedTags,
   setArticleTags,
   setSelectedTags,
+  selectTag,
 } from '../../../../../store/tagSlice';
 
 export default function ArticleHeader() {
@@ -19,9 +20,9 @@ export default function ArticleHeader() {
   const selectedTags = useSelector(selectSelectedTags);
   const [previouslySelectedTags, setPreviouslySelectedTags] = useState([]);
 
-  const clickHandler = ({ title }) => {
+  const clickHandler = (tag) => {
     history.goBack();
-    dispatch(setSelectedTags([title]));
+    dispatch(selectTag(tag));
   };
 
   useEffect(() => {

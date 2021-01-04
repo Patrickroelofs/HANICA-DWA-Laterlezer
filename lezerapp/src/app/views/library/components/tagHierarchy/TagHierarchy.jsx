@@ -48,7 +48,12 @@ const TagHierarchy = () => {
 
   const selectTag = (tagss) => {
     if (isSelected(tagss[0])) {
-      dispatch(setSelectedTags(selectedTags.filter((t) => !tagss.find((tag) => tag._id === t._id.toString()))));
+      const childrenIds = (tag) => tag.children.map((t) => [
+        t._id,
+        ...childrenIds(t),
+      ]).flat();
+      const ids = [...tagss.map((t) => t._id), ...childrenIds(tagss[0])];
+      dispatch(setSelectedTags(selectedTags.filter((t) => !ids.includes(t._id))));
     } else {
       dispatch(setSelectedTags([
         ...selectedTags,

@@ -20,13 +20,24 @@ const tagSlice = createSlice({
     setArticleTags: (state, action) => {
       state.articleTags = action.payload;
     },
+    selectTag: (state, action) => {
+      const childrenIds = (tag) => tag.children.map((t) => [t._id, ...childrenIds(t)]).flat();
+      function flatDeep(arr) {
+        return arr.reduce((acc, val) => acc.concat(val.children.length > 0 ? [...flatDeep(val.children), val] : [val]), []);
+      }
+      const parentsTags = (tag) => flatDeep(state.tags, Infinity).filter((t) => (childrenIds(t).includes(tag._id)));
+      const parentTags = parentsTags(action.payload);
+      state.selectedTags = [action.payload, ...parentTags];
+    },
   },
 });
 
 export const selectTags = (state) => state.tag.tags;
 export const selectSelectedTags = (state) => state.tag.selectedTags;
 
-export const { setTags, setSelectedTags, setArticleTags } = tagSlice.actions;
+export const {
+  setTags, setSelectedTags, setArticleTags, selectTag,
+} = tagSlice.actions;
 export default tagSlice.reducer;
 
 export const createTag = (title, color, parent) => (dispatch) => post(`${API_URL}/tags`, { tag: { title, color }, parent })

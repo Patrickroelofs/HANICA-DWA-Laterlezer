@@ -22,6 +22,7 @@ describe('User Model Tests', () => {
       articles: [{
         title: 'article 1',
         tags: [{
+          _id: '5fdcc504de09ff30845f9f2f',
           title: 'Politiek',
           color: '#00FF00',
           children: [],
@@ -53,6 +54,12 @@ describe('User Model Tests', () => {
         title: 'javascript',
         color: '#00FF00',
         children: [],
+      },
+      {
+        children: [],
+        _id: '5fdcc504de09ff30845f9f2f',
+        title: 'Voetbal',
+        color: '#4279a6',
       }],
     });
   });
@@ -134,12 +141,17 @@ describe('User Model Tests', () => {
   test('User method getTags should return all user tags', async () => {
     const testUser = await User.getUserByUsername('stanhan');
     const tags = testUser.getTags();
-    const expectedTags = [
-      {
-        title: 'javascript',
-        color: '#00FF00',
-        children: [],
-      }];
+    const expectedTags = [{
+      title: 'javascript',
+      color: '#00FF00',
+      children: [],
+    },
+    {
+      children: [],
+      _id: '5fdcc504de09ff30845f9f2f',
+      title: 'Voetbal',
+      color: '#4279a6',
+    }];
 
     expect(tags.length).toEqual(expectedTags.length);
 
@@ -250,5 +262,20 @@ describe('User Model Tests', () => {
     expect(testUser.tags).not.toContain(tagToDelete.tag);
     expect(testUser.articles[2].tags).not.toContain(tagToDelete.tag);
     expect(testUser.articles[2].tags).not.toContain(tagToDelete.tag.children[0]);
+  });
+
+  test('User method updateTag should update the tag', async () => {
+    const testUser = await User.getUserByUsername('stanhan');
+
+    await testUser.updateTag({
+      children: [],
+      _id: '5fdcc504de09ff30845f9f2f',
+      title: 'Voetballl',
+      color: '#4279a6',
+    });
+
+    const updatedTag = testUser.tags.find((tag) => tag._id == '5fdcc504de09ff30845f9f2f');
+    expect(updatedTag.title).toBe('Voetballl');
+    expect(updatedTag.color).toBe('#4279a6');
   });
 });

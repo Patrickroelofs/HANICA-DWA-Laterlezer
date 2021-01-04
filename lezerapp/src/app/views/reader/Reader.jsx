@@ -63,6 +63,7 @@ function Reader() {
                   <ArticleHeader article={article} />
                   <FullArticle
                     html={article.html}
+                    id={article._id}
                     fallback={(
                       <div className="w-full h-screen relative">
                         <div className="text-center inline-block absolute left-2/4 top-1/3">

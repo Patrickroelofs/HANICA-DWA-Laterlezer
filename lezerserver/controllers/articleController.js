@@ -11,6 +11,11 @@ exports.getArticles = async (req, res) => {
       return article.checkStatus(req.query.status);
     }
     return !article.archivedAt;
+  }).filter((article) => {
+    if (req.query.range) {
+      return article.checkRange(req.query.range);
+    }
+    return true;
   }).filter(_Article.filterWithTags(tags)).sort((a, b) => b.createdAt - a.createdAt).map((article) => {
     const parsedArticle = article;
     parsedArticle.html = undefined;

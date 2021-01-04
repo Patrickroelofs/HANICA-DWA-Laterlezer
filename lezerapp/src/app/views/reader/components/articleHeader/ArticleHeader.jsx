@@ -63,19 +63,16 @@ export default function ArticleHeader() {
           <small className="text-md italic pb-4 block">
             { article.author }
               &nbsp;
-            { article.published ? 'published on' : '' }
+            { article.published && 'published on' }
               &nbsp;
             { article.published !== null
-              ? moment(article.published).format('DD-MM-YYYY')
-              : null }
+              && moment(article.published).format('DD-MM-YYYY')}
           </small>
-        )
-        : null }
+        ) : null }
       <div>
         {
           article.html && article.image !== null && !article.html.includes(article.image)
-            ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} />
-            : null
+            && <img className="rounded-xl mb-8 shadow-xl m-auto" alt="news" src={article.image} />
         }
       </div>
     </>

@@ -28,6 +28,7 @@ articleSchema.methods.archive = function (date) {
     this.archivedAt = moment();
   }
 };
+
 articleSchema.methods.read = function (date) {
   if (date !== undefined) {
     this.readAt = date;

@@ -28,6 +28,7 @@ articleSchema.methods.archive = function (date) {
     this.archivedAt = moment();
   }
 };
+
 articleSchema.methods.read = function (date) {
   if (date !== undefined) {
     this.readAt = date;
@@ -37,18 +38,21 @@ articleSchema.methods.read = function (date) {
 };
 
 articleSchema.methods.checkStatus = function (status) {
-  if (status === 'today') {
-    return moment(this.createdAt).diff(moment(), 'days') === 0 && !this.archivedAt;
-  } if (status === 'week') {
-    return moment(this.createdAt).diff(moment(), 'weeks') === 0 && !this.archivedAt;
-  } if (status === 'month') {
-    return moment(this.createdAt).diff(moment(), 'months') === 0 && !this.archivedAt;
-  } if (status === 'year') {
-    return moment(this.createdAt).diff(moment(), 'years') === 0 && !this.archivedAt;
-  } if (status === 'archived') {
+  if (status === 'archived') {
     return this.archivedAt;
-  } if (status === 'undefined') {
-    return moment(this.createdAt) && !this.archivedAt;
+  }
+  return !this.archivedAt;
+};
+
+articleSchema.methods.checkRange = function (range) {
+  if (range === 'today') {
+    return moment(this.createdAt).diff(moment(), 'days') === 0;
+  } if (range === 'week') {
+    return moment(this.createdAt).diff(moment(), 'weeks') === 0;
+  } if (range === 'month') {
+    return moment(this.createdAt).diff(moment(), 'months') === 0;
+  } if (range === 'year') {
+    return moment(this.createdAt).diff(moment(), 'years') === 0;
   }
   return true;
 };

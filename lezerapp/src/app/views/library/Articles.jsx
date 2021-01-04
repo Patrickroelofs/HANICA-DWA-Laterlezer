@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Article from './components/article/Article';
 import { getArticles, selectArticles } from '../../../store/articleSlice';
 import { selectSelectedTags, selectTags } from '../../../store/tagSlice';
+import { useQuery } from '../../../utils/helpers';
 
 const Articles = () => {
   const dispatch = useDispatch();
+  const range = useQuery().get('range');
   const { status } = useParams();
 
   const selectedTags = useSelector(selectSelectedTags);
@@ -16,28 +18,33 @@ const Articles = () => {
   const [statusDescription, setStatusDescription] = useState('');
 
   useEffect(() => {
-    dispatch(getArticles(status, selectedTags));
-  }, [selectedTags, status, allTags]);
+    dispatch(getArticles(status, range, selectedTags));
+  }, [selectedTags, status, allTags, range]);
 
   useEffect(() => {
+    let description = '';
     switch (status) {
       case 'archived':
-        setStatusDescription('All your archived articles.');
+        description = 'All your archived articles';
         break;
+      default:
+        description = 'All your saved articles';
+        break;
+    }
+    switch (range) {
       case 'today':
-        setStatusDescription('All your articles added today.');
+        description += ' added today.';
         break;
       case 'week':
       case 'month':
       case 'year':
-        setStatusDescription(`All your articles added this ${status}.`);
+        description += ` added this ${range}.`;
         break;
-
       default:
-        setStatusDescription('All your saved articles.');
-        break;
+        description += '.';
     }
-  }, [status]);
+    setStatusDescription(description);
+  }, [status, range]);
 
   return (
     <>

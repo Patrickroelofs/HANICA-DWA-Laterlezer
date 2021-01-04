@@ -11,17 +11,22 @@ exports.getArticles = async (req, res) => {
       return article.checkStatus(req.query.status);
     }
     return !article.archivedAt;
-  }).filter(_Article.filterWithTags(tags)).sort((a, b) => b.createdAt - a.createdAt).map((article) => {
-    const parsedArticle = article;
-    parsedArticle.html = undefined;
-    return parsedArticle;
-  });
+  }).filter((article) => {
+    if (req.query.range) {
+      return article.checkRange(req.query.range);
+    }
+    return true;
+  }).filter(_Article.filterWithTags(tags)).sort((a, b) => b.createdAt - a.createdAt)
+    .map((article) => {
+      const parsedArticle = article;
+      parsedArticle.html = undefined;
+      return parsedArticle;
+    });
   res.json(articles);
 };
 
 exports.getArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
-  article.read();
   req.user.save();
 
   res.json(article);
@@ -77,6 +82,7 @@ exports.createArticlePost = async (req, res, next) => {
     next(e);
   }
 };
+
 exports.updateArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
   if (req.body.tags) {
@@ -84,4 +90,15 @@ exports.updateArticle = async (req, res) => {
   }
   req.user.save();
   res.json(article);
+};
+
+exports.readArticle = async (req, res, next) => {
+  try {
+    const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
+    article.read();
+    await req.user.save();
+    res.status(202).json();
+  } catch (e) {
+    next(e);
+  }
 };

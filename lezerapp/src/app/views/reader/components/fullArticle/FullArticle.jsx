@@ -1,31 +1,16 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 
 import ScrollToTop from 'react-scroll-up';
 
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import axios from 'axios';
 
-function FullArticle({ html }) {
-  const listener = () => {
-    const lazyImages = [].slice.call(document.querySelectorAll('img.lazy'));
-    if ('IntersectionObserver' in window) {
-      const lazyImageObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const lazyImage = entry.target;
-            lazyImage.src = lazyImage.dataset.src;
-            lazyImageObserver.unobserve(lazyImage);
-          }
-        });
-      });
-      lazyImages.forEach((lazyImage) => {
-        lazyImageObserver.observe(lazyImage);
-      });
+function FullArticle({ html, id }) {
+  window.onscroll = function () {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      axios.put(`http://localhost:3000/api/articles/${id}`);
     }
   };
-
-  useEffect(() => {
-    listener();
-  });
 
   return (
     <>

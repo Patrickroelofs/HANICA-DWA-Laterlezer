@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import he from 'he';
 import Thumbnail from '../thumbnail/Thumbnail';
 import TagPill from '../../../sharedcomponents/tagPill/TagPill';
 import { setCurrentArticle } from '../../../../../store/articleSlice';
-import { selectSelectedTags, setSelectedTags } from '../../../../../store/tagSlice';
+import { selectTag } from '../../../../../store/tagSlice';
 import ArticleDropdown from '../articleDropdown/ArticleDropdown';
 
 function Article({ article }) {
@@ -15,23 +15,16 @@ function Article({ article }) {
   const {
     _id, image, tags, title, description,
   } = article;
-  const selectedTags = useSelector(selectSelectedTags);
   const openModelRef = useOnclickOutside(() => {
     setOptions(false);
   });
 
   const dispatch = useDispatch();
 
-  const selectTag = (tag, e) => {
+  const selectStoreTag = (tag, e) => {
     e.stopPropagation();
     e.preventDefault();
-    let tagss = [...selectedTags];
-    if (!tagss.includes(tag.title)) {
-      tagss.push(tag.title);
-    } else {
-      tagss = selectedTags.filter((t) => t !== tag.title);
-    }
-    dispatch(setSelectedTags(tagss));
+    dispatch(selectTag(tag));
   };
 
   const openOptions = (e) => {
@@ -49,7 +42,7 @@ function Article({ article }) {
         <div className="col-span-3 ml-8">
           <div className="articleTags pb-2 text-xs overflow-x-hidden whitespace-nowrap overflow-ellipsis">
             { (tags) ? tags.map((tag) => (
-              <button type="button" className="focus:outline-none" key={tag._id} onClick={(e) => selectTag(tag, e)} value={tag._id}>
+              <button type="button" className="focus:outline-none" key={tag._id} onClick={(e) => selectStoreTag(tag, e)} value={tag._id}>
                 <TagPill data={tag} />
               </button>
             )) : <span>No tags found</span> }

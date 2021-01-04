@@ -74,7 +74,7 @@ export default function ArticleHeader() {
       <div>
         {
           article.html && article.image !== null && !article.html.includes(article.image)
-            ? <img className="rounded-xl mb-8 shadow-xl" alt="news" src={article.image} />
+            ? <img className="rounded-xl mb-8 shadow-xl m-auto" alt="news" src={article.image} />
             : null
         }
       </div>

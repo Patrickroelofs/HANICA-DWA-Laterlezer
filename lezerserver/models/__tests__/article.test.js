@@ -50,6 +50,24 @@ describe('Article Model Tests', () => {
     expect(article.readAt).toBe(null);
   });
 
+  test('Check if tags are deleted from article ', async () => {
+    await article.addTag({
+      title: 'voetbal',
+      color: '#00FF00',
+    });
+    await article.addTag({
+      title: 'ajax',
+      color: '#00FF00',
+    });
+
+    const tag1 = article.tags[0];
+    const tag2 = article.tags[1];
+    await article.deleteTags([tag1]);
+
+    expect(article.tags).toContain(tag2);
+    expect(article.tags).not.toContain(tag1);
+  });
+
   afterEach(async () => {
     await Article.deleteMany({});
   });

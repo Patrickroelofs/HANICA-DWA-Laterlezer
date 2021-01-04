@@ -28,6 +28,8 @@ const TagHierarchy = () => {
   });
 
   const handleClick = (tag, e, m) => {
+    e.preventDefault();
+    e.stopPropagation();
     switch (m) {
       case 'edit':
         setMode(m);

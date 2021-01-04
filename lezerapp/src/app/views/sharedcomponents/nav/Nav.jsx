@@ -22,7 +22,7 @@ function Nav() {
 
   const selectTimerange = (e) => {
     const selRange = e.target.value;
-    history.push(`${location.pathname}${range ? `?range=${selRange}` : ''}`);
+    history.push(`${location.pathname}${selRange ? `?range=${selRange}` : ''}`);
   };
 
   return (

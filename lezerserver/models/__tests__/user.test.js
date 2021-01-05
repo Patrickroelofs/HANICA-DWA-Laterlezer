@@ -45,6 +45,10 @@ describe('User Model Tests', () => {
           color: '#00FF00',
           children: [],
         }],
+      },
+      {
+        title: 'article 3',
+        tags: [],
       }],
       tags: [{
         title: 'javascript',
@@ -189,6 +193,75 @@ describe('User Model Tests', () => {
         ]),
       );
     });
+  });
+
+  test('Delete tag function should delete given tag that has a parent and all subtags and delete all tags from the articles.', async () => {
+    const testUser = await User.getUserByUsername('stanhan');
+
+    await testUser.createTag({
+      tag: {
+        title: 'sport',
+        color: '#00FF00',
+      },
+    });
+    await testUser.createTag({
+      parent: testUser.tags[1],
+      tag: {
+        title: 'voetbal',
+        color: '#00FF00',
+      },
+    });
+    await testUser.createTag({
+      parent: testUser.tags[1].children[0],
+      tag: {
+        title: 'ajax',
+        color: '#00FF00',
+      },
+    });
+
+    await testUser.articles[2].addTag(testUser.tags[1]);
+    await testUser.articles[2].addTag(testUser.tags[1].children[0]);
+    await testUser.articles[2].addTag(testUser.tags[1].children[0].children[0]);
+
+    const tagToDelete = {
+      tag: testUser.tags[1].children[0],
+    };
+
+    await testUser.deleteTag(tagToDelete);
+
+    expect(testUser.tags[1].children).not.toContain(tagToDelete.tag);
+    expect(testUser.articles[2].tags).not.toContain(tagToDelete.tag);
+  });
+
+  test('Delete tag function should delete given tag that has no parent tag and all subtags and delete all tags from the articles.', async () => {
+    const testUser = await User.getUserByUsername('stanhan');
+
+    await testUser.createTag({
+      tag: {
+        title: 'sport',
+        color: '#00FF00',
+      },
+    });
+    await testUser.createTag({
+      parent: testUser.tags[1],
+      tag: {
+        title: 'voetbal',
+        color: '#00FF00',
+      },
+    });
+
+    await testUser.articles[2].addTag(testUser.tags[1]);
+    await testUser.articles[2].addTag(testUser.tags[1].children[0]);
+
+    const tagToDelete = {
+      tag: testUser.tags[1],
+    };
+
+    await testUser.deleteTag(tagToDelete);
+
+    expect(testUser.tags).not.toContain(tagToDelete.tag);
+    expect(testUser.articles[2].tags).not.toContain(tagToDelete.tag);
+    expect(testUser.articles[2].tags).not.toContain(tagToDelete.tag.children[0]);
   });
 
   test('User method updateTag should update the tag', async () => {

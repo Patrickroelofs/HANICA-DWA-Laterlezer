@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const app = require('../../app'); // path to app.js
 const Tag = require('../../models/tag');
 const User = require('../../models/user');
+const tagController = require('../tagController');
 
 describe('Tag Controller Tests', () => {
   beforeAll(async () => {
@@ -79,5 +80,29 @@ describe('Tag Controller Tests', () => {
         title: 'Voetballl',
       },
     );
+  });
+
+  test('Delete tags', async () => {
+    const user = {
+      deleteTag: jest.fn(async () => null),
+      save: jest.fn(async () => null),
+    };
+    const body = {
+      tag: {
+        color: '#00ff00',
+        title: 'voetbal',
+      },
+    };
+    const status = jest.fn(() => ({
+      send: jest.fn(() => {}),
+    }));
+    const next = jest.fn(() => {});
+    await tagController.deleteTagsDelete({ user, body }, { status }, next);
+    expect(user.deleteTag.mock.calls.length).toBe(1);
+    expect(user.deleteTag.mock.calls[0][0]).toMatchObject(body);
+    expect(user.save.mock.calls.length).toBe(1);
+    expect(status.mock.calls.length).toBe(1);
+    expect(status.mock.calls[0][0]).toBe(200);
+    expect(next.mock.calls.length).toBe(0);
   });
 });

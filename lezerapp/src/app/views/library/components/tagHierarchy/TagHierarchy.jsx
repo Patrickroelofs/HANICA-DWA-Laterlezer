@@ -50,7 +50,22 @@ const TagHierarchy = () => {
 
   const selectTag = (tagss) => {
     if (isSelected(tagss[0])) {
-      dispatch(setSelectedTags(selectedTags.filter((t) => !tagss.find((tag) => tag._id === t._id.toString()))));
+      const childrenIds = (tag) => tag.children.map((t) => [
+        t._id,
+        ...childrenIds(t),
+      ]).flat();
+      const childIds = childrenIds(tagss[0]);
+      const parentIds = tagss.filter((tag) => {
+        const hasSelectedChild = childrenIds(tag).filter((id) => {
+          if (!tagss.find((selTag) => id === selTag._id) && !childIds.includes(id)) {
+            return selectedTags.find((selTag) => id === selTag._id.toString());
+          }
+          return false;
+        });
+        return hasSelectedChild.length === 0;
+      }).map((tag) => tag._id.toString());
+      const ids = [...childIds, ...parentIds];
+      dispatch(setSelectedTags(selectedTags.filter((t) => !ids.includes(t._id))));
     } else {
       dispatch(setSelectedTags([
         ...selectedTags,

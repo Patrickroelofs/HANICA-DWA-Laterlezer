@@ -85,7 +85,7 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
           }
         { getLoader() }
       </div>
-      <div className="w-full bg-gray-100 p-6">
+      <div className="w-full sticky bottom-0 bg-gray-100 p-6">
         { !autoLoggedIn && <span className="text-green-600 font-bold block">You&apos;ve been logged in automatically!</span>}
         <span className="align-middle leading-8">
           <span className="font-bold pr-1">Logged in as:</span>

@@ -61,21 +61,21 @@ function TagListSelect({ onSave }) {
 
   return (
     <>
-      <div className="">
-        {tags.map((tag) => (tag.children.length > 0
-          ? <TagParent parent={tag} isSelected={isSelected} onClick={selectTags} />
-          : (
-            <button
-              type="button"
-              key={tag._id}
-              className={`mr-1 mt-1 focus:outline-none ${isSelected(tag) ? '' : 'opacity-20'}`}
-              onClick={() => selectTags([tag])}
-              value={tag._id}
-            >
-              <TagPill data={tag} />
-            </button>
-          )))}
-      </div>
+
+      {tags.map((tag) => (tag.children.length > 0
+        ? <TagParent parent={tag} isSelected={isSelected} onClick={selectTags} />
+        : (
+          <button
+            type="button"
+            key={tag._id}
+            className={`mr-1 mt-1 focus:outline-none ${isSelected(tag) ? '' : 'opacity-20'}`}
+            onClick={() => selectTags([tag])}
+            value={tag._id}
+          >
+            <TagPill data={tag} />
+          </button>
+        )))}
+
       <div className="sticky fixed bottom-24 float-right">
         <button
           id="saveTagsToArticle"

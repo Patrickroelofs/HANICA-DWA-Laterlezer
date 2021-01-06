@@ -25,7 +25,7 @@ function ArchiveArticle() {
 
   return (
     <>
-      <button id="archiveArticle" onClick={() => archive()} type="button" className="block w-16 h-16 focus:outline-none hover:text-blue-600">
+      <button title={`${archived ? 'Archive' : 'Unarchive'} this article`} id="archiveArticle" onClick={() => archive()} type="button" className="block w-16 h-16 focus:outline-none hover:text-blue-600">
         { archived
           ? <UnarchiveIcon className="text-red-500" />
           : <ArchiveIcon />}

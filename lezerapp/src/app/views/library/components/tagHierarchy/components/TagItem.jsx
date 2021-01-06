@@ -28,7 +28,7 @@ export default ({
           style={{ background: tag.color, color: setContrast(tag.color) }}
         />
         {tag.title}
-        <div className="absolute right-0 top-2">
+        <div className="absolute right-6 top-2">
           <button
             className="ml-1 focus:outline-none opacity-0 hover:text-blue-600 group-hover:opacity-100 w-6 h-6 float-right "
             type="submit"

@@ -49,8 +49,7 @@ function Reader() {
               <Dock profilePicture={profilePicture} />
             </div>
             <div className="col-span-4">
-              {/* Sidebar should be moved to app.jsx file (this entire file needs rework) */}
-              <Nav />
+              <Nav staticTags />
             </div>
           </div>
         </nav>

@@ -9,7 +9,7 @@ import TagHierarchy from '../../library/components/tagHierarchy/TagHierarchy';
 import { setSelectedTags } from '../../../../store/tagSlice';
 import { useQuery } from '../../../../utils/helpers';
 
-function Nav() {
+function Nav({ staticTags = false }) {
   const history = useHistory();
   const { status } = useParams();
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ function Nav() {
         <span>
           Added:
         </span>
-        <select onChange={selectTimerange} className="focus:ring-indigo-500 focus:border-indigo-500 h-10 px-5 ml-3 pr-10 rounded-full text-sm">
+        <select disabled={staticTags} onChange={selectTimerange} className="focus:ring-indigo-500 focus:border-indigo-500 h-10 px-5 ml-3 pr-10 rounded-full text-sm">
           <option selected={!range} value="">All</option>
           <option selected={range === 'today'} value="today">Today</option>
           <option selected={range === 'week'} value="week">This week</option>
@@ -56,7 +56,7 @@ function Nav() {
       </div>
       <hr />
       <div className="mx-4">
-        <TagHierarchy />
+        <TagHierarchy isStatic={staticTags} />
       </div>
     </section>
   );

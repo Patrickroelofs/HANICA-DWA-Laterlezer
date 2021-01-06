@@ -1,4 +1,4 @@
-# [Laterlezer - Caracal](https://nl.wikipedia.org/wiki/Caracal_(dier))
+# Laterlezer | Caracal
 
 ![image](https://github.com/HANICA-DWA/sep2020-project-caracal/raw/c366e3cb0c201c7e2425d6f604ff91140915a16a/documents/bsFEmSzQqr.gif?raw=true)
 
@@ -11,6 +11,8 @@ LaterLezer is een tool die het lezen van artikelen beschikbaar en gemakkelijk ma
 ## Project
 
 Dit project is gemaakt als onderdeel van de ICT studie op de [HAN](https://www.han.nl/), de originele [opdracht](https://github.com/HANICA-DWA/sep2020-project-caracal/blob/new-readme/opdracht/LaterLezer.docx) beschrijft het idee dat vanuit de opdrachtgever kwam. Het 9 weken durende project heeft geresulteerd in een product dat hier opgeslagen staat.
+
+
 
 ## Installatie
 
@@ -35,7 +37,7 @@ node ./app.js
 ```
 cd lezerapp
 npm install
-npm run tailwind:build
+npm run build:tailwind
 npm start
 
 // de client zal nu draaien op localhost:3001
@@ -48,7 +50,7 @@ npm start
 ```
 cd extension
 npm install
-npm run tailwind:build
+npm run build:tailwind
 npm build // Plaats de build folder als extension in je Chromium browsser
 npm start
 

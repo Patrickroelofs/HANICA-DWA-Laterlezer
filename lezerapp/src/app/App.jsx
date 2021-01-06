@@ -27,8 +27,10 @@ function App() {
             <div className="col-span-1 bg-white relative top-0">
               <Dock profilePicture={profilePicture} />
             </div>
-            <div className="col-span-4">
-              <Nav />
+            <div className="col-span-4 relative top-0">
+              <div className="min-h-screen sticky top-0 z-50">
+                <Nav />
+              </div>
             </div>
           </div>
         </nav>

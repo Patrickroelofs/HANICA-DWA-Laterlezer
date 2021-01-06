@@ -62,7 +62,7 @@ function Nav({ staticTags = false }) {
         </select>
       </div>
       <hr />
-      <div className="mx-4">
+      <div className="pl-4 pb-16 overflow-y-scroll overflow-x-hidden" style={{ height: 'calc(100vh - 232px)' }}>
         <TagHierarchy isStatic={staticTags} />
       </div>
     </section>

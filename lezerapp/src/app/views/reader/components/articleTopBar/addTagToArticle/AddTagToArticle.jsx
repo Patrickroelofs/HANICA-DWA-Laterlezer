@@ -21,7 +21,7 @@ function AddTagToArticle() {
 
   return (
     <>
-      <button id="addTagsToArticle" ref={tagRef} onClick={() => toggleTagDropdown()} type="button" className={`${isTagDropdownOpen ? 'text-blue-600' : ''} block w-16 h-16 focus:outline-none hover:text-blue-600`}><LocalOfferIcon /></button>
+      <button title="Edit tags of article" id="addTagsToArticle" ref={tagRef} onClick={() => toggleTagDropdown()} type="button" className={`${isTagDropdownOpen ? 'text-blue-600' : ''} block w-16 h-16 focus:outline-none hover:text-blue-600`}><LocalOfferIcon /></button>
       { isTagDropdownOpen
         ? (
           <div ref={tagRef} id="tagSelectPopup" className="absolute flex top-12 p-4 bg-white shadow-lg rounded-lg">

@@ -25,7 +25,7 @@ function PrioritizeArticle() {
 
   return (
     <>
-      <button id="archiveArticle" onClick={() => archive()} type="button" className="block w-16 h-16 focus:outline-none hover:text-blue-600">
+      <button title={`${!priority ? 'Prioritize' : 'Lower priority of'} this article`} id="archiveArticle" onClick={() => archive()} type="button" className="block w-16 h-16 focus:outline-none hover:text-blue-600">
         { priority
           ? <LowPriorityIcon className="text-red-500" />
           : <PriorityHighIcon />}

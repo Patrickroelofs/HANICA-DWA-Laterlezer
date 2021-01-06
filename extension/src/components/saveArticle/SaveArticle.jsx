@@ -75,7 +75,7 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
 
   return (
     <>
-      <div className="p-6">
+      <div className="p-6" style={{ minHeight: '128px' }}>
         { loaded === 'waitForSelect' ? <TagListSelect onSave={postArticle} /> : ''}
 
         {

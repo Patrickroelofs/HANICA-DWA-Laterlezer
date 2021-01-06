@@ -17,6 +17,13 @@ export default ({
     e.stopPropagation();
     selectTag(tag);
   };
+
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(deleteTag(tag));
+  };
+
   return (
     <li
       key={tag._id}
@@ -46,7 +53,7 @@ export default ({
           <button
             className="ml-1 focus:outline-none opacity-0 hover:text-red-600 group-hover:opacity-100 w-6 h-6 float-right"
             type="submit"
-            onClick={() => dispatch(deleteTag(tag))}
+            onClick={handleDeleteClick}
           >
             <RemoveCircleOutlineRoundedIcon />
           </button>

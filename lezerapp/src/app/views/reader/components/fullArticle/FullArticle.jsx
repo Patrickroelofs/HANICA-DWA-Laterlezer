@@ -4,11 +4,12 @@ import ScrollToTop from 'react-scroll-up';
 
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import axios from 'axios';
+import moment from 'moment';
 
 function FullArticle({ html, id }) {
   window.onscroll = function () {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-      axios.put(`http://localhost:3000/api/articles/${id}`);
+      axios.post(`http://localhost:3000/api/articles/${id}/status`, { readAt: moment().toISOString() });
     }
   };
 

@@ -5,24 +5,80 @@
 const articleController = require('../articleController');
 
 describe('Article Controller Tests', () => {
-  test('Get all the articles', () => {
-    const user = {
-      articles: [
-        {},
-        {},
-      ],
+  test('Get all the articles', async () => {
+    const user = { _id: 12 };
+    const query = {
+      range: 'null',
+      tags: '',
+      status: 'undefined',
     };
     const json = jest.fn(() => {});
-    articleController.getArticles({ user }, { json }).then(() => {
-      expect(json.mock.calls.length).toBe(1);
-      expect(json.mock.calls[0][0]).toMatchObject([
-        { },
-        { },
-      ]);
-    });
+    const articles = [{ title: 'test' }];
+    const model = {
+      aggregate: jest.fn(() => ({
+        exec: () => articles,
+      })),
+    };
+    articleController.setUserModel(model);
+    await articleController.getArticles({ user, query }, { json });
+    expect(model.aggregate.mock.calls.length).toBe(1);
+    expect(model.aggregate.mock.calls[0][0][0].$unwind).toBe('$articles');
+    expect(model.aggregate.mock.calls[0][0][1].$match._id).toBe(user._id);
+    expect(model.aggregate.mock.calls[0][0][1].$match['articles.archivedAt']).toBe(undefined);
+    expect(json.mock.calls.length).toBe(1);
+    expect(json.mock.calls[0][0]).toMatchObject(articles);
   });
 
-  test('Get one article', () => {
+  test('Get all the archived articles', async () => {
+    const user = { _id: 12 };
+    const query = {
+      range: 'null',
+      tags: '',
+      status: 'archived',
+    };
+    const json = jest.fn(() => {});
+    const articles = [{ title: 'test' }];
+    const model = {
+      aggregate: jest.fn(() => ({
+        exec: () => articles,
+      })),
+    };
+    articleController.setUserModel(model);
+    await articleController.getArticles({ user, query }, { json });
+    expect(model.aggregate.mock.calls.length).toBe(1);
+    expect(model.aggregate.mock.calls[0][0][0].$unwind).toBe('$articles');
+    expect(model.aggregate.mock.calls[0][0][1].$match._id).toBe(user._id);
+    expect(model.aggregate.mock.calls[0][0][1].$match['articles.archivedAt'].$lte).toBeInstanceOf(Date);
+    expect(json.mock.calls.length).toBe(1);
+    expect(json.mock.calls[0][0]).toMatchObject(articles);
+  });
+
+  test('Get all the articles in range', async () => {
+    const user = { _id: 12 };
+    const query = {
+      range: 'today',
+      tags: '',
+      status: 'undefined',
+    };
+    const json = jest.fn(() => {});
+    const articles = [{ title: 'test' }];
+    const model = {
+      aggregate: jest.fn(() => ({
+        exec: () => articles,
+      })),
+    };
+    articleController.setUserModel(model);
+    await articleController.getArticles({ user, query }, { json });
+    expect(model.aggregate.mock.calls.length).toBe(1);
+    expect(model.aggregate.mock.calls[0][0][0].$unwind).toBe('$articles');
+    expect(model.aggregate.mock.calls[0][0][1].$match._id).toBe(user._id);
+    expect(model.aggregate.mock.calls[0][0][1].$match['articles.createdAt'].$lte).toBeInstanceOf(Date);
+    expect(model.aggregate.mock.calls[0][0][1].$match['articles.createdAt'].$gte).toBeInstanceOf(Date);
+    expect(json.mock.calls.length).toBe(1);
+    expect(json.mock.calls[0][0]).toMatchObject(articles);
+  });
+
+  test('Get one article', async () => {
     const user = {
       articles: [
         { _id: 12 },
@@ -30,98 +86,128 @@ describe('Article Controller Tests', () => {
       ],
     };
     const json = jest.fn(() => {});
-    articleController.getArticle({ user, params: { id: '12' } }, { json }).then(() => {
-      expect(json.mock.calls.length).toBe(1);
-      expect(json.mock.calls[0][0]).toMatchObject({ _id: 12 });
-    });
+    await articleController.getArticle({ user, params: { id: '12' } }, { json });
+    expect(json.mock.calls.length).toBe(1);
+    expect(json.mock.calls[0][0]).toMatchObject({ _id: 12 });
   });
 
   test('Fetches site and saves successfully', async () => {
-    const createArticle = jest.fn((html, url) => 1 + 1);
-    const user = { createArticle, save: (fn) => fn(false) };
+    const updateOrCreateArticle = jest.fn((html, url) => 1 + 1);
+    const user = { updateOrCreateArticle, save: (fn) => fn(false), articles: [{ _id: 't' }] };
     const req = { body: { url: 'https://nl.lipsum.com/' }, user };
-    const send = jest.fn(() => 't');
+    const status = jest.fn(() => ({ send: jest.fn(), json: jest.fn() }));
+    const next = jest.fn(() => {});
 
-    articleController.createArticlePost(req, {
-      status: jest.fn(() => ({ send: jest.fn(), json: jest.fn() })),
+    await articleController.createArticlePost(req, {
+      status,
       send: jest.fn(),
-    }).then(() => {
-      expect(createArticle.mock.calls.length).toBe(1);
-      expect(createArticle.mock.calls[0][0]).toContain('<!DOCTYPE html>');
-      expect(createArticle.mock.calls[0][1]).toBe('https://nl.lipsum.com/');
+    }, next);
+    expect(updateOrCreateArticle.mock.calls.length).toBe(1);
+    expect(updateOrCreateArticle.mock.calls[0][0]).toContain('<html>');
+    expect(updateOrCreateArticle.mock.calls[0][1]).toBe('https://nl.lipsum.com/');
 
-      expect(send.mock.calls.length).toBe(1);
-      expect(send.mock.calls[0][0]).toBe('Article created');
-    });
+    expect(status.mock.calls.length).toBe(1);
+    expect(status.mock.calls[0][0]).toBe(201);
+
+    expect(next.mock.calls.length).toBe(0);
   });
 
-  test('Did not save', () => {
-    const req = { body: { url: 'https://nl.lipsum.com/' } };
-    const createArticle = jest.fn((html, url) => 1 + 1);
-    const findOne = jest.fn(() => {}).mockResolvedValue({ createArticle, save: (fn) => fn(true) });
-    const userModel = { findOne };
+  test('Did not save', async () => {
+    const updateOrCreateArticle = jest.fn((html, url) => 1 + 1);
+    const user = { updateOrCreateArticle, save: jest.fn((fn) => fn(true)) };
     const status = jest.fn(() => ({ send: () => {} }));
+    const next = jest.fn(() => {});
+    const req = { body: { url: 'https://nl.lipsum.com/' }, user };
 
-    articleController.createArticlePost(req, { status }).then(() => {
-      expect(findOne.mock.calls.length).toBe(1);
+    await articleController.createArticlePost(req, { status }, next);
+    expect(user.save.mock.calls.length).toBe(1);
 
-      expect(createArticle.mock.calls.length).toBe(1);
-      expect(createArticle.mock.calls[0][0]).toContain('<!DOCTYPE html>');
-      expect(createArticle.mock.calls[0][1]).toBe('https://nl.lipsum.com/');
+    expect(updateOrCreateArticle.mock.calls.length).toBe(1);
+    expect(updateOrCreateArticle.mock.calls[0][0]).toContain('<html>');
+    expect(updateOrCreateArticle.mock.calls[0][1]).toBe('https://nl.lipsum.com/');
 
-      expect(status.mock.calls.length).toBe(400);
-    });
+    expect(status.mock.calls.length).toBe(1);
+    expect(status.mock.calls[0][0]).toBe(400);
+    expect(next.mock.calls.length).toBe(0);
   });
 
-  test('Get filtered articles with one tag title', () => {
-    const req = {
-      query: { tags: 'Politiek' },
-      user: {
-        articles: [
-          {
-            title: 'Test article',
-            tags: [{ title: 'Politiek' }],
-          },
-          {
-            title: 'Test article 2',
-            tags: [{ title: 'Sport' }],
-          },
-        ],
-      },
+  test('Get filtered articles with one tag title', async () => {
+    const user = { _id: 12 };
+    const query = {
+      range: 'null',
+      tags: 'Politiek',
+      status: 'undefined',
     };
-    const res = { json: jest.fn(() => {}) };
-    articleController.getArticles(req, res).then(() => {
-      expect(res.json.mock.calls.length).toBe(1);
-      expect(res.json.mock.calls[0][0].length).toEqual(1);
-      expect(res.json.mock.calls[0][0][0].title).toEqual('Test article');
-    });
-  });
-
-  test('Get filtered articles with two tag titles', () => {
-    const req = {
-      query: { tags: 'Sport,Nieuws' },
-      user: {
-        articles: [
-          {
-            title: 'Test article',
-            tags: [{ title: 'Politiek' }],
-          },
-          {
-            title: 'Test article 2',
-            tags: [{ title: 'Sport' }, { title: 'Nieuws' }],
-          },
-        ],
+    const json = jest.fn(() => {});
+    const articles = [
+      {
+        title: 'Test article',
+        tags: [{ title: 'Politiek' }],
       },
+      {
+        title: 'Test article 2',
+        tags: [{ title: 'Sport' }],
+      },
+    ];
+    const model = {
+      aggregate: jest.fn(() => ({
+        exec: () => articles,
+      })),
     };
-    const res = { json: jest.fn(() => {}) };
-    articleController.getArticles(req, res).then(() => {
-      expect(res.json.mock.calls.length).toBe(1);
-      expect(res.json.mock.calls[0][0].length).toEqual(1);
-      expect(res.json.mock.calls[0][0][0].title).toEqual('Test article 2');
-    });
+    articleController.setUserModel(model);
+    await articleController.getArticles({ user, query }, { json });
+    expect(model.aggregate.mock.calls.length).toBe(1);
+    expect(model.aggregate.mock.calls[0][0][0].$unwind).toBe('$articles');
+    expect(model.aggregate.mock.calls[0][0][1].$match._id).toBe(user._id);
+    expect(model.aggregate.mock.calls[0][0][1].$match['articles.archivedAt']).toBe(undefined);
+    expect(json.mock.calls.length).toBe(1);
+    expect(json.mock.calls[0][0]).toMatchObject([
+      {
+        title: 'Test article',
+        tags: [{ title: 'Politiek' }],
+      },
+    ]);
   });
 
-  test('update archived status', () => {
+  test('Get filtered articles with two tag titles', async () => {
+    const user = { _id: 12 };
+    const query = {
+      range: 'null',
+      tags: 'Politiek,News',
+      status: 'undefined',
+    };
+    const json = jest.fn(() => {});
+    const articles = [
+      {
+        title: 'Test article',
+        tags: [{ title: 'Politiek' }, { title: 'News' }],
+      },
+      {
+        title: 'Test article 2',
+        tags: [{ title: 'Sport' }],
+      },
+    ];
+    const model = {
+      aggregate: jest.fn(() => ({
+        exec: () => articles,
+      })),
+    };
+    articleController.setUserModel(model);
+    await articleController.getArticles({ user, query }, { json });
+    expect(model.aggregate.mock.calls.length).toBe(1);
+    expect(model.aggregate.mock.calls[0][0][0].$unwind).toBe('$articles');
+    expect(model.aggregate.mock.calls[0][0][1].$match._id).toBe(user._id);
+    expect(model.aggregate.mock.calls[0][0][1].$match['articles.archivedAt']).toBe(undefined);
+    expect(json.mock.calls.length).toBe(1);
+    expect(json.mock.calls[0][0]).toMatchObject([
+      {
+        title: 'Test article',
+        tags: [{ title: 'Politiek' }, { title: 'News' }],
+      },
+    ]);
+  });
+
+  test('update archived status', async () => {
     const archive = jest.fn(() => {});
     const read = jest.fn(() => {});
 
@@ -133,6 +219,7 @@ describe('Article Controller Tests', () => {
             read,
           }),
         },
+        save: jest.fn(() => {}),
       },
       body: {
         archivedAt: '11-12-2020',
@@ -141,19 +228,18 @@ describe('Article Controller Tests', () => {
     const res = {
       json: jest.fn(() => {}),
     };
-    articleController.updateStatus(req, res).then(() => {
-      expect(archive.mock.calls.length).toBe(1);
-      expect(archive.mock.calls[0][0]).toBe('11-12-2020');
-      expect(res.json.mock.calls.length).toBe(1);
-      expect(res.json.mock.calls[0][0]).toBe({
-        archive,
-        read,
-      });
-      expect(read.mock.calls.length).toBe(0);
+    await articleController.updateStatus(req, res);
+    expect(archive.mock.calls.length).toBe(1);
+    expect(archive.mock.calls[0][0]).toBe('11-12-2020');
+    expect(res.json.mock.calls.length).toBe(1);
+    expect(res.json.mock.calls[0][0]).toMatchObject({
+      archive,
+      read,
     });
+    expect(read.mock.calls.length).toBe(0);
   });
 
-  test('update read status', () => {
+  test('update read status', async () => {
     const archive = jest.fn(() => {});
     const read = jest.fn(() => {});
 
@@ -165,6 +251,7 @@ describe('Article Controller Tests', () => {
             read,
           }),
         },
+        save: jest.fn(() => {}),
       },
       body: {
         readAt: '11-12-2020',
@@ -173,19 +260,18 @@ describe('Article Controller Tests', () => {
     const res = {
       json: jest.fn(() => {}),
     };
-    articleController.updateStatus(req, res).then(() => {
-      expect(read.mock.calls.length).toBe(1);
-      expect(read.mock.calls[0][0]).toBe('11-12-2020');
-      expect(res.json.mock.calls.length).toBe(1);
-      expect(res.json.mock.calls[0][0]).toBe({
-        archive,
-        read,
-      });
-      expect(archive.mock.calls.length).toBe(0);
+    await articleController.updateStatus(req, res);
+    expect(read.mock.calls.length).toBe(1);
+    expect(read.mock.calls[0][0]).toBe('11-12-2020');
+    expect(res.json.mock.calls.length).toBe(1);
+    expect(res.json.mock.calls[0][0]).toMatchObject({
+      archive,
+      read,
     });
+    expect(archive.mock.calls.length).toBe(0);
   });
 
-  test('update archived status', () => {
+  test('update archived status', async () => {
     const archive = jest.fn(() => {});
     const read = jest.fn(() => {});
 
@@ -197,6 +283,7 @@ describe('Article Controller Tests', () => {
             read,
           }),
         },
+        save: jest.fn(() => {}),
       },
       body: {
         archivedAt: null,
@@ -205,19 +292,18 @@ describe('Article Controller Tests', () => {
     const res = {
       json: jest.fn(() => {}),
     };
-    articleController.updateStatus(req, res).then(() => {
-      expect(archive.mock.calls.length).toBe(1);
-      expect(archive.mock.calls[0][0]).toBe(null);
-      expect(res.json.mock.calls.length).toBe(1);
-      expect(res.json.mock.calls[0][0]).toBe({
-        archive,
-        read,
-      });
-      expect(read.mock.calls.length).toBe(0);
+    await articleController.updateStatus(req, res);
+    expect(archive.mock.calls.length).toBe(1);
+    expect(archive.mock.calls[0][0]).toBe(null);
+    expect(res.json.mock.calls.length).toBe(1);
+    expect(res.json.mock.calls[0][0]).toMatchObject({
+      archive,
+      read,
     });
+    expect(read.mock.calls.length).toBe(0);
   });
 
-  test('update read status', () => {
+  test('update read status', async () => {
     const archive = jest.fn(() => {});
     const read = jest.fn(() => {});
 
@@ -229,6 +315,7 @@ describe('Article Controller Tests', () => {
             read,
           }),
         },
+        save: jest.fn(() => {}),
       },
       body: {
         readAt: null,
@@ -237,16 +324,15 @@ describe('Article Controller Tests', () => {
     const res = {
       json: jest.fn(() => {}),
     };
-    articleController.updateStatus(req, res).then(() => {
-      expect(read.mock.calls.length).toBe(1);
-      expect(read.mock.calls[0][0]).toBe(null);
-      expect(res.json.mock.calls.length).toBe(1);
-      expect(res.json.mock.calls[0][0]).toBe({
-        archive,
-        read,
-      });
-      expect(archive.mock.calls.length).toBe(0);
+    await articleController.updateStatus(req, res);
+    expect(read.mock.calls.length).toBe(1);
+    expect(read.mock.calls[0][0]).toBe(null);
+    expect(res.json.mock.calls.length).toBe(1);
+    expect(res.json.mock.calls[0][0]).toMatchObject({
+      archive,
+      read,
     });
+    expect(archive.mock.calls.length).toBe(0);
   });
 
   test('update priority status', () => {

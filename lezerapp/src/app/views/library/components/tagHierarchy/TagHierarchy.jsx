@@ -9,7 +9,7 @@ import {
 } from '../../../../../store/tagSlice';
 import NewTagForm from '../../../sharedcomponents/newTag/NewTagForm';
 
-const TagHierarchy = () => {
+const TagHierarchy = ({ isStatic = false }) => {
   const tags = useSelector(selectTags);
   const selectedTags = useSelector(selectSelectedTags);
 
@@ -49,28 +49,30 @@ const TagHierarchy = () => {
   const isSelected = (tag) => selectedTags.find((t) => tag._id.toString() === t._id.toString());
 
   const selectTag = (tagss) => {
-    if (isSelected(tagss[0])) {
-      const childrenIds = (tag) => tag.children.map((t) => [
-        t._id,
-        ...childrenIds(t),
-      ]).flat();
-      const childIds = childrenIds(tagss[0]);
-      const parentIds = tagss.filter((tag) => {
-        const hasSelectedChild = childrenIds(tag).filter((id) => {
-          if (!tagss.find((selTag) => id === selTag._id) && !childIds.includes(id)) {
-            return selectedTags.find((selTag) => id === selTag._id.toString());
-          }
-          return false;
-        });
-        return hasSelectedChild.length === 0;
-      }).map((tag) => tag._id.toString());
-      const ids = [...childIds, ...parentIds];
-      dispatch(setSelectedTags(selectedTags.filter((t) => !ids.includes(t._id))));
-    } else {
-      dispatch(setSelectedTags([
-        ...selectedTags,
-        ...tagss,
-      ]));
+    if (!isStatic) {
+      if (isSelected(tagss[0])) {
+        const childrenIds = (tag) => tag.children.map((t) => [
+          t._id,
+          ...childrenIds(t),
+        ]).flat();
+        const childIds = childrenIds(tagss[0]);
+        const parentIds = tagss.filter((tag) => {
+          const hasSelectedChild = childrenIds(tag).filter((id) => {
+            if (!tagss.find((selTag) => id === selTag._id) && !childIds.includes(id)) {
+              return selectedTags.find((selTag) => id === selTag._id.toString());
+            }
+            return false;
+          });
+          return hasSelectedChild.length === 0;
+        }).map((tag) => tag._id.toString());
+        const ids = [...childIds, ...parentIds];
+        dispatch(setSelectedTags(selectedTags.filter((t) => !ids.includes(t._id))));
+      } else {
+        dispatch(setSelectedTags([
+          ...selectedTags,
+          ...tagss,
+        ]));
+      }
     }
   };
 
@@ -86,7 +88,7 @@ const TagHierarchy = () => {
         parents.push(t);
         pickedTag(parents);
       };
-      const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
+      const result = [(<TagItem tag={t} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
       if (t.children) {
         result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
       }
@@ -100,7 +102,7 @@ const TagHierarchy = () => {
       parents.push(t);
       selectTag(parents);
     };
-    const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
+    const result = [(<TagItem tag={t} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
     if (t.children) {
       result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
     }

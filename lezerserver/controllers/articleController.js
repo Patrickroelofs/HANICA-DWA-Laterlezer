@@ -2,32 +2,74 @@
 const moment = require('moment');
 const { parseHTML } = require('../utils/HTMLParser');
 const response = require('../utils/response');
-const _Article = require('../models/article');
+let _User = require('../models/user');
 
 exports.getArticles = async (req, res) => {
+  const query = [
+    { $unwind: '$articles' },
+    {
+      $match: {
+        _id: req.user._id,
+        'articles.archivedAt': undefined,
+      },
+    },
+    {
+      $project: {
+        _id: '$articles._id',
+        title: '$articles.title',
+        description: '$articles.description',
+        image: '$articles.image',
+        tags: '$articles.tags',
+        archivedAt: '$articles.archivedAt',
+        readAt: '$articles.readAt',
+      },
+    },
+    {
+      $sort: {
+        _id: -1,
+      },
+    },
+  ];
+  if (req.query.range !== 'null') {
+    const range = req.query.range === 'today' ? 'day' : req.query.range;
+    query[1].$match['articles.createdAt'] = {
+      $gte: moment().subtract(1, range).toDate(),
+      $lte: moment().toDate(),
+    };
+  }
+  if (req.query.status === 'archived') {
+    query[1].$match['articles.archivedAt'] = {
+      $lte: moment().toDate(),
+    };
+  }
   const tags = req.query.tags && req.query.tags.split(',');
-  const articles = req.user.articles.filter((article) => {
-    if (req.query.status) {
-      return article.checkStatus(req.query.status);
-    }
-    return !article.archivedAt;
-  }).filter((article) => {
-    if (req.query.range) {
-      return article.checkRange(req.query.range);
-    }
-    return true;
-  }).filter(_Article.filterWithTags(tags)).sort((a, b) => b.createdAt - a.createdAt)
-    .map((article) => {
-      const parsedArticle = article;
-      parsedArticle.html = undefined;
-      return parsedArticle;
+  if (tags.length > 0) {
+    query[1].$match['articles.tags'] = {
+      $elemMatch: {
+        title: {
+          $in: tags,
+        },
+      },
+    };
+  }
+  const articles = (await _User.aggregate(query).exec()).filter((a) => {
+    if (!tags) return true;
+    let counter = 0;
+    tags.forEach((filterTag) => {
+      a.tags.forEach((articleTag) => {
+        if (filterTag === articleTag.title) {
+          counter += 1;
+        }
+      });
     });
+    return counter === tags.length;
+  });
+
   res.json(articles);
 };
 
 exports.getArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
-  req.user.save();
 
   res.json(article);
 };
@@ -102,3 +144,5 @@ exports.readArticle = async (req, res, next) => {
     next(e);
   }
 };
+
+exports.setUserModel = (model) => { _User = model; };

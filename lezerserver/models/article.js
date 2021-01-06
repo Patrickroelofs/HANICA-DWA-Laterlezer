@@ -44,19 +44,6 @@ articleSchema.methods.checkStatus = function (status) {
   return !this.archivedAt;
 };
 
-articleSchema.methods.checkRange = function (range) {
-  if (range === 'today') {
-    return moment(this.createdAt).diff(moment(), 'days') === 0;
-  } if (range === 'week') {
-    return moment(this.createdAt).diff(moment(), 'weeks') === 0;
-  } if (range === 'month') {
-    return moment(this.createdAt).diff(moment(), 'months') === 0;
-  } if (range === 'year') {
-    return moment(this.createdAt).diff(moment(), 'years') === 0;
-  }
-  return true;
-};
-
 articleSchema.statics.filterWithTags = function (tags) {
   return (a) => {
     if (!tags) return true;

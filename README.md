@@ -1,4 +1,4 @@
-# [Caracal](https://nl.wikipedia.org/wiki/Caracal_(dier))
+# [Laterlezer - Caracal](https://nl.wikipedia.org/wiki/Caracal_(dier))
 
 ![image](https://github.com/HANICA-DWA/sep2020-project-caracal/raw/c366e3cb0c201c7e2425d6f604ff91140915a16a/documents/bsFEmSzQqr.gif?raw=true)
 
@@ -8,7 +8,7 @@ LaterLezer is een tool die het lezen van artikelen beschikbaar en gemakkelijk ma
 
 ## Installatie
 
-Een gedetailleerd uitleg met beelden wordt besproken in de [Software Guidebook](https://github.com/HANICA-DWA/sep2020-project-caracal/wiki/Software-Guidebook#operation-and-support).
+Een gedetailleerd uitleg met beelden wordt besproken in de [Software Guidebook; Operation & Support](https://github.com/HANICA-DWA/sep2020-project-caracal/wiki/Software-Guidebook#operation-and-support) hoofdstuk.
 
 ### Server
 

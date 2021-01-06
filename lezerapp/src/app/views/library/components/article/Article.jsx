@@ -35,7 +35,7 @@ function Article({ article }) {
 
   return (
     <Link to={`/app/${_id}`} onClick={() => dispatch(setCurrentArticle(article))}>
-      <article className="grid grid-cols-4 mt-6">
+      <article className={`grid grid-cols-4 mt-4 p-2 ${article.prioritizedAt && ' bg-gray-200 rounded-xl'}`}>
         <div className={`${article.readAt && 'opacity-70 filter-grayscale'}`}>
           <Thumbnail url={image || '/not-found.png'} />
         </div>

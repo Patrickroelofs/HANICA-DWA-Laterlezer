@@ -86,7 +86,7 @@ const TagHierarchy = () => {
         parents.push(t);
         pickedTag(parents);
       };
-      const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} />)];
+      const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
       if (t.children) {
         result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
       }
@@ -100,7 +100,7 @@ const TagHierarchy = () => {
       parents.push(t);
       selectTag(parents);
     };
-    const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} />)];
+    const result = [(<TagItem tag={t} handleClick={handleClick} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
     if (t.children) {
       result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
     }

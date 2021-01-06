@@ -24,6 +24,9 @@ const Articles = () => {
   useEffect(() => {
     let description = '';
     switch (status) {
+      case 'priority':
+        description = 'All your prioritized articles';
+        break;
       case 'archived':
         description = 'All your archived articles';
         break;

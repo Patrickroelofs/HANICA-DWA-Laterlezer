@@ -4,6 +4,7 @@
 import React from 'react';
 import AddTagToArticle from './addTagToArticle/AddTagToArticle';
 import ArchiveArticle from './ArchiveArticle/ArchiveArticle';
+import PrioritizeArticle from './PrioritizeArticle/PrioritizeArticle';
 
 function ArticleTopBar() {
   return (
@@ -14,6 +15,7 @@ function ArticleTopBar() {
       <div id="center" className="flex justify-center">
         <AddTagToArticle />
         <ArchiveArticle />
+        <PrioritizeArticle />
       </div>
       <div id="right" className="flex justify-right">
         {/* Right */}

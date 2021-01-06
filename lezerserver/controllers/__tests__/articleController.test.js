@@ -334,4 +334,68 @@ describe('Article Controller Tests', () => {
     });
     expect(archive.mock.calls.length).toBe(0);
   });
+
+  test('update priority status', () => {
+    const priority = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            priority,
+            read,
+          }),
+        },
+      },
+      body: {
+        prioritizedAt: '11-12-2020',
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(priority.mock.calls.length).toBe(1);
+      expect(priority.mock.calls[0][0]).toBe('11-12-2020');
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        priority,
+        read,
+      });
+      expect(read.mock.calls.length).toBe(0);
+    });
+  });
+
+  test('update priority status', () => {
+    const priority = jest.fn(() => {});
+    const read = jest.fn(() => {});
+
+    const req = {
+      user: {
+        articles: {
+          find: () => ({
+            priority,
+            read,
+          }),
+        },
+      },
+      body: {
+        prioritizedAt: null,
+      },
+    };
+    const res = {
+      json: jest.fn(() => {}),
+    };
+    articleController.updateStatus(req, res).then(() => {
+      expect(priority.mock.calls.length).toBe(1);
+      expect(priority.mock.calls[0][0]).toBe('11-12-2020');
+      expect(res.json.mock.calls.length).toBe(1);
+      expect(res.json.mock.calls[0][0]).toBe({
+        priority,
+        read,
+      });
+      expect(read.mock.calls.length).toBe(0);
+    });
+  });
 });

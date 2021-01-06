@@ -5,6 +5,7 @@ import {
 import ArchiveIcon from '@material-ui/icons/Archive';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import { useDispatch } from 'react-redux';
+import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import TagHierarchy from '../../library/components/tagHierarchy/TagHierarchy';
 import { setSelectedTags } from '../../../../store/tagSlice';
 import { useQuery } from '../../../../utils/helpers';
@@ -29,15 +30,21 @@ function Nav({ staticTags = false }) {
     <section id="navList" className="font-sans text-base">
       <ul>
         <Link to="/app" onClick={clickHandler}>
-          <li className={`hover:bg-gray-100 p-3 ${!status ? 'bg-gray-200 font-bold' : null} align-middle`}>
+          <li className={`hover:bg-gray-100 p-3 ${!status && 'bg-gray-200 font-bold'} align-middle`}>
             <AllInboxIcon className="opacity-60 mr-4 align-middle" />
             All
           </li>
         </Link>
         <Link to="/app/status/archived" onClick={clickHandler}>
-          <li className={`hover:bg-gray-100 p-3 ${status === 'archived' ? 'bg-gray-200 font-bold' : null} align-middle`}>
+          <li className={`hover:bg-gray-100 p-3 ${status === 'archived' && 'bg-gray-200 font-bold'} align-middle`}>
             <ArchiveIcon className="opacity-60 mr-4 align-middle" />
             Archived
+          </li>
+        </Link>
+        <Link to="/app/status/priority" onClick={clickHandler}>
+          <li className={`hover:bg-gray-100 p-3 ${status === 'priority' && 'bg-gray-200 font-bold'} align-middle`}>
+            <PriorityHighIcon className="opacity-60 mr-4 align-middle" />
+            Priority
           </li>
         </Link>
       </ul>

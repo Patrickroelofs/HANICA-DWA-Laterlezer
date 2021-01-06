@@ -61,29 +61,32 @@ function TagListSelect({ onSave }) {
 
   return (
     <>
-      <div className="mx-3">
-        {tags.map((tag) => (tag.children.length > 0
-          ? <TagParent parent={tag} isSelected={isSelected} onClick={selectTags} />
-          : (
-            <button
-              type="button"
-              key={tag._id}
-              className={`mr-1 mt-1 focus:outline-none ${isSelected(tag) ? '' : 'opacity-20'}`}
-              onClick={() => selectTags([tag])}
-              value={tag._id}
-            >
-              <TagPill data={tag} />
-            </button>
-          )))}
+
+      {tags.map((tag) => (tag.children.length > 0
+        ? <TagParent parent={tag} isSelected={isSelected} onClick={selectTags} />
+        : (
+          <button
+            type="button"
+            key={tag._id}
+            className={`mr-1 mt-1 focus:outline-none ${isSelected(tag) ? '' : 'opacity-20'}`}
+            onClick={() => selectTags([tag])}
+            value={tag._id}
+          >
+            <TagPill data={tag} />
+          </button>
+        )))}
+
+      <div className="sticky fixed bottom-24 float-right">
+        <button
+          id="saveTagsToArticle"
+          type="submit"
+          onClick={() => postTags()}
+          className="mt-2 mx-auto block h-9 px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+        >
+          Save Article
+        </button>
       </div>
-      <button
-        id="saveTagsToArticle"
-        type="submit"
-        onClick={() => postTags()}
-        className="mt-2 mx-auto block h-9 px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
-      >
-        Save Article
-      </button>
+
     </>
   );
 }

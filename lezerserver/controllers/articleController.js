@@ -76,14 +76,18 @@ exports.getArticle = async (req, res) => {
 
 exports.updateStatus = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
+
   if (req.body.readAt !== undefined) {
     article.read(req.body.readAt);
   }
   if (req.body.archivedAt !== undefined) {
     article.archive(req.body.archivedAt);
   }
-  req.user.save();
+  if (req.body.prioritizedAt !== undefined) {
+    article.prioritize(req.body.prioritizedAt);
+  }
 
+  req.user.save();
   res.json(article);
 };
 

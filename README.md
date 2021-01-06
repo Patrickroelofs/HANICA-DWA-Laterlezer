@@ -6,6 +6,12 @@
 
 LaterLezer is een tool die het lezen van artikelen beschikbaar en gemakkelijk maakt voor onderzoekers. Dit doet LaterLezer door de gebruiker de mogelijkheid te geven artikelen te kunnen toevoegen aan een persoonlijke bibliotheek, deze artikelen, zoals een website, worden door het systeem opgeschoond en verwijdert van onnodige data zoals advertenties en pagina styling. Met LaterLezer kan de gebruiker ervoor zorgen dat de artikelen die zijn opgeslagen op een logische volgorde gesorteerd worden door middel van folders en tags. LaterLezer heeft ook een browserextensie daarmee zal het voor de gebruiker makkelijker worden om websites te kunnen opslaan in een klik en ze in zijn persoonlijke bibliotheek te zetten.
 
+
+
+## Project
+
+Dit project is gemaakt als onderdeel van de ICT studie op de [HAN](https://www.han.nl/), de originele [opdracht](https://github.com/HANICA-DWA/sep2020-project-caracal/blob/new-readme/opdracht/LaterLezer.docx) beschrijft het idee dat vanuit de opdrachtgever kwam. Het 9 weken durende project heeft geresulteerd in een product dat hier opgeslagen staat.
+
 ## Installatie
 
 Een gedetailleerd uitleg met beelden wordt besproken in de [Software Guidebook; Operation & Support](https://github.com/HANICA-DWA/sep2020-project-caracal/wiki/Software-Guidebook#operation-and-support) hoofdstuk.

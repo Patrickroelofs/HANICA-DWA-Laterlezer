@@ -20,7 +20,7 @@ function PrioritizeArticle() {
   };
 
   useEffect(() => {
-    if (article.prioritizedAt) setPriority(true);
+    if (article && article.prioritizedAt) setPriority(true);
   }, []);
 
   return (

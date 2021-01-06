@@ -20,7 +20,7 @@ function ArchiveArticle() {
   };
 
   useEffect(() => {
-    if (article.archivedAt) setArchived(true);
+    if (article && article.archivedAt) setArchived(true);
   }, []);
 
   return (

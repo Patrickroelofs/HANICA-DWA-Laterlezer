@@ -16,6 +16,7 @@ function NewTagForm({
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
+    e.stopPropagation();
     e.preventDefault();
     if (mode === 'edit') {
       const newTag = {

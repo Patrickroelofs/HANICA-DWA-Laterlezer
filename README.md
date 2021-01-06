@@ -10,6 +10,8 @@ LaterLezer is een tool die het lezen van artikelen beschikbaar en gemakkelijk ma
 
 Een gedetailleerd uitleg met beelden wordt besproken in de [Software Guidebook; Operation & Support](https://github.com/HANICA-DWA/sep2020-project-caracal/wiki/Software-Guidebook#operation-and-support) hoofdstuk.
 
+*Zorg ervoor dat de server, client en extension op eigen terminals draaien, de extension is optioneel en is niet verplicht in de werking van de app.*
+
 ### Server
 
 ```

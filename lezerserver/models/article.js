@@ -17,6 +17,7 @@ const articleSchema = Schema({
   createdAt: Date,
   readAt: Date,
   archivedAt: Date,
+  prioritizedAt: Date,
 });
 
 articleSchema.methods.addTag = function (tag) { this.tags = [...this.tags, tag]; };
@@ -37,9 +38,22 @@ articleSchema.methods.read = function (date) {
   }
 };
 
+articleSchema.methods.prioritize = function (date) {
+  if (date !== undefined) {
+    this.prioritizedAt = date;
+  } else {
+    this.prioritizedAt = moment();
+  }
+};
+
 articleSchema.methods.checkStatus = function (status) {
   if (status === 'archived') {
     return this.archivedAt;
+  }
+  if (status === 'priority') {
+    if (!this.archivedAt) {
+      return this.prioritizedAt;
+    }
   }
   return !this.archivedAt;
 };

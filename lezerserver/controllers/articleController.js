@@ -134,15 +134,4 @@ exports.updateArticle = async (req, res) => {
   res.json(article);
 };
 
-exports.readArticle = async (req, res, next) => {
-  try {
-    const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
-    article.read();
-    await req.user.save();
-    res.status(202).json();
-  } catch (e) {
-    next(e);
-  }
-};
-
 exports.setUserModel = (model) => { _User = model; };

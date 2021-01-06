@@ -19,8 +19,7 @@ router.route('/articles')
   .post(articleController.createArticlePost);
 router.route('/articles/:id')
   .get(articleController.getArticle)
-  .post(articleController.updateArticle)
-  .put(articleController.readArticle);
+  .post(articleController.updateArticle);
 router.route('/articles/:id/status')
   .post(articleController.updateStatus);
 

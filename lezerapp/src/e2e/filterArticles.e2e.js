@@ -15,8 +15,8 @@ describe('e2e tests filter articles', () => {
   });
 
   test('User (de)selects a tag and library gets filtered', async () => {
-    let selectedTagTitle = await page.$eval('#navList > .mx-4 > #compositions-list > .transform:nth-child(1) > .group', (element) => element.innerText);
-    await page.click('#navList > .mx-4 > #compositions-list > .transform:nth-child(1) > .group');
+    let selectedTagTitle = await page.$eval('#compositions-list > .border-l-2:nth-child(2) > .relative:nth-child(3) > .group > .w-6', (element) => element.innerText);
+    await page.click('#compositions-list > .border-l-2:nth-child(2) > .relative:nth-child(3) > .group > .w-6');
     await page.waitFor(3000);
     const data = await page.evaluate(() => {
       const lis = Array.from(document.querySelectorAll('.articleTags span'));
@@ -24,9 +24,9 @@ describe('e2e tests filter articles', () => {
     });
     expect(data.includes(selectedTagTitle));
     // After this check, system deselects the current tag and selects another tag
-    await page.click('#navList > .mx-4 > #compositions-list > .bg-gray-200 > .group');
-    selectedTagTitle = await page.$eval('#navList > .mx-4 > #compositions-list > .transform:nth-child(5) > .group', (element) => element.innerText);
-    await page.click('#navList > .mx-4 > #compositions-list > .transform:nth-child(5) > .group');
+    await page.click('#compositions-list > .border-l-2:nth-child(2) > .relative:nth-child(3) > .group > .w-6');
+    selectedTagTitle = await page.$eval('#compositions-list > .border-l-2 > .border-l-2 > .relative:nth-child(3) > .group', (element) => element.innerText);
+    await page.click('#compositions-list > .border-l-2 > .border-l-2 > .relative:nth-child(3) > .group');
     await page.waitFor(3000);
     const data2 = await page.evaluate(() => {
       const lis = Array.from(document.querySelectorAll('.articleTags span'));

@@ -189,6 +189,24 @@ describe('User Model Tests', () => {
     }
   });
 
+  test('User method createTag should throw an error tag title already exists', async () => {
+    try {
+      const testUser = await User.getUserByUsername('stanhan');
+      const newTag = {
+        tag: {
+          _id: 32,
+          title: 'javascript',
+          color: '#00FF00',
+          children: [],
+        },
+      };
+      testUser.createTag(newTag);
+    } catch (error) {
+      expect(error.message).toEqual('Tag already exists.');
+      expect(error.status).toEqual(400);
+    }
+  });
+
   test('User method createTag should throw an error', async () => {
     try {
       const testUser = await User.getUserByUsername('stanhan');

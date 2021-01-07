@@ -20,6 +20,7 @@ module.exports = {
     'react',
   ],
   rules: {
+    'no-underscore-dangle': 0,
     'linebreak-style': 0,
     'react/prop-types': 0,
     'no-param-reassign': 0,

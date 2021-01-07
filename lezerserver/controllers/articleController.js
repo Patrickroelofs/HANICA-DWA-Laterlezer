@@ -1,50 +1,107 @@
+/* eslint-disable max-len */
 const moment = require('moment');
-const { lazifyImages } = require('../utils/HTMLParser');
+const { parseHTML } = require('../utils/HTMLParser');
 const response = require('../utils/response');
+let _User = require('../models/user');
 
 exports.getArticles = async (req, res) => {
-  const articles = req.user.articles.reverse().map((article) => {
-    const parsedArticle = article;
-    parsedArticle.html = undefined;
-    return parsedArticle;
-  }).filter((article) => {
-    if (req.query.status) {
-      if (req.query.status === 'today') {
-        return moment(article.createdAt).diff(moment(), 'days') === 0 && !article.archivedAt;
-      }
-      if (req.query.status === 'archived') {
-        return article.archivedAt;
-      }
-    }
-    return !article.archivedAt;
+  const query = [
+    { $unwind: '$articles' },
+    {
+      $match: {
+        _id: req.user._id,
+        'articles.archivedAt': undefined,
+      },
+    },
+    {
+      $project: {
+        _id: '$articles._id',
+        title: '$articles.title',
+        description: '$articles.description',
+        image: '$articles.image',
+        tags: '$articles.tags',
+        archivedAt: '$articles.archivedAt',
+        readAt: '$articles.readAt',
+        prioritizedAt: '$articles.prioritizedAt',
+      },
+    },
+    {
+      $sort: {
+        _id: -1,
+      },
+    },
+  ];
+  if (req.query.range !== 'null') {
+    const range = req.query.range === 'today' ? 'day' : req.query.range;
+    query[1].$match['articles.createdAt'] = {
+      $gte: moment().subtract(1, range).toDate(),
+      $lte: moment().toDate(),
+    };
+  }
+  if (req.query.status === 'archived') {
+    query[1].$match['articles.archivedAt'] = {
+      $lte: moment().toDate(),
+    };
+  }
+
+  if (req.query.status === 'priority') {
+    query[1].$match['articles.prioritizedAt'] = {
+      $lte: moment().toDate(),
+    };
+  }
+
+  const tags = req.query.tags && req.query.tags.split(',');
+  if (tags.length > 0) {
+    query[1].$match['articles.tags'] = {
+      $elemMatch: {
+        title: {
+          $in: tags,
+        },
+      },
+    };
+  }
+  const articles = (await _User.aggregate(query).exec()).filter((a) => {
+    if (!tags) return true;
+    let counter = 0;
+    tags.forEach((filterTag) => {
+      a.tags.forEach((articleTag) => {
+        if (filterTag === articleTag.title) {
+          counter += 1;
+        }
+      });
+    });
+    return counter === tags.length;
   });
+
   res.json(articles);
 };
 
 exports.getArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
-  article.read();
-  req.user.save();
 
   res.json(article);
 };
 
 exports.updateStatus = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
+
   if (req.body.readAt !== undefined) {
     article.read(req.body.readAt);
   }
   if (req.body.archivedAt !== undefined) {
     article.archive(req.body.archivedAt);
   }
-  req.user.save();
+  if (req.body.prioritizedAt !== undefined) {
+    article.prioritize(req.body.prioritizedAt);
+  }
 
+  req.user.save();
   res.json(article);
-}
+};
 
 exports.createArticlePost = async (req, res, next) => {
   try {
-    const { dom, page } = await lazifyImages(req.body.url);
+    const { dom, site } = await parseHTML(req.body.url);
     if (req.body.tags) {
       req.body.tags.forEach((tag) => {
         if (tag.__isNew__) {
@@ -52,61 +109,41 @@ exports.createArticlePost = async (req, res, next) => {
         }
       });
     }
-    if (page.error) {
-      res.status(406).send(page.message);
+    if (site.error) {
+      res.status(406).send(site.message);
       return;
     }
 
-    req.user.updateOrCreateArticle(dom, req.body.url, {
-      title: page.title,
-      author: page.author,
-      published: page.date_published,
-      image: page.lead_image_url,
-      links: [page.next_page_url],
-      description: page.excerpt,
+    req.user.updateOrCreateArticle(dom, site.url, {
+      title: site.title,
+      author: site.author,
+      published: site.date_published,
+      image: site.lead_image_url,
+      links: [site.next_page_url],
+      description: site.excerpt,
       tags: req.body.tags,
       createdAt: moment(),
     });
 
     req.user.save((err) => {
       if (err) {
-        res.status(400).send(response('Color must be in the right format', null, false));
+        res.status(400).send(response('Something went wrong', null, false));
       } else {
-        res.status(201).send(response('tag created', req.user.tags, true));
+        res.status(201).send(response('Article created', req.user.articles.reverse()[0]._id, true));
       }
     });
   } catch (e) {
     next(e);
   }
 };
+
 exports.updateArticle = async (req, res) => {
   const article = req.user.articles.find((a) => a._id.toString() === req.params.id);
   if (req.body.tags) {
-    // eslint-disable-next-line max-len
-    const newTags = req.body.tags.filter((tag) => !req.user.tags.find((uTag) => uTag.title === tag.title));
-    req.user.createTag(newTags);
     article.tags = req.body.tags;
   }
   req.user.save();
   res.json(article);
 };
 
-exports.getArticlesByTags = async (req, res) => {
-  let filterTags;
-  if (!Array.isArray(req.query.title)) {
-    filterTags = req.query.title.split();
-  } else {
-    filterTags = req.query.title;
-  }
-  res.json(req.user.getArticlesByTags(filterTags).filter((article) => {
-    if (req.query.status) {
-      if (req.query.status === 'today') {
-        return moment(article.createdAt).diff(moment(), 'days') === 0;
-      }
-      if (req.query.status === 'archived') {
-        return article.archivedAt;
-      }
-    }
-    return !article.archivedAt;
-  }));
-};
+exports.setUserModel = (model) => { _User = model; };

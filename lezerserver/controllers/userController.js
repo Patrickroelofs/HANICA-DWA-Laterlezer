@@ -11,7 +11,11 @@ exports.createUser = async (req, res, next) => {
 
         user.save(((err) => {
           if (err) {
-            res.status(404).send('User creation failed.');
+            if (err.errors.userName.kind === 'maxlength') {
+              res.status(406).send('Username is too long');
+            } else {
+              res.status(404).json('User could not be created');
+            }
           } else {
             res.status(200).send(user.userName);
           }
@@ -28,7 +32,6 @@ exports.createUser = async (req, res, next) => {
 exports.loginUser = async (req, res, next) => {
   try {
     const user = await User.findOne({ userName: req.params.userName });
-
     if (user === null) {
       res.status(401).send('User not found');
     } else {

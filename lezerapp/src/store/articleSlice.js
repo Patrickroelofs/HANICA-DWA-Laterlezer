@@ -1,8 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { get } from 'axios';
+
+const API_URL = 'http://localhost:3000/api';
 
 const articleSlice = createSlice({
   name: 'article',
-  initialState: {},
+  initialState: {
+    articles: [],
+  },
   reducers: {
     setArticles: (state, action) => {
       state.articles = action.payload;
@@ -30,3 +35,9 @@ export const {
   setArticles, setCurrentArticle, setCurrentArticleId, updateArticle, removeArticle,
 } = articleSlice.actions;
 export default articleSlice.reducer;
+
+export const getArticles = (status, range, tags = []) => (dispatch) => {
+  const joinedTags = tags.map((t) => t.title).join(',');
+  get(`${API_URL}/articles?status=${status}&range=${range}&tags=${joinedTags}`)
+    .then(({ data }) => dispatch(setArticles(data)));
+};

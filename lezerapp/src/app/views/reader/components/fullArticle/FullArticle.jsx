@@ -1,44 +1,23 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 
 import ScrollToTop from 'react-scroll-up';
 
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import axios from 'axios';
+import moment from 'moment';
 
-function FullArticle({ html }) {
-  const listener = () => {
-    const lazyImages = [].slice.call(document.querySelectorAll('img.lazy'));
-    if ('IntersectionObserver' in window) {
-      const lazyImageObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const lazyImage = entry.target;
-            lazyImage.src = lazyImage.dataset.src;
-            lazyImageObserver.unobserve(lazyImage);
-          }
-        });
-      });
-      lazyImages.forEach((lazyImage) => {
-        lazyImageObserver.observe(lazyImage);
-      });
+function FullArticle({ html, id }) {
+  window.onscroll = function () {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      axios.post(`http://localhost:3000/api/articles/${id}/status`, { readAt: moment().toISOString() });
     }
   };
-
-  useEffect(() => {
-    listener();
-  });
 
   return (
     <>
       {/* eslint-disable-next-line react/no-danger */}
-      <div className="max-w-2xl m-auto mb-64 article" dangerouslySetInnerHTML={{ __html: html }} />
-      <ScrollToTop
-        duration={1250}
-        showUnder={160}
-        easing="easeInOutSine"
-        style={{
-          margin: '0', marginRight: '18px', marginBottom: '18px', fontSize: '12px', height: '32px', outline: '0',
-        }}
-      >
+      <div className="max-w-2xl m-auto mb-64 article prose lg:prose-sm" dangerouslySetInnerHTML={{ __html: html }} />
+      <ScrollToTop duration={1250} showUnder={160} easing="easeInOutSine">
         <span className="text-base font-sans bg-gray-200 text-black p-2 rounded-2xl">Back to top</span>
       </ScrollToTop>
     </>

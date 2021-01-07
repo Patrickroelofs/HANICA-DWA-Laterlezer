@@ -1,56 +1,65 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React, { memo, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Article from './components/article/Article';
-import { selectArticles, setArticles } from '../../../store/articleSlice';
-import { selectSelectedTags } from '../../../store/tagSlice';
+import { getArticles, selectArticles } from '../../../store/articleSlice';
+import { selectSelectedTags, selectTags } from '../../../store/tagSlice';
+import { useQuery } from '../../../utils/helpers';
 
-function Articles() {
+const Articles = () => {
   const dispatch = useDispatch();
+  const range = useQuery().get('range');
   const { status } = useParams();
 
   const selectedTags = useSelector(selectSelectedTags);
   const articles = useSelector(selectArticles);
+  const allTags = useSelector(selectTags);
 
-  const getArticles = () => {
-    axios.get(`http://localhost:3000/api/articles?status=${status}`).then(({ data }) => {
-      dispatch(setArticles(data));
-    });
-  };
-
-  const getFilteredArticles = () => {
-    let tags = '';
-    selectedTags.forEach((t, i) => {
-      if (i === 0) {
-        tags += `title=${t}`;
-      } else {
-        tags += `&title=${t}`;
-      }
-    });
-
-    axios.get(`http://localhost:3000/api/articles/tags/filter?${tags}&status=${status}`).then(({ data }) => {
-      dispatch(setArticles(data));
-    });
-  };
+  const [statusDescription, setStatusDescription] = useState('');
 
   useEffect(() => {
-    if (selectedTags.length <= 0) {
-      getArticles();
-    } else {
-      getFilteredArticles();
+    dispatch(getArticles(status, range, selectedTags));
+  }, [selectedTags, status, allTags, range]);
+
+  useEffect(() => {
+    let description = '';
+    switch (status) {
+      case 'priority':
+        description = 'All your prioritized articles';
+        break;
+      case 'archived':
+        description = 'All your archived articles';
+        break;
+      default:
+        description = 'All your saved articles';
+        break;
     }
-  }, [selectedTags, status]);
+    switch (range) {
+      case 'today':
+        description += ' added today.';
+        break;
+      case 'week':
+      case 'month':
+      case 'year':
+        description += ` added this ${range}.`;
+        break;
+      default:
+        description += '.';
+    }
+    setStatusDescription(description);
+  }, [status, range]);
 
   return (
     <>
       <h1 className="font-bold text-xl">My library</h1>
-      <p className="text-sm pt-4">All your saved articles.</p>
+      <p className="text-sm pt-4">
+        { statusDescription }
+      </p>
       <div className="mt-12 mb-64">
-        {(articles) ? articles.map((article) => <Article key={article._id} article={article} />) : <span>No articles found.</span> }
+        {(articles.length > 0) ? articles.map((article) => <Article key={article._id} article={article} />) : <span>No articles found with this filter.</span> }
       </div>
     </>
   );
-}
+};
 
-export default Articles;
+export default memo(Articles, (prevProps, nextProps) => prevProps === nextProps);

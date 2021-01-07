@@ -10,3 +10,17 @@
     filter: grayscale(100%);
   }
 }
+
+@layer base {
+  button {
+    @apply focus:outline-none;
+  }
+
+  a {
+    @apply focus:outline-none;
+  }
+
+  select {
+    @apply focus:outline-none;
+  }
+}

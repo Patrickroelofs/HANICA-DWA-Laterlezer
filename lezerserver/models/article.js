@@ -46,18 +46,6 @@ articleSchema.methods.prioritize = function (date) {
   }
 };
 
-articleSchema.methods.checkStatus = function (status) {
-  if (status === 'archived') {
-    return this.archivedAt;
-  }
-  if (status === 'priority') {
-    if (!this.archivedAt) {
-      return this.prioritizedAt;
-    }
-  }
-  return !this.archivedAt;
-};
-
 articleSchema.methods.deleteTags = function (deletingTags) {
   // eslint-disable-next-line max-len,no-return-assign
   deletingTags.forEach((tag) => this.tags = this.tags.filter((deletingTag) => (tag._id.toString() !== deletingTag._id.toString())));

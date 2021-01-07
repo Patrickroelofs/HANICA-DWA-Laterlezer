@@ -68,6 +68,22 @@ describe('Article Model Tests', () => {
     expect(article.tags).not.toContain(tag1);
   });
 
+  test('Check if article prioritized at is now when no date given', () => {
+    article.prioritize();
+    expect(article.prioritizedAt).toBeInstanceOf(Date);
+  });
+
+  test('Check if article prioritized at is now when a date is given', () => {
+    const date = moment();
+    article.prioritize(date);
+    expect(article.prioritizedAt.toISOString()).toBe(date.toISOString());
+  });
+
+  test('Check if article is not prioritized when null is given', () => {
+    article.prioritize(null);
+    expect(article.prioritizedAt).toBe(null);
+  });
+
   afterEach(async () => {
     await Article.deleteMany({});
   });

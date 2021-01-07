@@ -33,6 +33,7 @@ function NewTagForm({
 
     setTitle('');
     setShowPicker(false);
+    setColor(chroma.random().hex());
   };
 
   const ref = useOnclickOutside(() => setShowPicker(false));

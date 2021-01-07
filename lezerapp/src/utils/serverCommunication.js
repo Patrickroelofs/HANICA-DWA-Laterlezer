@@ -26,7 +26,7 @@ export function openWebSocket() {
     const messageObj = JSON.parse(messageEvent.data);
     switch (messageObj.type) {
       case 'NEW ARTICLE':
-        store.dispatch(getArticles(undefined));
+        store.dispatch(getArticles(undefined, null));
         break;
       default:
         break;

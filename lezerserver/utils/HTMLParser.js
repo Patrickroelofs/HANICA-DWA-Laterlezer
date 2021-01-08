@@ -11,6 +11,7 @@ exports.parseHTML = async (url) => {
 
     Array.from(document.getElementsByTagName('a')).forEach((link) => {
       link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noreferrer');
     });
 
     dom = minify(dom.window.document.documentElement.outerHTML, {

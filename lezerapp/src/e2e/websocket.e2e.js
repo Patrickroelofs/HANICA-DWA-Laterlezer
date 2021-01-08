@@ -17,25 +17,20 @@ describe('e2e tests filter articles', () => {
   });
 
   test('Check if extension adds article site will automatically update', async () => {
-    const amountOfLorems = await page.evaluate(() => {
-      const titles = Array.from(document.querySelectorAll('.container strong'));
-      return titles.filter((title) => title.innerText === 'Lorem ipsum');
-    });
     await page.waitForSelector('.container > .mt-12');
-    console.log('post');
     const res = await axios.post('http://localhost:3000/api/articles', { url: 'http://www.loremipsum.nl/' }, {
       headers: {
         Username: 'testuser',
       },
     });
-    console.log(res.data);
     id = res.data.data;
     await page.waitForSelector('.container > .mt-12 > a:nth-child(1) > .grid > .col-span-3');
-    const newAmountOfLorems = await page.evaluate(() => {
-      const titles = Array.from(document.querySelectorAll('.container strong'));
-      return titles.filter((title) => title.innerText === 'Lorem ipsum');
+    const isExistend = await page.evaluate(() => {
+      const titles = Array.from(document.querySelectorAll('.container > .mt-12 > a:nth-child(1) > .grid > .col-span-3 strong'));
+      console.log(titles);
+      return titles.filter((title) => title.innerText === 'Lorem ipsum').length;
     });
-    console.log(newAmountOfLorems, amountOfLorems);
+    expect(isExistend).toBe(1);
   });
 
   afterAll(async () => {

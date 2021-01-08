@@ -3,6 +3,7 @@ const moment = require('moment');
 const { parseHTML } = require('../utils/HTMLParser');
 const response = require('../utils/response');
 let _User = require('../models/user');
+const { sendMessage } = require('../websocket/ws');
 
 exports.getArticles = async (req, res) => {
   const query = [
@@ -117,6 +118,8 @@ exports.createArticlePost = async (req, res, next) => {
       tags: req.body.tags,
       createdAt: moment(),
     });
+
+    sendMessage(req.user.userName, { type: 'NEW ARTICLE' });
 
     req.user.save((err) => {
       if (err) {

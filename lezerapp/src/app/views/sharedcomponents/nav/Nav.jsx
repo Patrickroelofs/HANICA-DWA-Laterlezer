@@ -53,12 +53,12 @@ function Nav({ staticTags = false }) {
         <span>
           Added:
         </span>
-        <select disabled={staticTags} onChange={selectTimerange} className="focus:ring-indigo-500 focus:border-indigo-500 h-10 px-5 ml-3 pr-10 rounded-full text-sm">
-          <option selected={!range} value="">All</option>
-          <option selected={range === 'today'} value="today">Today</option>
-          <option selected={range === 'week'} value="week">This week</option>
-          <option selected={range === 'month'} value="month">This month</option>
-          <option selected={range === 'year'} value="year">This year</option>
+        <select value={range || ''} disabled={staticTags} onChange={selectTimerange} className="focus:ring-indigo-500 focus:border-indigo-500 h-10 px-5 ml-3 pr-10 rounded-full text-sm">
+          <option value="">All</option>
+          <option value="today">Today</option>
+          <option value="week">This week</option>
+          <option value="month">This month</option>
+          <option value="year">This year</option>
         </select>
       </div>
       <hr />

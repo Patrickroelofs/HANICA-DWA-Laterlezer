@@ -146,4 +146,13 @@ exports.updateArticle = async (req, res) => {
   res.json(article);
 };
 
+/*
+  This function in initially created for the websocket e2e test because of articles that you dont know if they update or not
+ */
+exports.deleteArticle = async (req, res) => {
+  req.user.articles = req.user.articles.filter((article) => article._id.toString() !== req.params.id);
+  req.user.save();
+  res.status(200).send('Article deleted');
+};
+
 exports.setUserModel = (model) => { _User = model; };

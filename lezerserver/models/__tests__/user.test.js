@@ -116,6 +116,97 @@ describe('User Model Tests', () => {
     expect(testUser.tags[0].title).toBe('javascript');
   });
 
+  test('User method createTag should throw an error too long tag title', async () => {
+    try {
+      const testUser = await User.getUserByUsername('stanhan');
+      const newTag = {
+        tag: {
+          _id: 32,
+          title: 'thistagislongerthanthirtycharacters',
+          color: '#00FF00',
+          children: [],
+        },
+        parent: {
+          _id: 0,
+          title: '',
+          children: [],
+        },
+      };
+      testUser.createTag(newTag);
+    } catch (error) {
+      expect(error.message).toEqual('Tag title is too long.');
+      expect(error.status).toEqual(400);
+    }
+  });
+
+  test('User method createTag should throw an error title cannot be same as parent title', async () => {
+    try {
+      const testUser = await User.getUserByUsername('stanhan');
+      const newTag = {
+        tag: {
+          _id: 32,
+          title: 'same',
+          color: '#00FF00',
+          children: [],
+        },
+        parent: {
+          _id: 0,
+          title: 'same',
+          children: [],
+        },
+      };
+      testUser.createTag(newTag);
+    } catch (error) {
+      expect(error.message).toEqual('Subtag can\'t have the same title as the parent.');
+      expect(error.status).toEqual(400);
+    }
+  });
+
+  test('User method createTag should throw an error title cannot be same as child from parent title', async () => {
+    try {
+      const testUser = await User.getUserByUsername('stanhan');
+      const newTag = {
+        tag: {
+          _id: 32,
+          title: 'same',
+          color: '#00FF00',
+          children: [],
+        },
+        parent: {
+          _id: 0,
+          title: 'notsame',
+          children: [{
+            _id: 1,
+            title: 'same',
+            children: [],
+          }],
+        },
+      };
+      testUser.createTag(newTag);
+    } catch (error) {
+      expect(error.message).toEqual('Tag already exists.');
+      expect(error.status).toEqual(400);
+    }
+  });
+
+  test('User method createTag should throw an error tag title already exists', async () => {
+    try {
+      const testUser = await User.getUserByUsername('stanhan');
+      const newTag = {
+        tag: {
+          _id: 32,
+          title: 'javascript',
+          color: '#00FF00',
+          children: [],
+        },
+      };
+      testUser.createTag(newTag);
+    } catch (error) {
+      expect(error.message).toEqual('Tag already exists.');
+      expect(error.status).toEqual(400);
+    }
+  });
+
   test('User method createTag should throw an error', async () => {
     try {
       const testUser = await User.getUserByUsername('stanhan');
@@ -138,6 +229,7 @@ describe('User Model Tests', () => {
       expect(error.status).toEqual(400);
     }
   });
+
   test('User method getTags should return all user tags', async () => {
     const testUser = await User.getUserByUsername('stanhan');
     const tags = testUser.getTags();

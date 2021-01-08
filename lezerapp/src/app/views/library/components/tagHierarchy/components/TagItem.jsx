@@ -17,9 +17,15 @@ export default ({
     e.stopPropagation();
     selectTag(tag);
   };
+
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(deleteTag(tag));
+  };
+
   return (
     <li
-      key={tag._id}
       className={`relative transform ${isStatic === false ? 'hover:scale-105 hover:bg-gray-100' : ''} motion-reduce:transform-none transition-transform rounded-lg my-1 ${isSelected(tag) && 'bg-gray-200'}`}
     >
       <span className="group w-full text-left">
@@ -30,7 +36,7 @@ export default ({
           />
           {tag.title}
         </button>
-        <div className="absolute right-0 top-2">
+        <div className="absolute right-6 top-2">
           <button
             className="ml-1 focus:outline-none opacity-0 hover:text-blue-600 group-hover:opacity-100 w-6 h-6 float-right "
             type="submit"
@@ -48,7 +54,7 @@ export default ({
           <button
             className="ml-1 focus:outline-none opacity-0 hover:text-red-600 group-hover:opacity-100 w-6 h-6 float-right"
             type="submit"
-            onClick={() => dispatch(deleteTag(tag))}
+            onClick={handleDeleteClick}
           >
             <RemoveCircleOutlineRoundedIcon />
           </button>

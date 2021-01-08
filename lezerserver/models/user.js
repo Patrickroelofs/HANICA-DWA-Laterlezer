@@ -92,7 +92,14 @@ userSchema.methods.createTag = function (data) {
   if (data.tag.title.length > 29) {
     throw new CustomError('Tag title is too long.', 400);
   }
-  if (!data.parent) return this.tags.push(data.tag);
+  if (!data.parent) {
+    this.tags.forEach((tag) => {
+      if (tag.title === data.tag.title) {
+        throw new CustomError('Tag already exists.', 400);
+      }
+    });
+    return this.tags.push(data.tag);
+  }
 
   if (data.tag.title === data.parent.title) {
     throw new CustomError('Subtag can\'t have the same title as the parent.', 400);

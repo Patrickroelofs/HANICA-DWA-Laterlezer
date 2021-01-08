@@ -22,6 +22,7 @@ exports.getArticles = async (req, res) => {
         tags: '$articles.tags',
         archivedAt: '$articles.archivedAt',
         readAt: '$articles.readAt',
+        prioritizedAt: '$articles.prioritizedAt',
       },
     },
     {
@@ -42,6 +43,13 @@ exports.getArticles = async (req, res) => {
       $lte: moment().toDate(),
     };
   }
+
+  if (req.query.status === 'priority') {
+    query[1].$match['articles.prioritizedAt'] = {
+      $lte: moment().toDate(),
+    };
+  }
+
   const tags = req.query.tags && req.query.tags.split(',');
   if (tags.length > 0) {
     query[1].$match['articles.tags'] = {
@@ -94,13 +102,6 @@ exports.updateStatus = async (req, res) => {
 exports.createArticlePost = async (req, res, next) => {
   try {
     const { dom, site } = await parseHTML(req.body.url);
-    if (req.body.tags) {
-      req.body.tags.forEach((tag) => {
-        if (tag.__isNew__) {
-          req.user.createTag([tag]);
-        }
-      });
-    }
     if (site.error) {
       res.status(406).send(site.message);
       return;

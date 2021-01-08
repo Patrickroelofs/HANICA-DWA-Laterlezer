@@ -16,6 +16,7 @@ function NewTagForm({
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
+    e.stopPropagation();
     e.preventDefault();
     if (mode === 'edit') {
       const newTag = {
@@ -32,6 +33,7 @@ function NewTagForm({
 
     setTitle('');
     setShowPicker(false);
+    setColor(chroma.random().hex());
   };
 
   const ref = useOnclickOutside(() => setShowPicker(false));

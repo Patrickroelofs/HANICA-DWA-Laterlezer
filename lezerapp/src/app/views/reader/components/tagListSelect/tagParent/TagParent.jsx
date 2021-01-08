@@ -9,7 +9,7 @@ function TagParent({ parent, isSelected, onClick }) {
 
   return (
     <>
-      <div key={parent._id} className="inline-block border rounded-3xl py-1 px-1" style={{ borderColor: parent.color }}>
+      <div key={parent._id} className="inline-block border rounded-3xl px-0.5 py-0.5" style={{ borderColor: parent.color }}>
         <button
           type="button"
           key={parent._id}

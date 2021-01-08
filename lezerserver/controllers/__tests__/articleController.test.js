@@ -53,6 +53,30 @@ describe('Article Controller Tests', () => {
     expect(json.mock.calls[0][0]).toMatchObject(articles);
   });
 
+  test('Get all the priority articles', async () => {
+    const user = { _id: 12 };
+    const query = {
+      range: 'null',
+      tags: '',
+      status: 'priority',
+    };
+    const json = jest.fn(() => {});
+    const articles = [{ title: 'test' }];
+    const model = {
+      aggregate: jest.fn(() => ({
+        exec: () => articles,
+      })),
+    };
+    articleController.setUserModel(model);
+    await articleController.getArticles({ user, query }, { json });
+    expect(model.aggregate.mock.calls.length).toBe(1);
+    expect(model.aggregate.mock.calls[0][0][0].$unwind).toBe('$articles');
+    expect(model.aggregate.mock.calls[0][0][1].$match._id).toBe(user._id);
+    expect(model.aggregate.mock.calls[0][0][1].$match['articles.prioritizedAt'].$lte).toBeInstanceOf(Date);
+    expect(json.mock.calls.length).toBe(1);
+    expect(json.mock.calls[0][0]).toMatchObject(articles);
+  });
+
   test('Get all the articles in range', async () => {
     const user = { _id: 12 };
     const query = {
@@ -337,14 +361,12 @@ describe('Article Controller Tests', () => {
 
   test('update priority status', () => {
     const priority = jest.fn(() => {});
-    const read = jest.fn(() => {});
 
     const req = {
       user: {
         articles: {
           find: () => ({
             priority,
-            read,
           }),
         },
       },
@@ -357,45 +379,11 @@ describe('Article Controller Tests', () => {
     };
     articleController.updateStatus(req, res).then(() => {
       expect(priority.mock.calls.length).toBe(1);
-      expect(priority.mock.calls[0][0]).toBe('11-12-2020');
+      expect(priority.mock.calls[0][0]).toBe(null);
       expect(res.json.mock.calls.length).toBe(1);
       expect(res.json.mock.calls[0][0]).toBe({
         priority,
-        read,
       });
-      expect(read.mock.calls.length).toBe(0);
-    });
-  });
-
-  test('update priority status', () => {
-    const priority = jest.fn(() => {});
-    const read = jest.fn(() => {});
-
-    const req = {
-      user: {
-        articles: {
-          find: () => ({
-            priority,
-            read,
-          }),
-        },
-      },
-      body: {
-        prioritizedAt: null,
-      },
-    };
-    const res = {
-      json: jest.fn(() => {}),
-    };
-    articleController.updateStatus(req, res).then(() => {
-      expect(priority.mock.calls.length).toBe(1);
-      expect(priority.mock.calls[0][0]).toBe('11-12-2020');
-      expect(res.json.mock.calls.length).toBe(1);
-      expect(res.json.mock.calls[0][0]).toBe({
-        priority,
-        read,
-      });
-      expect(read.mock.calls.length).toBe(0);
     });
   });
 });

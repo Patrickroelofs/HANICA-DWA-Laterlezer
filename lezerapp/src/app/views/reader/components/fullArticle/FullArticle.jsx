@@ -7,7 +7,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 function FullArticle({ html, id }) {
-  window.onscroll = function () {
+  window.onscroll = () => {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
       axios.post(`http://localhost:3000/api/articles/${id}/status`, { readAt: moment().toISOString() });
     }

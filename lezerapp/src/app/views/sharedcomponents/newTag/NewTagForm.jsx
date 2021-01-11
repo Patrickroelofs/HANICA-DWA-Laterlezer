@@ -5,6 +5,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import chroma from 'chroma-js';
 import { createTag, updateTag } from '../../../../store/tagSlice';
 import setContrast from '../../../../utils/chromaContrast';
+import { updateArticleTag } from '../../../../store/articleSlice';
 
 function NewTagForm({
   reference, parent, tag = {}, mode, position,
@@ -25,6 +26,7 @@ function NewTagForm({
       dispatch(updateTag(newTag)).then((res) => {
         setResponse(res);
       });
+      dispatch(updateArticleTag(newTag));
     } else {
       dispatch(createTag(title, chroma(color).hex(), parent)).then((res) => {
         setResponse(res);

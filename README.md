@@ -55,7 +55,7 @@ npm run build:tailwind
 //Plaats een .env file in de extension folder met de code; dit zorgt ervoor dat de extension werkt.
 INLINE_RUNTIME_CHUNK=false
 
-npm build // Plaats de build folder als extension in je Chromium browsser
+npm run build // Plaats de build folder als extension in je Chromium browsser
 npm start
 
 // de extension zal nu draaien op localhost:3002

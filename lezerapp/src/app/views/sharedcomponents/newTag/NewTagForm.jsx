@@ -8,7 +8,7 @@ import setContrast from '../../../../utils/chromaContrast';
 import { updateArticleTag } from '../../../../store/articleSlice';
 
 function NewTagForm({
-  reference, parent, tag = {}, mode, position,
+  reference, parent, tag = {}, mode, position, toggle,
 }) {
   const [title, setTitle] = useState(tag.title || '');
   const [color, setColor] = useState(tag.color || chroma.random().hex());
@@ -27,6 +27,7 @@ function NewTagForm({
         setResponse(res);
       });
       dispatch(updateArticleTag(newTag));
+      toggle();
     } else {
       dispatch(createTag(title, chroma(color).hex(), parent)).then((res) => {
         setResponse(res);

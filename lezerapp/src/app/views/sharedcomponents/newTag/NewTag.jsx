@@ -20,7 +20,7 @@ function NewTag() {
       <button ref={addTagRef} onClick={(e) => toggleAddTagDropdown(e)} type="button" className={`focus:outline-none ${showTagDropdown && 'text-green-600'} w-8 h-8 text-center float-right mr-4 hover:text-green-600`}>
         <AddCircleOutlineRoundedIcon fontSize="large" />
       </button>
-      { showTagDropdown && <NewTagForm reference={addTagRef} position={position} /> }
+      { showTagDropdown && <NewTagForm reference={addTagRef} position={position} toggle={toggleAddTagDropdown} /> }
     </>
   );
 }

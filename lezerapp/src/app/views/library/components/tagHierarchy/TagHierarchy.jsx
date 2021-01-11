@@ -113,7 +113,7 @@ const TagHierarchy = ({ isStatic = false }) => {
     <>
       <div className="mb-4 mt-6 pl-2 font-bold text-base">
         <span>Tags</span>
-        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} /> }
+        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} toggle={() => setShowTagDropdown(!showTagDropdown)} /> }
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">

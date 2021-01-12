@@ -101,7 +101,7 @@ exports.updateStatus = async (req, res) => {
 
 exports.createArticlePost = async (req, res, next) => {
   try {
-    const { dom, site } = await parseHTML(req.body.url);
+    const { dom, site } = await parseHTML(req.body.url, req.body.preParsed);
     if (site.error) {
       res.status(406).send(site.message);
       return;

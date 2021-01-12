@@ -36,7 +36,7 @@ const articleSlice = createSlice({
     },
     deleteArticleTag: (state, action) => {
       const articleTags = [];
-      for (let i = 0; i < articleTags.length; i++) {
+      for (let i = 0; i < state.currentArticle.tags.length; i++) {
         if (state.currentArticle.tags[i]._id !== action.payload._id) {
           articleTags.push(state.currentArticle.tags[i]);
         }

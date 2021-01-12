@@ -34,6 +34,15 @@ const articleSlice = createSlice({
       }
       state.currentArticle.tags = articleTags;
     },
+    deleteArticleTag: (state, action) => {
+      const articleTags = [];
+      for (let i = 0; i < articleTags.length; i++) {
+        if (state.currentArticle.tags[i]._id !== action.payload._id) {
+          articleTags.push(state.currentArticle.tags[i]);
+        }
+      }
+      state.currentArticle.tags = articleTags;
+    },
   },
 });
 
@@ -42,7 +51,7 @@ export const findCurrentArticle = (state) => state.article.articles.find((articl
 export const selectCurrentArticle = (state) => state.article.currentArticle;
 
 export const {
-  setArticles, setCurrentArticle, setCurrentArticleId, updateArticle, removeArticle, updateArticleTag,
+  setArticles, setCurrentArticle, setCurrentArticleId, updateArticle, removeArticle, updateArticleTag, deleteArticleTag,
 } = articleSlice.actions;
 export default articleSlice.reducer;
 

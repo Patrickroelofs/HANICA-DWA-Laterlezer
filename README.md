@@ -52,11 +52,11 @@ cd extension
 npm install
 npm run build:tailwind
 
-//Plaats een .env file in de extension folder met de code; dit zorgt ervoor dat de extension werkt.
+-> Maak een .env file in de extension folder met de code;
 INLINE_RUNTIME_CHUNK=false
 
-npm run build // Plaats de build folder als extension in je Chromium browsser
-npm start
+npm run build
+-> Plaats de build folder als extension in je Chromium browser
 
 // de extension zal nu draaien op localhost:3002
 ```

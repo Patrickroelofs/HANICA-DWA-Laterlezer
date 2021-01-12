@@ -5,7 +5,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import NewTag from '../../../sharedcomponents/newTag/NewTag';
 import TagItem from './components/TagItem';
 import {
-  setTags, selectTags, selectSelectedTags, setSelectedTags,
+  setTags, selectTags, selectSelectedTags, setSelectedTags, deleteTag,
 } from '../../../../../store/tagSlice';
 import NewTagForm from '../../../sharedcomponents/newTag/NewTagForm';
 
@@ -76,6 +76,11 @@ const TagHierarchy = ({ isStatic = false }) => {
     }
   };
 
+  const deleteClickedTag = (tag) => {
+    selectTag([tag]);
+    dispatch(deleteTag(tag));
+  };
+
   useEffect(() => {
     get('http://localhost:3000/api/tags').then(({ data }) => {
       dispatch(setTags(data.data));
@@ -88,7 +93,7 @@ const TagHierarchy = ({ isStatic = false }) => {
         parents.push(t);
         pickedTag(parents);
       };
-      const result = [(<TagItem tag={t} key={`tags${t._id}`} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
+      const result = [(<TagItem tag={t} key={`tags${t._id}`} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} deleteTag={deleteClickedTag} />)];
       if (t.children) {
         result.push(<li data-key={`tags${t._id}chld`} key={`tags${t._id}chld`}><ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul></li>);
       }
@@ -102,7 +107,7 @@ const TagHierarchy = ({ isStatic = false }) => {
       parents.push(t);
       selectTag(parents);
     };
-    const result = [(<TagItem key={`tags${t._id}`} tag={t} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
+    const result = [(<TagItem key={`tags${t._id}`} tag={t} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} deleteTag={deleteClickedTag} />)];
     if (t.children) {
       result.push(<li data-key={`tags${t._id}chld`} key={`tags${t._id}chld`}><ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul></li>);
     }

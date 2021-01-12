@@ -32,7 +32,7 @@ function Nav({ staticTags = false }) {
         <Link to="/app" onClick={clickHandler}>
           <li className={`hover:bg-gray-100 p-3 ${!status && 'bg-gray-200 font-bold'} align-middle`}>
             <AllInboxIcon className="opacity-60 mr-4 align-middle" />
-            All
+            Library
           </li>
         </Link>
         <Link to="/app/status/archived" onClick={clickHandler}>

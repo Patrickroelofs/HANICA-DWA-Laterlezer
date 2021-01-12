@@ -37,10 +37,33 @@ export const {
 } = articleSlice.actions;
 export default articleSlice.reducer;
 
-export const getArticles = (status, range, tags = []) => (dispatch) => {
+export const getArticles = (status, range, tags = []) => async (dispatch) => {
   const joinedTags = tags.map((t) => t.title).join(',');
-  get(`${API_URL}/articles?status=${status}&range=${range}&tags=${joinedTags}`)
-    .then(({ data }) => dispatch(setArticles(data)));
+
+  try {
+    const { data } = await get(`${API_URL}/articles?status=${status}&range=${range}&tags=${joinedTags}`);
+    dispatch(setArticles(data));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getArticle = (_id) => async (dispatch) => {
+  try {
+    const { data } = await get(`${API_URL}/articles/${_id}`);
+    dispatch(setCurrentArticle(data));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const addTags = (_id, tags = []) => async (dispatch) => {
+  try {
+    const { data } = await post(`${API_URL}/articles/${_id}`, { tags });
+    dispatch(setCurrentArticle(data));
+  } catch (err) {
+    throw new Error(err);
+  }
 };
 
 export const read = ({ _id, readAt }) => async (dispatch) => {

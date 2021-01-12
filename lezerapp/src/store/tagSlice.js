@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios, { post, put } from 'axios';
+import axios, { post, put, get } from 'axios';
 import { getArticles } from './articleSlice';
 
 const API_URL = 'http://localhost:3000/api';
@@ -40,6 +40,23 @@ export const {
   setTags, setSelectedTags, setArticleTags, selectTag,
 } = tagSlice.actions;
 export default tagSlice.reducer;
+
+export const getTags = () => async (dispatch) => {
+  try {
+    const { data } = await get(`${API_URL}/tags`);
+
+    const mapTags = (defTags) => defTags.map((tag) => ({
+      _id: tag._id,
+      title: tag.title,
+      color: tag.color,
+      children: mapTags(tag.children),
+    }));
+    console.log(data.data);
+    dispatch(setTags(mapTags(data.data)));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 
 export const updateTag = (tag) => (dispatch) => put(`${API_URL}/tags`, tag)
   .then(({ data, status }) => {

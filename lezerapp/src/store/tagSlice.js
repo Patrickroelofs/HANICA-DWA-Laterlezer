@@ -13,7 +13,15 @@ const tagSlice = createSlice({
   },
   reducers: {
     setTags: (state, action) => {
-      state.tags = action.payload;
+      const tags = action.payload.sort((a, b) => a.title.localeCompare(b.title));
+      const sortChildren = (tagslist) => {
+        tagslist.forEach((t) => {
+          t.children = t.children.sort((a, b) => a.title.localeCompare(b.title));
+          sortChildren(t.children);
+        });
+      };
+      sortChildren(tags);
+      state.tags = tags;
     },
     setSelectedTags: (state, action) => {
       state.selectedTags = action.payload;

@@ -25,6 +25,25 @@ const articleSlice = createSlice({
     removeArticle: (state, action) => {
       state.articles = state.articles.filter((article) => article._id !== action.payload._id);
     },
+    updateArticleTag: (state, action) => {
+      const articleTags = state.currentArticle.tags;
+      for (let i = 0; i < articleTags.length; i++) {
+        if (articleTags[i]._id === action.payload._id) {
+          articleTags[i].title = action.payload.title;
+          articleTags[i].color = action.payload.color;
+        }
+      }
+      state.currentArticle.tags = articleTags;
+    },
+    deleteArticleTag: (state, action) => {
+      const articleTags = [];
+      for (let i = 0; i < state.currentArticle.tags.length; i++) {
+        if (state.currentArticle.tags[i]._id !== action.payload._id) {
+          articleTags.push(state.currentArticle.tags[i]);
+        }
+      }
+      state.currentArticle.tags = articleTags;
+    },
   },
 });
 
@@ -33,7 +52,7 @@ export const findCurrentArticle = (state) => state.article.articles.find((articl
 export const selectCurrentArticle = (state) => state.article.currentArticle;
 
 export const {
-  setArticles, setCurrentArticle, setCurrentArticleId, updateArticle, removeArticle,
+  setArticles, setCurrentArticle, setCurrentArticleId, updateArticle, removeArticle, updateArticleTag, deleteArticleTag,
 } = articleSlice.actions;
 export default articleSlice.reducer;
 

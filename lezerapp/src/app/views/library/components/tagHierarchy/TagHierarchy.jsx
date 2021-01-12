@@ -88,9 +88,9 @@ const TagHierarchy = ({ isStatic = false }) => {
         parents.push(t);
         pickedTag(parents);
       };
-      const result = [(<TagItem tag={t} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
+      const result = [(<TagItem tag={t} key={`tags${t._id}`} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
       if (t.children) {
-        result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
+        result.push(<li data-key={`tags${t._id}chld`} key={`tags${t._id}chld`}><ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul></li>);
       }
       return result;
     });
@@ -102,9 +102,9 @@ const TagHierarchy = ({ isStatic = false }) => {
       parents.push(t);
       selectTag(parents);
     };
-    const result = [(<TagItem tag={t} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
+    const result = [(<TagItem key={`tags${t._id}`} tag={t} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
     if (t.children) {
-      result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
+      result.push(<li data-key={`tags${t._id}chld`} key={`tags${t._id}chld`}><ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul></li>);
     }
     return result;
   });
@@ -113,7 +113,7 @@ const TagHierarchy = ({ isStatic = false }) => {
     <>
       <div className="mb-4 mt-6 pl-2 font-bold text-base">
         <span>Tags</span>
-        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} /> }
+        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} toggle={() => setShowTagDropdown(!showTagDropdown)} /> }
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">

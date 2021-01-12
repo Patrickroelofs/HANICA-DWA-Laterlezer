@@ -10,7 +10,6 @@ import { selectUsername, selectProfilePicture } from '../../../store/userSlice';
 import { setCurrentArticleId, selectCurrentArticle, setCurrentArticle } from '../../../store/articleSlice';
 import ArticleHeader from './components/articleHeader/ArticleHeader';
 
-import './Reader.scss';
 import ArticleTopBar from './components/articleTopBar/ArticleTopBar';
 import Nav from '../sharedcomponents/nav/Nav';
 

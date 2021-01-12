@@ -47,6 +47,8 @@ npm start
 
 ### Extension
 
+De extension is niet verplicht voor de werking van app.
+
 ```
 cd extension
 npm install

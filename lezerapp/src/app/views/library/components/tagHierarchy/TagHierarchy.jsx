@@ -76,7 +76,10 @@ const TagHierarchy = ({ isStatic = false }) => {
     }
   };
 
-  const deleteClickedTag = (tag) => {
+  const deleteClickedTag = (tag, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     selectTag([tag]);
     dispatch(deleteTag(tag));
   };

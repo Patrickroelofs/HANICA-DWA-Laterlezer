@@ -45,7 +45,7 @@ export default ({
           <button
             className="ml-1 focus:outline-none opacity-0 hover:text-red-600 group-hover:opacity-100 w-6 h-6 float-right"
             type="submit"
-            onClick={() => deleteTag(tag)}
+            onClick={(e) => deleteTag(tag, e)}
           >
             <RemoveCircleOutlineRoundedIcon />
           </button>

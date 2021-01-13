@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { store } from '../store';
 import { getArticles } from '../store/articleSlice';
 
@@ -33,7 +34,7 @@ export function openWebSocket() {
     }
   };
   theSocket.onclose = () => {
-    console.log(`Closing socket ws://${serverHostname}`);
+    console.info(`Closing socket ws://${serverHostname}`);
   };
   return theSocket;
 }

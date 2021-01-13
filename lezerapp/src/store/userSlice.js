@@ -24,30 +24,57 @@ export default userSlice.reducer;
 
 export const loginUser = (username) => async (dispatch) => {
   try {
-    const { data } = await get(`${API_URL}/user/${username}`);
+    const { data, status } = await get(`${API_URL}/user/${username}`);
     dispatch(setUsername(data.username));
-  } catch (err) {
-    throw new Error(err);
+    return {
+      status,
+      message: data.message,
+      success: data.success,
+    };
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data,
+      success: response.data.success || false,
+    };
   }
 };
 
 export const registerUser = (username) => async (dispatch) => {
   try {
-    const { data } = await post(`${API_URL}/user`, { userName: username });
+    const { data, status } = await post(`${API_URL}/user`, { userName: username });
     dispatch(setUsername(data));
-  } catch (err) {
-    throw new Error(err);
+    return {
+      status,
+      message: data.message,
+      success: data.success,
+    };
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data,
+      success: response.data.success || false,
+    };
   }
 };
 
 export const googleAccount = (googleResponse) => async (dispatch) => {
   try {
-    const { data } = await post(`${API_URL}/user/oauth/google`, {
+    const { data, status } = await post(`${API_URL}/user/oauth/google`, {
       tokenId: googleResponse.tokenId,
     });
     dispatch(setUsername(data.userName));
     dispatch(setProfilePicture(data.profilePicture));
-  } catch (err) {
-    throw new Error(err);
+    return {
+      status,
+      message: data.message,
+      success: data.success,
+    };
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data,
+      success: response.data.success || false,
+    };
   }
 };

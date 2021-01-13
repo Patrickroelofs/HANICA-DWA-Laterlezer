@@ -51,7 +51,6 @@ const Articles = () => {
 
   return (
     <>
-      <h1 className="font-bold text-xl">My library</h1>
       <p className="text-sm pt-4">
         { statusDescription }
       </p>

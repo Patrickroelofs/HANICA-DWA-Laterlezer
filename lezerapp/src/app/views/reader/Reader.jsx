@@ -7,10 +7,9 @@ import BallBeat from 'react-pure-loaders/build/BallBeat';
 
 import Dock from '../sharedcomponents/dock/Dock';
 import { selectUsername, selectProfilePicture } from '../../../store/userSlice';
-import { setCurrentArticleId, selectCurrentArticle, setCurrentArticle } from '../../../store/articleSlice';
+import { selectCurrentArticle, getArticle } from '../../../store/articleSlice';
 import ArticleHeader from './components/articleHeader/ArticleHeader';
 
-import './Reader.scss';
 import ArticleTopBar from './components/articleTopBar/ArticleTopBar';
 import Nav from '../sharedcomponents/nav/Nav';
 
@@ -29,15 +28,8 @@ function Reader() {
     return config;
   });
 
-  const fetchArticle = () => {
-    axios.get(`http://localhost:3000/api/articles/${id}`).then(({ data }) => {
-      dispatch(setCurrentArticle(data));
-    });
-  };
-
   useEffect(() => {
-    dispatch(setCurrentArticleId(id));
-    fetchArticle();
+    dispatch(getArticle(id));
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios, { post, put } from 'axios';
+import axios, { post, put, get } from 'axios';
 import { getArticles } from './articleSlice';
 
 const API_URL = 'http://localhost:3000/api';
@@ -13,7 +13,15 @@ const tagSlice = createSlice({
   },
   reducers: {
     setTags: (state, action) => {
-      state.tags = action.payload;
+      const tags = action.payload.sort((a, b) => a.title.localeCompare(b.title));
+      const sortChildren = (tagslist) => {
+        tagslist.forEach((t) => {
+          t.children = t.children.sort((a, b) => a.title.localeCompare(b.title));
+          sortChildren(t.children);
+        });
+      };
+      sortChildren(tags);
+      state.tags = tags;
     },
     setSelectedTags: (state, action) => {
       state.selectedTags = action.payload;
@@ -41,8 +49,18 @@ export const {
 } = tagSlice.actions;
 export default tagSlice.reducer;
 
-export const updateTag = (tag) => (dispatch) => put(`${API_URL}/tags`, tag)
-  .then(({ data, status }) => {
+export const getTags = () => async (dispatch) => {
+  try {
+    const { data } = await get(`${API_URL}/tags`);
+    dispatch(setTags(data.data));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const updateTag = (tag) => async (dispatch) => {
+  try {
+    const { data, status } = await put(`${API_URL}/tags`, tag);
     dispatch(setTags(data.data));
     dispatch(getArticles());
     return {
@@ -50,36 +68,47 @@ export const updateTag = (tag) => (dispatch) => put(`${API_URL}/tags`, tag)
       message: data.message,
       success: data.success,
     };
-  }).catch(({ response }) => ({
-    status: response.status,
-    message: response.data.message,
-    success: response.data.success,
-  }));
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data.message,
+      success: response.data.success,
+    };
+  }
+};
 
-export const createTag = (title, color, parent) => (dispatch) => post(`${API_URL}/tags`, { tag: { title, color }, parent })
-  .then(({ data, status }) => {
+export const createTag = (title, color, parent) => async (dispatch) => {
+  try {
+    const { data, status } = await post(`${API_URL}/tags`, { tag: { title, color }, parent });
     dispatch(setTags(data.data));
     return {
       status,
       message: data.message,
       success: data.success,
     };
-  }).catch(({ response }) => ({
-    status: response.status,
-    message: response.data.message,
-    success: response.data.success,
-  }));
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data.message,
+      success: response.data.success,
+    };
+  }
+};
 
-export const deleteTag = (tag) => (dispatch) => axios.delete(`${API_URL}/tags`, { data: { tag } })
-  .then(({ data, status }) => {
+export const deleteTag = (tag) => async (dispatch) => {
+  try {
+    const { data, status } = await axios.delete(`${API_URL}/tags`, { data: { tag } });
     dispatch(setTags(data.data));
     return {
       status,
       message: data.message,
       success: data.success,
     };
-  }).catch(({ response }) => ({
-    status: response.status,
-    message: response.data.message,
-    success: response.data.success,
-  }));
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data.message,
+      success: response.data.success,
+    };
+  }
+};

@@ -7,7 +7,7 @@ let id;
 
 jest.setTimeout(30000);
 
-describe('e2e tests filter articles', () => {
+xdescribe('e2e tests filter articles', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: false, slowMo: 350 });
     page = await browser.newPage();

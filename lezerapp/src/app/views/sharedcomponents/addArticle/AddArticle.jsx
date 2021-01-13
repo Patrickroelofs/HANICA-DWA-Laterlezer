@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable */
 import React, { useState } from 'react';
 import { post } from 'axios';
 import { useHistory } from 'react-router-dom';
@@ -12,7 +10,7 @@ function AddArticle() {
   const history = useHistory();
   const username = useSelector(selectUsername);
   const [sendingArticle, setSendingArticle] = useState(false);
-  const [err, setErr] = useState('')
+  const [err, setErr] = useState('');
 
   const postArticle = (e) => {
     e.preventDefault();
@@ -23,11 +21,12 @@ function AddArticle() {
           Username: username,
         },
       }).then((response) => {
-        setSendingArticle(false);
-        history.push(`/app/${response.data.data}`);
-    }).catch((err) => {
-      setSendingArticle(false)
-      setErr('The URL does not look like a valid URL. Please check your URL and try again.')
+      setSendingArticle(false);
+      history.push(`/app/${response.data.data}`);
+    }).catch((error) => {
+      setSendingArticle(false);
+      setErr('The URL does not look like a valid URL. Please check your URL and try again.');
+      console.error(error);
     });
   };
 
@@ -42,8 +41,7 @@ function AddArticle() {
           <button type="submit" className="absolute right-0 top-5 mt-3 mr-4 focus:outline-none transition-all hover:text-blue-700">
             {sendingArticle
               ? <AutorenewIcon className="animate-spin" />
-              : <SendIcon />
-            }
+              : <SendIcon />}
           </button>
           {
             err && <span className="block mt-2" style={{ color: 'red' }}>{err}</span>

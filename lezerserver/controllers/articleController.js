@@ -3,6 +3,7 @@ const moment = require('moment');
 const { parseHTML } = require('../utils/HTMLParser');
 const response = require('../utils/response');
 let _User = require('../models/user');
+const { sendMessage, getWebsocket } = require('../websocket/ws');
 
 exports.getArticles = async (req, res) => {
   const query = [
@@ -118,6 +119,10 @@ exports.createArticlePost = async (req, res, next) => {
       createdAt: moment(),
     });
 
+    if (getWebsocket()) {
+      sendMessage(req.user.userName, { type: 'NEW ARTICLE' });
+    }
+
     req.user.save((err) => {
       if (err) {
         res.status(400).send(response('Something went wrong', null, false));
@@ -137,6 +142,15 @@ exports.updateArticle = async (req, res) => {
   }
   req.user.save();
   res.json(article);
+};
+
+/*
+  This function in initially created for the websocket e2e test because of articles that you dont know if they update or not
+ */
+exports.deleteArticle = async (req, res) => {
+  req.user.articles = req.user.articles.filter((article) => article._id.toString() !== req.params.id);
+  req.user.save();
+  res.status(200).send('Article deleted');
 };
 
 exports.setUserModel = (model) => { _User = model; };

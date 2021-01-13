@@ -5,6 +5,7 @@ import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutli
 import { useDispatch } from 'react-redux';
 import { deleteTag } from '../../../../../../store/tagSlice';
 import setContrast from '../../../../../../utils/chromaContrast';
+import { deleteArticleTag } from '../../../../../../store/articleSlice';
 
 export default ({
   tag, selectTag, handleClick, selectedTags, isStatic,
@@ -21,7 +22,12 @@ export default ({
   const handleDeleteClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(deleteTag(tag));
+    // eslint-disable-next-line no-alert
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(`Are you sure you want to delete the tag with name: ${tag.title}?`)) {
+      dispatch(deleteTag(tag));
+      dispatch(deleteArticleTag(tag));
+    }
   };
 
   return (

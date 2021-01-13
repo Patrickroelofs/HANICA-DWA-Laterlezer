@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Link, useHistory, useLocation,
+  Link, matchPath, useHistory, useLocation,
 } from 'react-router-dom';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
@@ -10,12 +10,24 @@ import TagHierarchy from '../../library/components/tagHierarchy/TagHierarchy';
 import { setSelectedTags } from '../../../../store/tagSlice';
 import { useQuery } from '../../../../utils/helpers';
 
-function Nav({ staticTags = false }) {
+function Nav() {
+  const [staticTags, setStatictags] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
   const [status, setStatus] = useState('');
   const range = useQuery().get('range');
+
+  useEffect(() => {
+    if (matchPath(location.pathname, {
+      path: '/app/:id',
+      exact: true,
+    })) {
+      setStatictags(true);
+    } else {
+      setStatictags(false);
+    }
+  }, [location]);
 
   const clickHandler = (inputStatus) => {
     setStatus(inputStatus);

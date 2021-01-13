@@ -225,7 +225,7 @@ describe('User Model Tests', () => {
       };
       testUser.createTag(newTag);
     } catch (error) {
-      expect(error.message).toEqual('Tag already exists');
+      expect(error.message).toEqual('Tag already exists.');
       expect(error.status).toEqual(400);
     }
   });

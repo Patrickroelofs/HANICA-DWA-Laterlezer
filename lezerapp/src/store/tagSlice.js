@@ -58,8 +58,9 @@ export const getTags = () => async (dispatch) => {
   }
 };
 
-export const updateTag = (tag) => (dispatch) => put(`${API_URL}/tags`, tag)
-  .then(({ data, status }) => {
+export const updateTag = (tag) => async (dispatch) => {
+  try {
+    const { data, status } = await put(`${API_URL}/tags`, tag);
     dispatch(setTags(data.data));
     dispatch(getArticles());
     return {
@@ -67,36 +68,47 @@ export const updateTag = (tag) => (dispatch) => put(`${API_URL}/tags`, tag)
       message: data.message,
       success: data.success,
     };
-  }).catch(({ response }) => ({
-    status: response.status,
-    message: response.data.message,
-    success: response.data.success,
-  }));
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data.message,
+      success: response.data.success,
+    };
+  }
+};
 
-export const createTag = (title, color, parent) => (dispatch) => post(`${API_URL}/tags`, { tag: { title, color }, parent })
-  .then(({ data, status }) => {
+export const createTag = (title, color, parent) => async (dispatch) => {
+  try {
+    const { data, status } = await post(`${API_URL}/tags`, { tag: { title, color }, parent });
     dispatch(setTags(data.data));
     return {
       status,
       message: data.message,
       success: data.success,
     };
-  }).catch(({ response }) => ({
-    status: response.status,
-    message: response.data.message,
-    success: response.data.success,
-  }));
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data.message,
+      success: response.data.success,
+    };
+  }
+};
 
-export const deleteTag = (tag) => (dispatch) => axios.delete(`${API_URL}/tags`, { data: { tag } })
-  .then(({ data, status }) => {
+export const deleteTag = (tag) => async (dispatch) => {
+  try {
+    const { data, status } = await axios.delete(`${API_URL}/tags`, { data: { tag } });
     dispatch(setTags(data.data));
     return {
       status,
       message: data.message,
       success: data.success,
     };
-  }).catch(({ response }) => ({
-    status: response.status,
-    message: response.data.message,
-    success: response.data.success,
-  }));
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data.message,
+      success: response.data.success,
+    };
+  }
+};

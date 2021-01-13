@@ -17,7 +17,7 @@ module.exports = {
     require('@tailwindcss/typography'),
   ],
   purge: {
-    enabled: false,
+    enabled: true,
     content: [
       './src/**/*.js',
       './src/**/*.jsx',

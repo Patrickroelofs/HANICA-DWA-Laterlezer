@@ -1,44 +1,29 @@
 import React from 'react';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { updateArticle, removeArticle } from '../../../../../store/articleSlice';
-
-const moment = require('moment');
+import { prioritize, read, archive } from '../../../../../store/articleSlice';
 
 function ArticleDropdown({ article, close }) {
   const dispatch = useDispatch();
 
-  const unread = (e) => {
+  const clickHandler = (e, context) => {
     e.stopPropagation();
     e.preventDefault();
-    axios.post(`http://localhost:3000/api/articles/${article._id}/status`, {
-      readAt: article.readAt ? null : moment().toISOString(),
-    }).then(({ data }) => {
-      dispatch(updateArticle(data));
-      close();
-    });
-  };
 
-  const archive = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    axios.post(`http://localhost:3000/api/articles/${article._id}/status`, {
-      archivedAt: article.archivedAt ? null : moment().toISOString(),
-    }).then(({ data }) => {
-      dispatch(removeArticle(data));
-      close();
-    });
-  };
+    switch (context) {
+      case 'read':
+        dispatch(read(article));
+        break;
+      case 'archive':
+        dispatch(archive(article));
+        break;
+      case 'prioritize':
+        dispatch(prioritize(article));
+        break;
+      default:
+        break;
+    }
 
-  const prioritize = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    axios.post(`http://localhost:3000/api/articles/${article._id}/status`, {
-      prioritizedAt: article.prioritizedAt ? null : moment().toISOString(),
-    }).then(({ data }) => {
-      dispatch(updateArticle(data));
-      close();
-    });
+    close();
   };
 
   return (
@@ -51,7 +36,7 @@ function ArticleDropdown({ article, close }) {
           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-100"
           role="menuitem"
           tabIndex="0"
-          onClick={archive}
+          onClick={(e) => clickHandler(e, 'archive')}
         >
           { article.archivedAt ? 'Unarchive' : 'Archive' }
         </span>
@@ -60,7 +45,7 @@ function ArticleDropdown({ article, close }) {
           tabIndex="0"
           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-100"
           role="menuitem"
-          onClick={unread}
+          onClick={(e) => clickHandler(e, 'read')}
         >
           Mark
           { article.readAt ? ' unread' : ' read' }
@@ -70,7 +55,7 @@ function ArticleDropdown({ article, close }) {
           tabIndex="0"
           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-100"
           role="menuitem"
-          onClick={prioritize}
+          onClick={(e) => clickHandler(e, 'prioritize')}
         >
           {
             article.prioritizedAt ? ' Dismiss priority' : ' Prioritize'

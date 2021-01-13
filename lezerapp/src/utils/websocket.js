@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { store } from '../store';
 import { getArticles } from '../store/articleSlice';
 
@@ -15,7 +16,7 @@ export function openWebSocket() {
   }
   const state = store.getState();
   const user = state.user.username;
-  console.log('Opening socket for', `ws://${serverHostname}`);
+
   theSocket = new WebSocket(`ws://${serverHostname}`);
 
   theSocket.onopen = () => {
@@ -31,10 +32,9 @@ export function openWebSocket() {
       default:
         break;
     }
-    console.log(`Client Websocket Received: ${messageEvent.data}`);
   };
   theSocket.onclose = () => {
-    console.log(`Closing socket ws://${serverHostname}`);
+    console.info(`Closing socket ws://${serverHostname}`);
   };
   return theSocket;
 }
@@ -56,6 +56,6 @@ export function closeWebSocket() {
     const ws = getWebSocket();
     ws.close();
   } catch (e) {
-    console.log(e.message);
+    console.error(e.message);
   }
 }

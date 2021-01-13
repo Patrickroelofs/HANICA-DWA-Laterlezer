@@ -4,8 +4,13 @@ import { Link } from 'react-router-dom';
 import LockIcon from '@material-ui/icons/Lock';
 import { GoogleLogout } from 'react-google-login';
 import { useDispatch } from 'react-redux';
+<<<<<<< HEAD
 import { setSelectedTags, toggleMode } from '../../../../store/tagSlice';
 import { closeWebSocket, openWebSocket } from '../../../../utils/websocketCommunication';
+=======
+import { setSelectedTags } from '../../../../store/tagSlice';
+import { closeWebSocket, openWebSocket } from '../../../../utils/websocket';
+>>>>>>> 0e2561d3293b5af24f42466e62cf00cceda14c23
 
 const Dock = ({ profilePicture }) => {
   const dispatch = useDispatch();
@@ -20,7 +25,7 @@ const Dock = ({ profilePicture }) => {
 
   useEffect(() => {
     openWebSocket();
-  }, []);
+  }, [profilePicture]);
 
   const clickHandler = () => {
     dispatch(setSelectedTags([]));

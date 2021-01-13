@@ -22,16 +22,59 @@ export const selectProfilePicture = (state) => state.user.profilePicture;
 export const { setUsername, setProfilePicture } = userSlice.actions;
 export default userSlice.reducer;
 
-export const loginUser = (username) => (dispatch) => get(`${API_URL}/user/${username}`)
-  .then(({ data }) => dispatch(setUsername(data.username)));
+export const loginUser = (username) => async (dispatch) => {
+  try {
+    const { data, status } = await get(`${API_URL}/user/${username}`);
+    dispatch(setUsername(data.username));
+    return {
+      status,
+      message: data.message,
+      success: data.success,
+    };
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data,
+      success: response.data.success || false,
+    };
+  }
+};
 
-export const registerUser = (username) => (dispatch) => post(`${API_URL}/user`, { userName: username })
-  .then(({ data }) => dispatch(setUsername(data)));
+export const registerUser = (username) => async (dispatch) => {
+  try {
+    const { data, status } = await post(`${API_URL}/user`, { userName: username });
+    dispatch(setUsername(data));
+    return {
+      status,
+      message: data.message,
+      success: data.success,
+    };
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data,
+      success: response.data.success || false,
+    };
+  }
+};
 
-export const googleAccount = (googleResponse) => (dispatch) => post(`${API_URL}/user/oauth/google`, {
-  tokenId: googleResponse.tokenId,
-})
-  .then((response) => {
-    dispatch(setUsername(response.data.userName));
-    dispatch(setProfilePicture(response.data.profilePicture));
-  });
+export const googleAccount = (googleResponse) => async (dispatch) => {
+  try {
+    const { data, status } = await post(`${API_URL}/user/oauth/google`, {
+      tokenId: googleResponse.tokenId,
+    });
+    dispatch(setUsername(data.userName));
+    dispatch(setProfilePicture(data.profilePicture));
+    return {
+      status,
+      message: data.message,
+      success: data.success,
+    };
+  } catch ({ response }) {
+    return {
+      status: response.status,
+      message: response.data,
+      success: response.data.success || false,
+    };
+  }
+};

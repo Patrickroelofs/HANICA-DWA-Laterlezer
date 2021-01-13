@@ -12,26 +12,25 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
   const [error, setError] = useState('');
   const [tab, setTab] = useState({});
 
-  const postArticle = (selectedTags) => {
+  const postArticle = async (selectedTags) => {
     setLoaded(false);
     selectedTags.map((tag) => {
       tag.title = tag.value;
       tag.color = chroma(tag.color).hex();
       return tag;
     });
-    post('http://localhost:3000/api/articles',
-      { url: tab, tags: selectedTags }, {
-        headers: {
-          Username: localStorage.getItem('username'),
-        },
-      })
-      .then(() => {
-        setLoaded(true);
-        // sendMessage({ type: 'NEW ARTICLE' });
-      }).catch((e) => {
-        setError(e.message);
-        setLoaded(true);
-      });
+    try {
+      await post('http://localhost:3000/api/articles',
+        { url: tab, tags: selectedTags }, {
+          headers: {
+            Username: localStorage.getItem('username'),
+          },
+        });
+      setLoaded(true);
+    } catch (err) {
+      setError(err.message);
+      setLoaded(true);
+    }
   };
 
   const checkBrowser = () => {
@@ -48,7 +47,7 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
         <div className="w-full h-full p-6 text-center font-bold text-lg">
           <h2>
             Your article has
-            {error ? ' not' : ''}
+            {error && ' not'}
             {' '}
             been saved.
           </h2>

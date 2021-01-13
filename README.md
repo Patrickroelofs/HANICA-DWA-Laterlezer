@@ -47,12 +47,18 @@ npm start
 
 ### Extension
 
+De extension is niet verplicht voor de werking van app.
+
 ```
 cd extension
 npm install
 npm run build:tailwind
-npm build // Plaats de build folder als extension in je Chromium browsser
-npm start
+
+-> Maak een .env file in de extension folder met de code;
+INLINE_RUNTIME_CHUNK=false
+
+npm run build
+-> Plaats de build folder als extension in je Chromium browser
 
 // de extension zal nu draaien op localhost:3002
 ```

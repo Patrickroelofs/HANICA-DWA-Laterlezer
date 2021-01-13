@@ -1,11 +1,10 @@
 import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { get } from 'axios';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import NewTag from '../../../sharedcomponents/newTag/NewTag';
 import TagItem from './components/TagItem';
 import {
-  setTags, selectTags, selectSelectedTags, setSelectedTags,
+  getTags, selectTags, selectSelectedTags, setSelectedTags,
 } from '../../../../../store/tagSlice';
 import NewTagForm from '../../../sharedcomponents/newTag/NewTagForm';
 
@@ -77,10 +76,8 @@ const TagHierarchy = ({ isStatic = false }) => {
   };
 
   useEffect(() => {
-    get('http://localhost:3000/api/tags').then(({ data }) => {
-      dispatch(setTags(data.data));
-    });
-  }, [setTags]);
+    dispatch(getTags());
+  }, []);
 
   const tagHierarchyGenerator = (tagz, pickedTag) => {
     tagz = tagz.map((t) => {

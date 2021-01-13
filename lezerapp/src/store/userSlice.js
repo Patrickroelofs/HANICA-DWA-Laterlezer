@@ -22,16 +22,32 @@ export const selectProfilePicture = (state) => state.user.profilePicture;
 export const { setUsername, setProfilePicture } = userSlice.actions;
 export default userSlice.reducer;
 
-export const loginUser = (username) => (dispatch) => get(`${API_URL}/user/${username}`)
-  .then(({ data }) => dispatch(setUsername(data.username)));
+export const loginUser = (username) => async (dispatch) => {
+  try {
+    const { data } = await get(`${API_URL}/user/${username}`);
+    dispatch(setUsername(data.username));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 
-export const registerUser = (username) => (dispatch) => post(`${API_URL}/user`, { userName: username })
-  .then(({ data }) => dispatch(setUsername(data)));
+export const registerUser = (username) => async (dispatch) => {
+  try {
+    const { data } = await post(`${API_URL}/user`, { userName: username });
+    dispatch(setUsername(data));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 
-export const googleAccount = (googleResponse) => (dispatch) => post(`${API_URL}/user/oauth/google`, {
-  tokenId: googleResponse.tokenId,
-})
-  .then((response) => {
-    dispatch(setUsername(response.data.userName));
-    dispatch(setProfilePicture(response.data.profilePicture));
-  });
+export const googleAccount = (googleResponse) => async (dispatch) => {
+  try {
+    const { data } = await post(`${API_URL}/user/oauth/google`, {
+      tokenId: googleResponse.tokenId,
+    });
+    dispatch(setUsername(data.userName));
+    dispatch(setProfilePicture(data.profilePicture));
+  } catch (err) {
+    throw new Error(err);
+  }
+};

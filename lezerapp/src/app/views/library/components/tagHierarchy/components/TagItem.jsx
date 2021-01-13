@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-alert */
 import React from 'react';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
@@ -22,8 +24,6 @@ export default ({
   const handleDeleteClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // eslint-disable-next-line no-alert
-    // eslint-disable-next-line no-restricted-globals
     if (confirm(`Are you sure you want to delete the tag with name: ${tag.title}?`)) {
       dispatch(deleteTag(tag));
       dispatch(deleteArticleTag(tag));

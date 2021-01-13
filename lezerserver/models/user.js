@@ -91,8 +91,7 @@ const findTag = function (tag, allTags) {
   let tagToFind = '';
   const eachRecursive = (tags) => {
     tags.forEach((t) => {
-      // eslint-disable-next-line consistent-return
-      if (tag._id.toString() === t._id.toString()) {
+      if (tag && tag._id.toString() === t._id.toString()) {
         tagToFind = t;
       } else {
         eachRecursive(t.children);

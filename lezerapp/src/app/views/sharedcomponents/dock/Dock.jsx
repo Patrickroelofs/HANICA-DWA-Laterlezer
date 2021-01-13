@@ -19,7 +19,7 @@ const Dock = ({ profilePicture }) => {
 
   useEffect(() => {
     openWebSocket();
-  }, []);
+  }, [profilePicture]);
 
   const clickHandler = () => {
     dispatch(setSelectedTags([]));

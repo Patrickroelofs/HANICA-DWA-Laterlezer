@@ -81,6 +81,8 @@ const TagHierarchy = ({ isStatic = false }) => {
     e.preventDefault();
     e.stopPropagation();
 
+    // eslint-disable-next-line no-alert
+    // eslint-disable-next-line no-restricted-globals
     if (confirm(`Are you sure you want to delete the tag with name: ${tag.title}?`)) {
       selectTag([tag]);
       dispatch(deleteTag(tag));

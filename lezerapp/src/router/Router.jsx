@@ -30,34 +30,36 @@ function Router() {
 
         <Route path="/register">{checkLoggedOut(<Register />)}</Route>
 
-        <div className="min-h-screen bg-gray-50 font-serif text-sm">
-          <div className="min-h-full md:grid grid-cols-4">
-            <nav className="col-span-1">
-              <div className="grid grid-cols-5 min-h-full">
-                <div className="col-span-1 bg-white relative top-0">
-                  <Dock profilePicture={profilePicture} />
-                </div>
-                <div className="col-span-4 relative top-0">
-                  <div className="min-h-screen sticky top-0 z-50">
-                    <Nav />
+        <>
+          <div className="min-h-screen bg-gray-50 font-serif text-sm">
+            <div className="min-h-full md:grid grid-cols-4">
+              <nav className="col-span-1">
+                <div className="grid grid-cols-5 min-h-full">
+                  <div className="col-span-1 bg-white relative top-0">
+                    <Dock profilePicture={profilePicture} />
+                  </div>
+                  <div className="col-span-4 relative top-0">
+                    <div className="min-h-screen sticky top-0 z-50">
+                      <Nav />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </nav>
+              </nav>
 
-            <main className="min-h-screen col-span-3 bg-white">
-              <Route path="/app" exact>
-                {checkLoggedIn(<App />)}
-              </Route>
+              <main className="min-h-screen col-span-3 bg-white">
+                <Route path="/app" exact>
+                  {checkLoggedIn(<App />)}
+                </Route>
 
-              <Route path="/app/status/:status" exact>
-                {checkLoggedIn(<App />)}
-              </Route>
+                <Route path="/app/status/:status" exact>
+                  {checkLoggedIn(<App />)}
+                </Route>
 
-              <Route exact path="/app/:id">{checkLoggedIn(<Reader />)}</Route>
-            </main>
+                <Route exact path="/app/:id">{checkLoggedIn(<Reader />)}</Route>
+              </main>
+            </div>
           </div>
-        </div>
+        </>
       </Switch>
     </BrowserRouter>
   );

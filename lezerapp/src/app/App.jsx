@@ -1,23 +1,17 @@
 import React from 'react';
-
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Dock from './views/sharedcomponents/dock/Dock';
 import Nav from './views/sharedcomponents/nav/Nav';
 import Articles from './views/library/Articles';
 import { selectUsername, selectProfilePicture } from '../store/userSlice';
 import AddArticle from './views/sharedcomponents/addArticle/AddArticle';
+import { useInterceptor } from '../utils/helpers';
 
 function App() {
   const username = useSelector(selectUsername);
   const profilePicture = useSelector(selectProfilePicture);
 
-  axios.interceptors.request.use((config) => {
-    if (username) {
-      config.headers.Username = username;
-    }
-    return config;
-  });
+  useInterceptor(username);
 
   return (
     <div className="min-h-screen bg-gray-50 font-serif text-sm">

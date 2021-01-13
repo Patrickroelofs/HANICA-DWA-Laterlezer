@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import setContrast from '../../../../utils/chromaContrast';
+import { setContrast } from '../../../../utils/helpers';
 
 export default memo(({ data: { _id, title, color } }) => (
   <span

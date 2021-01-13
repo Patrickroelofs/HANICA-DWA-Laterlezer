@@ -5,7 +5,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import { GoogleLogout } from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import { setSelectedTags } from '../../../../store/tagSlice';
-import { closeWebSocket, openWebSocket } from '../../../../utils/websocketCommunication';
+import { closeWebSocket, openWebSocket } from '../../../../utils/websocket';
 
 const Dock = ({ profilePicture }) => {
   const dispatch = useDispatch();

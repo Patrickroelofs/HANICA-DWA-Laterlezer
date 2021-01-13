@@ -15,6 +15,7 @@ describe('User Controller Tests', () => {
   });
 
   beforeEach(async () => {
+    setTimeout(() => {}, 100);
     await User.create({
       firstName: 'Stan',
       lastName: 'Han',
@@ -48,35 +49,26 @@ describe('User Controller Tests', () => {
   test('POST /tags should return response with status 201', async () => {
     const response = await request(app).post('/api/tags')
       .send({
-        parent: {
-          _id: 1,
-          title: 'testTag',
-          color: '#123122',
-          children: [],
-        },
         tag: {
-          _id: 2,
-          title: 'javascript',
+          title: 'react',
           color: '#FF0000',
           children: [],
         },
       })
       .set('Username', 'stanhan')
       .set('Accept', 'application/json');
+    console.log(response);
     expect(response.status).toEqual(201);
     expect(response.body.message).toEqual('Tag created');
     expect(response.body.success).toEqual(true);
   });
 
-  // TODO: Need to update this test after bugfix #242 is pushed
-  xtest('POST /tags  should return bad request response, Subtag can\'t have the same title as the parent.', async () => {
+  test('POST /tags  should return bad request response, Subtag can\'t have the same title as the parent.', async () => {
+    const user = await User.getUserByUsername('stanhan');
     const response = await request(app).post('/api/tags')
       .send({
-        parent: {
-          children: [],
-        },
+        parent: user.tags[0],
         tag: {
-          _id: 2,
           title: 'javascript',
           color: '#FF0000',
           children: [],
@@ -140,7 +132,7 @@ describe('User Controller Tests', () => {
   });
 
   // I really don't know whats wrong with this test... ~ Imre Boersma
-  xtest('POST /user should return 200, user has been created', async () => {
+  test('POST /user should return 200, user has been created', async () => {
     const response = await request(app).post('/api/user').send({ userName: 'user_tony' });
     expect(response.status).toEqual(200);
   });

@@ -57,7 +57,6 @@ describe('User Controller Tests', () => {
       })
       .set('Username', 'stanhan')
       .set('Accept', 'application/json');
-    console.log(response);
     expect(response.status).toEqual(201);
     expect(response.body.message).toEqual('Tag created');
     expect(response.body.success).toEqual(true);

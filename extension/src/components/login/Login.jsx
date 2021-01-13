@@ -9,23 +9,24 @@ function Login({ setUser, setAutoLoggedIn }) {
   const googleLogin = async (resultsArray) => {
     const usernameResult = JSON.parse(resultsArray[0]).username;
 
-    await get(`${API_URL}/user/${usernameResult}`)
-      .then(({ data }) => {
-        setName(data.username);
-        setUser(data.username);
-      }).catch((err) => {
-        console.log(err);
-      });
+    try {
+      const { data } = await get(`${API_URL}/user/${usernameResult}`);
+
+      setName(data.username);
+      setUser(data.username);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const usernameLogin = async (username) => {
-    await get(`${API_URL}/user/${username}`)
-      .then(({ data }) => {
-        setName(data.username);
-        setUser(data.username);
-      }).catch((err) => {
-        setResponse(err);
-      });
+    try {
+      const { data } = await get(`${API_URL}/user/${username}`);
+      setName(data.username);
+      setUser(data.username);
+    } catch (err) {
+      setResponse(err);
+    }
   };
 
   chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {

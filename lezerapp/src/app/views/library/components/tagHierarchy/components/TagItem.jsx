@@ -5,9 +5,10 @@ import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRoun
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded';
 import { useDispatch } from 'react-redux';
+
 import { deleteTag } from '../../../../../../store/tagSlice';
-import setContrast from '../../../../../../utils/chromaContrast';
 import { deleteArticleTag } from '../../../../../../store/articleSlice';
+import { setContrast } from '../../../../../../utils/helpers';
 
 export default ({
   tag, selectTag, handleClick, selectedTags, isStatic,

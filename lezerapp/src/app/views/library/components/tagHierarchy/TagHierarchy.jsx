@@ -4,6 +4,7 @@ import { get } from 'axios';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import NewTag from '../../../sharedcomponents/newTag/NewTag';
 import TagItem from './components/TagItem';
+import { deleteArticleTag } from '../../../../../store/articleSlice';
 import {
   setTags, selectTags, selectSelectedTags, setSelectedTags, deleteTag,
 } from '../../../../../store/tagSlice';
@@ -79,9 +80,12 @@ const TagHierarchy = ({ isStatic = false }) => {
   const deleteClickedTag = (tag, e) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    selectTag([tag]);
-    dispatch(deleteTag(tag));
+
+    if (confirm(`Are you sure you want to delete the tag with name: ${tag.title}?`)) {
+      selectTag([tag]);
+      dispatch(deleteTag(tag));
+      dispatch(deleteArticleTag(tag));
+    }
   };
 
   useEffect(() => {
@@ -121,7 +125,7 @@ const TagHierarchy = ({ isStatic = false }) => {
     <>
       <div className="mb-4 mt-6 pl-2 font-bold text-base">
         <span>Tags</span>
-        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} /> }
+        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} toggle={() => setShowTagDropdown(!showTagDropdown)} /> }
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">

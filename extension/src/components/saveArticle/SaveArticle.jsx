@@ -5,7 +5,7 @@ import { post } from 'axios';
 import chroma from 'chroma-js';
 
 import TagListSelect from '../tagListSelect/TagListSelect';
-import { openWebSocket, sendMessage } from '../../utils/serverCommunication';
+import { openWebSocket } from '../../utils/websocketCommunication';
 
 function SaveArticle({ setUser, user, autoLoggedIn }) {
   const [loaded, setLoaded] = useState('waitForSelect');
@@ -27,7 +27,7 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
       })
       .then(() => {
         setLoaded(true);
-        sendMessage({ type: 'NEW ARTICLE' });
+        // sendMessage({ type: 'NEW ARTICLE' });
       }).catch((e) => {
         setError(e.message);
         setLoaded(true);

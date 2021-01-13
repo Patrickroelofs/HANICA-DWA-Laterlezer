@@ -34,7 +34,7 @@ export const loginUser = (username) => async (dispatch) => {
   } catch ({ response }) {
     return {
       status: response.status,
-      message: response.data,
+      message: response.data.message,
       success: response.data.success || false,
     };
   }
@@ -50,9 +50,10 @@ export const registerUser = (username) => async (dispatch) => {
       success: data.success,
     };
   } catch ({ response }) {
+    console.log(response);
     return {
       status: response.status,
-      message: response.data,
+      message: response.data.message,
       success: response.data.success || false,
     };
   }

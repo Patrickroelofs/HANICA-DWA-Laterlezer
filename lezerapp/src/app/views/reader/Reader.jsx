@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import loadable from '@loadable/component';
 import BallBeat from 'react-pure-loaders/build/BallBeat';
 
 import Dock from '../sharedcomponents/dock/Dock';
 import { selectUsername, selectProfilePicture } from '../../../store/userSlice';
-import { setCurrentArticleId, selectCurrentArticle, setCurrentArticle } from '../../../store/articleSlice';
+import { selectCurrentArticle, getArticle } from '../../../store/articleSlice';
 import ArticleHeader from './components/articleHeader/ArticleHeader';
 
 import ArticleTopBar from './components/articleTopBar/ArticleTopBar';
 import Nav from '../sharedcomponents/nav/Nav';
+import { useInterceptor } from '../../../utils/helpers';
 
 const FullArticle = loadable(() => import('./components/fullArticle/FullArticle'));
 
@@ -23,20 +23,10 @@ function Reader() {
   const article = useSelector(selectCurrentArticle);
   const profilePicture = useSelector(selectProfilePicture);
 
-  axios.interceptors.request.use((config) => {
-    if (username) config.headers.Username = username;
-    return config;
-  });
-
-  const fetchArticle = () => {
-    axios.get(`http://localhost:3000/api/articles/${id}`).then(({ data }) => {
-      dispatch(setCurrentArticle(data));
-    });
-  };
+  useInterceptor(username);
 
   useEffect(() => {
-    dispatch(setCurrentArticleId(id));
-    fetchArticle();
+    dispatch(getArticle(id));
   }, []);
 
   return (

@@ -3,9 +3,10 @@ import { useDispatch } from 'react-redux';
 import { ChromePicker } from 'react-color';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import chroma from 'chroma-js';
+
 import { createTag, updateTag } from '../../../../store/tagSlice';
-import setContrast from '../../../../utils/chromaContrast';
 import { updateArticleTag } from '../../../../store/articleSlice';
+import { setContrast } from '../../../../utils/helpers';
 
 function NewTagForm({
   reference, parent, tag = {}, mode, position, toggle,

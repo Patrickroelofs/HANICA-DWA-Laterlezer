@@ -11,13 +11,14 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
   const [error, setError] = useState('');
   const [tab, setTab] = useState({});
 
-  const postArticle = (selectedTags) => {
+  const postArticle = async (selectedTags) => {
     setLoaded(false);
     selectedTags.map((tag) => {
       tag.title = tag.value;
       tag.color = chroma(tag.color).hex();
       return tag;
     });
+
     ArticleSender({ url: tab, tags: selectedTags }, user, fetchLoad).then(() => {
       setLoaded(true);
     }).catch((e) => {
@@ -40,7 +41,7 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
         <div className="w-full h-full p-6 text-center font-bold text-lg">
           <h2>
             Your article has
-            {error ? ' not' : ''}
+            {error && ' not'}
             {' '}
             been saved.
           </h2>

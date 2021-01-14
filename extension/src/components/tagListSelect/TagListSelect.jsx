@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { get } from 'axios';
 import TagPill from '../tagPill/TagPill';
 import TagParent from './tagParent/TagParent';
 
@@ -7,12 +7,13 @@ function TagListSelect({ onSave }) {
   const [selectedTags, setSelectedTags] = useState([]);
   const [tags, setTags] = useState([]);
 
-  const fetchTags = () => {
-    axios.get('http://localhost:3000/api/tags', {
-      headers: {
-        Username: localStorage.getItem('username'),
-      },
-    }).then(({ data }) => {
+  const fetchTags = async () => {
+    try {
+      const { data } = await get('http://localhost:3000/api/tags', {
+        headers: {
+          Username: localStorage.getItem('username'),
+        },
+      });
       const mapTags = (defTags) => defTags.map((tag) => ({
         _id: tag._id,
         title: tag.title,
@@ -22,7 +23,9 @@ function TagListSelect({ onSave }) {
         children: mapTags(tag.children),
       }));
       setTags(mapTags(data.data));
-    });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const postTags = () => onSave(selectedTags);

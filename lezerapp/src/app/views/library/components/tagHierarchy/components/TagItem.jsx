@@ -1,11 +1,14 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-alert */
 import React from 'react';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded';
 import { useDispatch } from 'react-redux';
+
 import { deleteTag } from '../../../../../../store/tagSlice';
-import setContrast from '../../../../../../utils/chromaContrast';
 import { deleteArticleTag } from '../../../../../../store/articleSlice';
+import { setContrast } from '../../../../../../utils/helpers';
 
 export default ({
   tag, selectTag, handleClick, selectedTags, isStatic,
@@ -22,8 +25,6 @@ export default ({
   const handleDeleteClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // eslint-disable-next-line no-alert
-    // eslint-disable-next-line no-restricted-globals
     if (confirm(`Are you sure you want to delete the tag with name: ${tag.title}?`)) {
       dispatch(deleteTag(tag));
       dispatch(deleteArticleTag(tag));

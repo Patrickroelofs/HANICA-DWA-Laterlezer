@@ -36,13 +36,15 @@ const articleSlice = createSlice({
       state.currentArticle.tags = articleTags;
     },
     deleteArticleTag: (state, action) => {
-      const articleTags = [];
-      for (let i = 0; i < state.currentArticle.tags.length; i++) {
-        if (state.currentArticle.tags[i]._id !== action.payload._id) {
-          articleTags.push(state.currentArticle.tags[i]);
+      if (state.currentArticle) {
+        const articleTags = [];
+        for (let i = 0; i < state.currentArticle.tags.length; i++) {
+          if (state.currentArticle.tags[i]._id !== action.payload._id) {
+            articleTags.push(state.currentArticle.tags[i]);
+          }
         }
+        state.currentArticle.tags = articleTags;
       }
-      state.currentArticle.tags = articleTags;
     },
   },
 });

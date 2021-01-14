@@ -1,14 +1,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LockIcon from '@material-ui/icons/Lock';
 import { GoogleLogout } from 'react-google-login';
 import { useDispatch } from 'react-redux';
-import { setSelectedTags } from '../../../../store/tagSlice';
+import { setSelectedTags, toggleMode } from '../../../../store/tagSlice';
 import { closeWebSocket, openWebSocket } from '../../../../utils/websocket';
 
 const Dock = ({ profilePicture }) => {
   const dispatch = useDispatch();
+  const [clicks, setClicks] = useState(0);
   const onLogout = () => {
     closeWebSocket();
     localStorage.clear();
@@ -23,6 +24,15 @@ const Dock = ({ profilePicture }) => {
 
   const clickHandler = () => {
     dispatch(setSelectedTags([]));
+  };
+
+  const toggleTagMode = () => {
+    setClicks(clicks + 1);
+    if (clicks >= 3) {
+      setClicks(0);
+      dispatch(toggleMode());
+      alert('Tags mode has been changed');
+    }
   };
 
   return (
@@ -43,7 +53,8 @@ const Dock = ({ profilePicture }) => {
             <button onClick={onClick} disabled={disabled} type="button" className="focus:outline-none text-center w-full mb-4"><LockIcon /></button>
           )}
         />
-        <img className="m-auto rounded-full w-16" alt="profilePicture" src={`${profilePicture || 'https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png'} `} />
+        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/click-events-have-key-events */}
+        <img key="profilePicture" onClick={toggleTagMode} className="m-auto rounded-full w-16" alt="profilePicture" src={`${profilePicture || 'https://cdn.discordapp.com/attachments/775300546122612767/781448294924025856/unknown.png'} `} />
       </div>
     </section>
   );

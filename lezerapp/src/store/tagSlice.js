@@ -1,17 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios, { post, put, get } from 'axios';
-import { getArticles } from './articleSlice';
+import axios from 'axios';
+import TopDown from './Classes/TopDown';
+import DownTop from './Classes/DownTop';
 
 const API_URL = 'http://localhost:3000/api';
+
+const modeParser = (state) => (state.mode === 'TopDown' ? new TopDown(state.tags, state.selectedTags) : new DownTop(state.tags, state.selectedTags));
 
 const tagSlice = createSlice({
   name: 'tag',
   initialState: {
     tags: [],
+    mode: 'DownTop',
     selectedTags: [],
     articleTags: [],
   },
   reducers: {
+    toggleMode: (state) => {
+      if (state.mode === 'TopDown') {
+        state.mode = 'DownTop';
+      } else {
+        state.mode = 'TopDown';
+      }
+    },
     setTags: (state, action) => {
       const tags = action.payload.sort((a, b) => a.title.localeCompare(b.title));
       const sortChildren = (tagslist) => {
@@ -30,28 +41,26 @@ const tagSlice = createSlice({
       state.articleTags = action.payload;
     },
     selectTag: (state, action) => {
-      const childrenIds = (tag) => tag.children.map((t) => [t._id, ...childrenIds(t)]).flat();
-      function flatDeep(arr) {
-        return arr.reduce((acc, val) => acc.concat(val.children.length > 0 ? [...flatDeep(val.children), val] : [val]), []);
-      }
-      const parentsTags = (tag) => flatDeep(state.tags, Infinity).filter((t) => (childrenIds(t).includes(tag._id)));
-      const parentTags = parentsTags(action.payload);
-      state.selectedTags = [action.payload, ...parentTags];
+      state.selectedTags = modeParser(state).selectTag(action.payload);
+    },
+    deselectTag: (state, action) => {
+      state.selectedTags = modeParser(state).deselectTag(action.payload);
     },
   },
 });
 
 export const selectTags = (state) => state.tag.tags;
 export const selectSelectedTags = (state) => state.tag.selectedTags;
+export const getTagClasses = (state) => (tag, isStatic) => modeParser(state.tag).getClasses(tag, isStatic);
 
 export const {
-  setTags, setSelectedTags, setArticleTags, selectTag,
+  setTags, setSelectedTags, setArticleTags, selectTag, toggleMode, deselectTag,
 } = tagSlice.actions;
 export default tagSlice.reducer;
 
 export const getTags = () => async (dispatch) => {
   try {
-    const { data } = await get(`${API_URL}/tags`);
+    const { data } = await axios.get(`${API_URL}/tags`);
     dispatch(setTags(data.data));
   } catch (err) {
     throw new Error(err);
@@ -60,9 +69,8 @@ export const getTags = () => async (dispatch) => {
 
 export const updateTag = (tag) => async (dispatch) => {
   try {
-    const { data, status } = await put(`${API_URL}/tags`, tag);
+    const { data, status } = await axios.put(`${API_URL}/tags`, tag);
     dispatch(setTags(data.data));
-    dispatch(getArticles());
     return {
       status,
       message: data.message,
@@ -79,7 +87,7 @@ export const updateTag = (tag) => async (dispatch) => {
 
 export const createTag = (title, color, parent) => async (dispatch) => {
   try {
-    const { data, status } = await post(`${API_URL}/tags`, { tag: { title, color }, parent });
+    const { data, status } = await axios.post(`${API_URL}/tags`, { tag: { title, color }, parent });
     dispatch(setTags(data.data));
     return {
       status,

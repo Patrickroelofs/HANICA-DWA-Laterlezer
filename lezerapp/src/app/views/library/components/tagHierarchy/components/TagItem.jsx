@@ -4,31 +4,16 @@ import React from 'react';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded';
-import { useDispatch } from 'react-redux';
-
-import { deleteTag } from '../../../../../../store/tagSlice';
-import { deleteArticleTag } from '../../../../../../store/articleSlice';
 import { setContrast } from '../../../../../../utils/helpers';
 
 export default ({
-  tag, selectTag, handleClick, selectedTags, isStatic,
+  tag, selectTag, handleClick, selectedTags, isStatic, deleteTag,
 }) => {
   const isSelected = (tagg) => selectedTags.find((t) => tagg._id.toString() === t._id.toString());
-  const dispatch = useDispatch();
-
   const handleTagClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
     selectTag(tag);
-  };
-
-  const handleDeleteClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (confirm(`Are you sure you want to delete the tag with name: ${tag.title}?`)) {
-      dispatch(deleteTag(tag));
-      dispatch(deleteArticleTag(tag));
-    }
   };
 
   return (
@@ -61,7 +46,7 @@ export default ({
           <button
             className="ml-1 focus:outline-none opacity-0 hover:text-red-600 group-hover:opacity-100 w-6 h-6 float-right"
             type="submit"
-            onClick={handleDeleteClick}
+            onClick={(e) => deleteTag(tag, e)}
           >
             <RemoveCircleOutlineRoundedIcon />
           </button>

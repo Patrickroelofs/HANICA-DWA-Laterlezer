@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { get, post } from 'axios';
 import moment from 'moment';
+import { setChildrenInArray } from '../utils/helpers';
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -37,13 +38,9 @@ const articleSlice = createSlice({
     },
     deleteArticleTag: (state, action) => {
       if (state.currentArticle) {
-        const articleTags = [];
-        for (let i = 0; i < state.currentArticle.tags.length; i++) {
-          if (state.currentArticle.tags[i]._id !== action.payload._id) {
-            articleTags.push(state.currentArticle.tags[i]);
-          }
-        }
-        state.currentArticle.tags = articleTags;
+        const tagsToDelete = setChildrenInArray(action.payload);
+        // eslint-disable-next-line no-return-assign
+        tagsToDelete.forEach((tag) => state.currentArticle.tags = state.currentArticle.tags.filter((deletingTag) => (tag._id.toString() !== deletingTag._id.toString())));
       }
     },
   },

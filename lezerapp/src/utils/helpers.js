@@ -11,4 +11,16 @@ export const useInterceptor = (username) => axios.interceptors.request.use((conf
   return config;
 });
 
+export const setChildrenInArray = (tag) => {
+  const children = [tag];
+  const eachRecursive = (tags) => {
+    tags.forEach((child) => {
+      children.push(child);
+      eachRecursive(child.children);
+    });
+  };
+  eachRecursive(tag.children);
+  return children;
+};
+
 export default null;

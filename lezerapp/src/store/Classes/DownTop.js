@@ -24,11 +24,11 @@ export default class DownTop {
     return this.selectedTags.filter((t) => payload._id !== t._id);
   }
 
-  getClasses(tag) {
+  getClasses(tag, isStatic) {
     if (this.isSelected(tag)) {
       return 'bg-gray-200 font-bold';
     }
-    if (this.parentTags(tag).filter((t) => this.isSelected(t) && this.childIds(t).filter((ta) => this.isSelected({ _id: ta })).length === 0).length > 0) {
+    if (!isStatic && this.parentTags(tag).filter((t) => this.isSelected(t) && this.childIds(t).filter((ta) => this.isSelected({ _id: ta })).length === 0).length > 0) {
       return 'bg-gray-200';
     }
     return '';

@@ -63,7 +63,7 @@ const TagHierarchy = ({ isStatic = false }) => {
   }, []);
 
   const generateList = (tagss) => tagss.map((tag) => {
-    const result = [(<TagItem key={`tags${tag._id}`} tag={tag} handleClick={handleClick} isStatic={isStatic} selectTag={() => handleTag(tag)} classes={getClasses(tag)} editable={tag.editable} />)];
+    const result = [(<TagItem key={`tags${tag._id}`} tag={tag} handleClick={handleClick} isStatic={isStatic} selectTag={() => handleTag(tag)} classes={getClasses(tag, isStatic)} editable={tag.editable} />)];
     if (tag.children && tag.children.length > 0) {
       result.push(<li key={`tags${tag._id}chld`}><ul className="border-l-2 inset border-gray-300 border-solid ml-4">{generateList(tag.children)}</ul></li>);
     }

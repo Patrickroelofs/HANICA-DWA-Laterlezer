@@ -54,7 +54,7 @@ export const selectTags = (state) => state.tag.tags;
 export const selectSelectedTags = (state) => state.tag.selectedTags;
 export const getTagClasses = (state) => {
   const model = modeParser(state.tag);
-  return (tag) => model.getClasses(tag);
+  return (tag, isStatic) => model.getClasses(tag, isStatic);
 };
 
 export const {

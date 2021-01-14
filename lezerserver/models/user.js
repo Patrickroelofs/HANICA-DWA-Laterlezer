@@ -84,11 +84,13 @@ userSchema.methods.updateTag = async function (newTag) {
     throw new CustomError('Subtag can\'t have the same title as the parent.', 400);
   }
 
-  parent.children.forEach((tag) => {
-    if (tag.title === newTag.title) {
-      throw new CustomError('Tag already exists.', 400);
-    }
-  });
+  if (parent) {
+    parent.children.forEach((tag) => {
+      if (tag.title === newTag.title) {
+        throw new CustomError('Tag already exists.', 400);
+      }
+    });
+  }
 
   const eachRecursive = (tags) => {
     this.tags = tags.map((tag) => {

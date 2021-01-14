@@ -2,11 +2,12 @@ import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import NewTag from '../../../sharedcomponents/newTag/NewTag';
+import TagItem from './components/TagItem';
+import { deleteArticleTag } from '../../../../../store/articleSlice';
 import {
-  getTags, selectTags, selectSelectedTags, selectTag, deselectTag, getTagClasses,
+  getTags, selectTags, selectSelectedTags, selectTag, deselectTag, getTagClasses, deleteTag,
 } from '../../../../../store/tagSlice';
 import NewTagForm from '../../../sharedcomponents/newTag/NewTagForm';
-import TagItem from './components/TagItem';
 
 const TagHierarchy = ({ isStatic = false }) => {
   const tags = useSelector(selectTags);
@@ -58,12 +59,25 @@ const TagHierarchy = ({ isStatic = false }) => {
     }
   };
 
+  const deleteClickedTag = (tag, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // eslint-disable-next-line no-alert
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(`Are you sure you want to delete the tag with name: ${tag.title}?`)) {
+      selectTag([tag]);
+      dispatch(deleteTag(tag));
+      dispatch(deleteArticleTag(tag));
+    }
+  };
+
   useEffect(() => {
     dispatch(getTags());
   }, []);
 
   const generateList = (tagss) => tagss.map((tag) => {
-    const result = [(<TagItem key={`tags${tag._id}`} tag={tag} handleClick={handleClick} isStatic={isStatic} selectTag={() => handleTag(tag)} classes={getClasses(tag, isStatic)} editable={tag.editable} />)];
+    const result = [(<TagItem key={`tags${tag._id}`} tag={tag} handleClick={handleClick} isStatic={isStatic} selectTag={() => handleTag(tag)} classes={getClasses(tag, isStatic)} deleteTag={deleteClickedTag} editable={tag.editable} />)];
     if (tag.children && tag.children.length > 0) {
       result.push(<li key={`tags${tag._id}chld`}><ul className="border-l-2 inset border-gray-300 border-solid ml-4">{generateList(tag.children)}</ul></li>);
     }
@@ -79,7 +93,7 @@ const TagHierarchy = ({ isStatic = false }) => {
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">
-        {generateList(tags)}
+        {renderParents()}
       </ul>
     </>
   );

@@ -96,7 +96,7 @@ exports.updateStatus = async (req, res) => {
     article.prioritize(req.body.prioritizedAt);
   }
 
-  req.user.save();
+  await req.user.save();
   res.json(article);
 };
 
@@ -120,16 +120,11 @@ exports.createArticlePost = async (req, res, next) => {
     });
 
     if (getWebsocket()) {
-      sendMessage(req.user.userName, {type: 'NEW ARTICLE'});
+      sendMessage(req.user.userName, { type: 'NEW ARTICLE' });
     }
 
-    req.user.save((err) => {
-      if (err) {
-        res.status(400).send(response('Something went wrong', null, false));
-      } else {
-        res.status(201).send(response('Article created', req.user.articles.reverse()[0]._id, true));
-      }
-    });
+    await req.user.save();
+    res.status(201).send(response('Article created', req.user.articles.reverse()[0]._id, true));
   } catch (e) {
     next(e);
   }
@@ -140,7 +135,7 @@ exports.updateArticle = async (req, res) => {
   if (req.body.tags) {
     article.tags = req.body.tags;
   }
-  req.user.save();
+  await req.user.save();
   res.json(article);
 };
 
@@ -149,7 +144,7 @@ exports.updateArticle = async (req, res) => {
  */
 exports.deleteArticle = async (req, res) => {
   req.user.articles = req.user.articles.filter((article) => article._id.toString() !== req.params.id);
-  req.user.save();
+  await req.user.save();
   res.status(200).send('Article deleted');
 };
 

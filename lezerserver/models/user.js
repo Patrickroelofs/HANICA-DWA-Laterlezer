@@ -25,6 +25,17 @@ userSchema.statics.getUserByUsername = async function (userName) {
   return user;
 };
 
+userSchema.statics.createUser = async function (userName) {
+  if (userName.length > 30) throw new CustomError('Username is too long', 406);
+  const exists = await this.model('User').findOne({ userName });
+  if (exists === null) {
+    const user = new this({ userName });
+    await user.save();
+  } else {
+    throw new CustomError('User already exists.', 401);
+  }
+};
+
 userSchema.methods.getTags = function () {
   return this.tags;
 };

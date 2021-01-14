@@ -56,7 +56,7 @@ export const {
 export default articleSlice.reducer;
 
 export const getArticles = (status, range, tags = []) => async (dispatch) => {
-  const joinedTags = tags.map((t) => t.title).join(',');
+  const joinedTags = tags.map((t) => t._id).join(',');
 
   try {
     const { data } = await get(`${API_URL}/articles?status=${status}&range=${range}&tags=${joinedTags}`);

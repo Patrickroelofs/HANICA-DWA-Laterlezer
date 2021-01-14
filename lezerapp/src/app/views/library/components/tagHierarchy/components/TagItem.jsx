@@ -20,7 +20,7 @@ export default ({
       className={`relative transform ${isStatic === false ? 'hover:scale-105 hover:bg-gray-100' : ''} motion-reduce:transform-none transition-transform rounded-lg my-1 ${classes}`}
     >
       <span className="group w-full text-left">
-        <button type="button" onClick={handleTagClick} className={`py-2 px-4 focus:outline-none ${isStatic ? 'cursor-default' : ''} w-full text-left ${classes}`}>
+        <button type="button" onClick={handleTagClick} className={`py-2 px-4 focus:outline-none ${isStatic ? 'cursor-default' : ''} w-full text-left ${classes.includes('font-bold') && 'font-bold'}`}>
           <span
             className="w-6 h-6 inline-block rounded-full align-middle mr-2"
             style={{ background: tag.color, color: setContrast(tag.color) }}

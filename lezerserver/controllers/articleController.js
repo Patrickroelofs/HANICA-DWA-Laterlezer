@@ -3,6 +3,7 @@ const moment = require('moment');
 const { parseHTML } = require('../utils/HTMLParser');
 const response = require('../utils/response');
 let _User = require('../models/user');
+const mongoose = require('mongoose');
 const { sendMessage, getWebsocket } = require('../websocket/ws');
 
 exports.getArticles = async (req, res) => {
@@ -55,8 +56,8 @@ exports.getArticles = async (req, res) => {
   if (tags.length > 0) {
     query[1].$match['articles.tags'] = {
       $elemMatch: {
-        title: {
-          $in: tags,
+        _id: {
+          $in: tags.map((id) => mongoose.Types.ObjectId(id)),
         },
       },
     };
@@ -66,7 +67,7 @@ exports.getArticles = async (req, res) => {
     let counter = 0;
     tags.forEach((filterTag) => {
       a.tags.forEach((articleTag) => {
-        if (filterTag === articleTag.title) {
+        if (filterTag === articleTag._id.toString()) {
           counter += 1;
         }
       });

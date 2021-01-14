@@ -9,7 +9,7 @@ const User = mongoose.model('User');
 
 describe('User Model Tests', () => {
   beforeAll(async () => {
-    await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+    await mongoose.connect('mongodb://localhost:27017/readerTestDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
   });
 
   beforeEach(async () => {

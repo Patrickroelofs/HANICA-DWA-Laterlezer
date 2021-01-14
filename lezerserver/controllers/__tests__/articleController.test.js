@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 
+const mongoose = require('mongoose');
 const articleController = require('../articleController');
 
 describe('Article Controller Tests', () => {
@@ -117,15 +118,12 @@ describe('Article Controller Tests', () => {
 
   test('Fetches site and saves successfully', async () => {
     const updateOrCreateArticle = jest.fn((html, url) => 1 + 1);
-    const user = { updateOrCreateArticle, save: (fn) => fn(false), articles: [{ _id: 't' }] };
+    const user = { updateOrCreateArticle, save: () => true, articles: [{ _id: 't' }] };
     const req = { body: { url: 'https://nl.lipsum.com/' }, user };
     const status = jest.fn(() => ({ send: jest.fn(), json: jest.fn() }));
     const next = jest.fn(() => {});
 
-    await articleController.createArticlePost(req, {
-      status,
-      send: jest.fn(),
-    }, next);
+    await articleController.createArticlePost(req, { status }, next);
     expect(updateOrCreateArticle.mock.calls.length).toBe(1);
     expect(updateOrCreateArticle.mock.calls[0][0]).toContain('<html>');
     expect(updateOrCreateArticle.mock.calls[0][1]).toBe('https://nl.lipsum.com/');
@@ -138,39 +136,32 @@ describe('Article Controller Tests', () => {
 
   test('Did not save', async () => {
     const updateOrCreateArticle = jest.fn((html, url) => 1 + 1);
-    const user = { updateOrCreateArticle, save: jest.fn((fn) => fn(true)) };
+    const user = { updateOrCreateArticle, save: jest.fn(() => false) };
     const status = jest.fn(() => ({ send: () => {} }));
     const next = jest.fn(() => {});
     const req = { body: { url: 'https://nl.lipsum.com/' }, user };
 
     await articleController.createArticlePost(req, { status }, next);
-    expect(user.save.mock.calls.length).toBe(1);
 
-    expect(updateOrCreateArticle.mock.calls.length).toBe(1);
-    expect(updateOrCreateArticle.mock.calls[0][0]).toContain('<html>');
-    expect(updateOrCreateArticle.mock.calls[0][1]).toBe('https://nl.lipsum.com/');
-
-    expect(status.mock.calls.length).toBe(1);
-    expect(status.mock.calls[0][0]).toBe(400);
-    expect(next.mock.calls.length).toBe(0);
+    expect(next.mock.calls.length).toBe(1);
   });
 
   test('Get filtered articles with one tag title', async () => {
     const user = { _id: 12 };
     const query = {
       range: 'null',
-      tags: 'Politiek',
+      tags: '5ff5aec1880f3b21cea0fe8e',
       status: 'undefined',
     };
     const json = jest.fn(() => {});
     const articles = [
       {
         title: 'Test article',
-        tags: [{ title: 'Politiek' }],
+        tags: [{ _id: mongoose.Types.ObjectId('5ff5aec1880f3b21cea0fe8e'), title: 'Politiek' }],
       },
       {
         title: 'Test article 2',
-        tags: [{ title: 'Sport' }],
+        tags: [{ _id: mongoose.Types.ObjectId('5ff5aec1880f3b21cea0fe8a'), title: 'Sport' }],
       },
     ];
     const model = {
@@ -188,7 +179,7 @@ describe('Article Controller Tests', () => {
     expect(json.mock.calls[0][0]).toMatchObject([
       {
         title: 'Test article',
-        tags: [{ title: 'Politiek' }],
+        tags: [{ _id: mongoose.Types.ObjectId('5ff5aec1880f3b21cea0fe8e'), title: 'Politiek' }],
       },
     ]);
   });
@@ -197,18 +188,18 @@ describe('Article Controller Tests', () => {
     const user = { _id: 12 };
     const query = {
       range: 'null',
-      tags: 'Politiek,News',
+      tags: '5ff5aec1880f3b21cea0fe8e,5ff5aec1880f3b21cea0fe8a',
       status: 'undefined',
     };
     const json = jest.fn(() => {});
     const articles = [
       {
         title: 'Test article',
-        tags: [{ title: 'Politiek' }, { title: 'News' }],
+        tags: [{ _id: mongoose.Types.ObjectId('5ff5aec1880f3b21cea0fe8e'), title: 'Politiek' }, { _id: mongoose.Types.ObjectId('5ff5aec1880f3b21cea0fe8a'), title: 'News' }],
       },
       {
         title: 'Test article 2',
-        tags: [{ title: 'Sport' }],
+        tags: [{ _id: mongoose.Types.ObjectId('5ff5aec1880f3b21cea0fe8b'), title: 'Sport' }],
       },
     ];
     const model = {
@@ -226,7 +217,7 @@ describe('Article Controller Tests', () => {
     expect(json.mock.calls[0][0]).toMatchObject([
       {
         title: 'Test article',
-        tags: [{ title: 'Politiek' }, { title: 'News' }],
+        tags: [{ _id: mongoose.Types.ObjectId('5ff5aec1880f3b21cea0fe8e'), title: 'Politiek' }, { _id: mongoose.Types.ObjectId('5ff5aec1880f3b21cea0fe8a'), title: 'News' }],
       },
     ]);
   });

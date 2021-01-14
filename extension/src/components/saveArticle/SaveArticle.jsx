@@ -70,17 +70,17 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
       <div className="p-6" style={{ minHeight: '128px' }}>
         { loaded === 'waitForSelect' ? (
           <>
-            <div className="flex items-center float-right" title="If you uncheck this box the extension will exactly copy what is on your page. This is will be slower but will allow you to post a blocked article which you can view">
+            <div className="block text-right mb-2" title="If you uncheck this box the extension will exactly copy what is on your page. This is will be slower but will allow you to post a blocked article which you can view">
               <input
                 id="fetch"
                 name="fetch"
                 checked={fetchLoad}
                 onChange={() => setFetchLoad(!fetchLoad)}
                 type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="inline-block align-middle h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="fetch" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="fetch" className="align-middle ml-2 inline-block text-sm text-gray-900">
                 Fetch on server
               </label>
             </div>

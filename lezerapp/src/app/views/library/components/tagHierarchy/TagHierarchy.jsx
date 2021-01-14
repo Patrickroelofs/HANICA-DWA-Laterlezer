@@ -4,6 +4,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import NewTag from '../../../sharedcomponents/newTag/NewTag';
 import TagItem from './components/TagItem';
 import { deleteArticleTag } from '../../../../../store/articleSlice';
+import { selectUsername } from '../../../../../store/userSlice';
 import {
   getTags, selectTags, selectSelectedTags, selectTag, deselectTag, getTagClasses, deleteTag,
 } from '../../../../../store/tagSlice';
@@ -13,6 +14,7 @@ const TagHierarchy = ({ isStatic = false }) => {
   const tags = useSelector(selectTags);
   const selectedTags = useSelector(selectSelectedTags);
   const getClasses = useSelector(getTagClasses);
+  const username = useSelector(selectUsername);
 
   const [showTagDropdown, setShowTagDropdown] = useState(false);
   const [clickedTag, setClickedTag] = useState();
@@ -73,7 +75,9 @@ const TagHierarchy = ({ isStatic = false }) => {
   };
 
   useEffect(() => {
-    dispatch(getTags());
+    if (username) {
+      dispatch(getTags());
+    }
   }, []);
 
   const generateList = (tagss) => tagss.map((tag) => {

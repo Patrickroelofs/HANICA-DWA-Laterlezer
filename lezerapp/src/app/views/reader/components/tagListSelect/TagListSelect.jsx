@@ -17,14 +17,11 @@ function TagListSelect() {
   const isSelected = (tag) => selectedTags.find((t) => tag._id.toString() === t._id.toString());
 
   const selectTags = (selTags) => {
+    const model = new TopDown(tags, selectedTags);
     if (isSelected(selTags[0])) {
-      const model = new TopDown(tags, selectedTags);
       setSelectedTags(model.deselectTag(selTags[0]));
     } else {
-      setSelectedTags([
-        ...selectedTags,
-        ...selTags.filter((tag) => !isSelected(tag)),
-      ]);
+      setSelectedTags(model.selectTag(selTags[0]));
     }
   };
 
@@ -35,13 +32,10 @@ function TagListSelect() {
 
   useEffect(() => {
     dispatch(getTags());
-  }, []);
-
-  useEffect(() => {
     if (article.tags) {
       setSelectedTags(article.tags);
     }
-  }, [article.tags]);
+  }, []);
 
   return (
     <>

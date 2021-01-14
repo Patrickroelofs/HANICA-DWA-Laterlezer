@@ -56,7 +56,40 @@ userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
   }
 };
 
+const findParent = function (tag, allTags) {
+  let tagParent = '';
+  const eachRecursive = (tags) => {
+    tags.forEach((parent) => {
+      // eslint-disable-next-line consistent-return
+      parent.children.forEach((child) => {
+        if (child._id.toString() === tag._id.toString()) {
+          tagParent = parent;
+        }
+        eachRecursive(parent.children);
+      });
+    });
+  };
+  eachRecursive(allTags);
+  return tagParent;
+};
+
 userSchema.methods.updateTag = async function (newTag) {
+  const parent = findParent(newTag, this.tags);
+
+  if (newTag.title.length > 29) {
+    throw new CustomError('Tag title is too long.', 400);
+  }
+
+  if (newTag.title === parent.title) {
+    throw new CustomError('Subtag can\'t have the same title as the parent.', 400);
+  }
+
+  parent.children.forEach((tag) => {
+    if (tag.title === newTag.title) {
+      throw new CustomError('Tag already exists.', 400);
+    }
+  });
+
   const eachRecursive = (tags) => {
     this.tags = tags.map((tag) => {
       if (newTag._id.toString() !== tag._id.toString()) {
@@ -162,23 +195,6 @@ const setChildrenInArray = function (tag) {
   };
   eachRecursive(tag[0].children);
   return children;
-};
-
-const findParent = function (tag, allTags) {
-  let tagParent = '';
-  const eachRecursive = (tags) => {
-    tags.forEach((parent) => {
-      // eslint-disable-next-line consistent-return
-      parent.children.forEach((child) => {
-        if (child._id.toString() === tag._id.toString()) {
-          tagParent = parent;
-        }
-        eachRecursive(parent.children);
-      });
-    });
-  };
-  eachRecursive(allTags);
-  return tagParent;
 };
 
 // eslint-disable-next-line consistent-return

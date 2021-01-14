@@ -1,22 +1,19 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import LowPriorityIcon from '@material-ui/icons/LowPriority';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import moment from 'moment';
-import { selectCurrentArticle } from '../../../../../../store/articleSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentArticle, prioritize } from '../../../../../../store/articleSlice';
 
 function PrioritizeArticle() {
   const article = useSelector(selectCurrentArticle);
-  const [priority, setPriority] = useState(false);
 
-  const archive = () => {
-    axios.post(`http://localhost:3000/api/articles/${article._id}/status`, {
-      prioritizedAt: (article.prioritizedAt) ? null : moment().toISOString(),
-    }).then(() => {
-      setPriority(!priority);
-    });
+  const [prioritized, setPriority] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const prioritizeArticle = () => {
+    dispatch(prioritize(article));
+    setPriority(!prioritized);
   };
 
   useEffect(() => {
@@ -25,8 +22,8 @@ function PrioritizeArticle() {
 
   return (
     <>
-      <button title={`${!priority ? 'Prioritize' : 'Lower priority of'} this article`} id="archiveArticle" onClick={() => archive()} type="button" className="block w-16 h-16 focus:outline-none hover:text-blue-600">
-        { priority
+      <button title={`${!prioritized ? 'Prioritize' : 'Lower priority of'} this article`} id="prioritizeArticle" onClick={prioritizeArticle} type="button" className="block w-16 h-16 focus:outline-none hover:text-blue-600">
+        { prioritized
           ? <LowPriorityIcon className="text-red-500" />
           : <PriorityHighIcon />}
       </button>

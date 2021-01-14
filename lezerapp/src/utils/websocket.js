@@ -1,18 +1,22 @@
-/* eslint-disable no-undef */
+/* eslint-disable no-console */
+import { store } from '../store';
+import { getArticles } from '../store/articleSlice';
+
 const port = 3000;
-const serverHostname = `localhost:${port}`;
+const serverHostname = `${window.location.hostname}:${port}`;
 
 let theSocket;
 
-export function openWebSocket(userName) {
+export function openWebSocket() {
   if (theSocket) {
     theSocket.onerror = null;
     theSocket.onopen = null;
     theSocket.onclose = null;
     theSocket.close();
   }
-  const user = userName;
-  console.log('Opening socket for', `ws://${serverHostname}`);
+  const state = store.getState();
+  const user = state.user.username;
+
   theSocket = new WebSocket(`ws://${serverHostname}`);
 
   theSocket.onopen = () => {
@@ -22,13 +26,15 @@ export function openWebSocket(userName) {
   theSocket.onmessage = async (messageEvent) => {
     const messageObj = JSON.parse(messageEvent.data);
     switch (messageObj.type) {
+      case 'NEW ARTICLE':
+        store.dispatch(getArticles(undefined, null));
+        break;
       default:
         break;
     }
-    console.log(`Client Websocket Received: ${messageEvent.data}`);
   };
   theSocket.onclose = () => {
-    console.log(`Closing socket ws://${serverHostname}`);
+    console.info(`Closing socket ws://${serverHostname}`);
   };
   return theSocket;
 }
@@ -46,6 +52,10 @@ export function sendMessage(message) {
 }
 
 export function closeWebSocket() {
-  const socket = getWebSocket();
-  socket.close();
+  try {
+    const ws = getWebSocket();
+    ws.close();
+  } catch (e) {
+    console.error(e.message);
+  }
 }

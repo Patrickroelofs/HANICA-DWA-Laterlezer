@@ -2,9 +2,14 @@ const { parse } = require('@postlight/mercury-parser');
 const { JSDOM } = require('jsdom');
 const { minify } = require('html-minifier');
 
-exports.parseHTML = async (url) => {
+exports.parseHTML = async (url, preParsed) => {
   try {
-    const site = await parse(url);
+    let site;
+    if (preParsed) {
+      site = preParsed;
+    } else {
+      site = await parse(url);
+    }
     let dom = new JSDOM(site.content);
     dom.serialize();
     const { document } = dom.window;

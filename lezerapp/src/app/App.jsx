@@ -1,20 +1,14 @@
 import React from 'react';
-
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Articles from './views/library/Articles';
 import { selectUsername } from '../store/userSlice';
 import AddArticle from './views/sharedcomponents/addArticle/AddArticle';
+import { useInterceptor } from '../utils/helpers';
 
 function App() {
   const username = useSelector(selectUsername);
 
-  axios.interceptors.request.use((config) => {
-    if (username) {
-      config.headers.Username = username;
-    }
-    return config;
-  });
+  useInterceptor(username);
 
   return (
     <>

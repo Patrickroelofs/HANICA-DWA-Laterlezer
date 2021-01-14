@@ -4,12 +4,14 @@ import { ChromePicker } from 'react-color';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import chroma from 'chroma-js';
 
-import { createTag, updateTag } from '../../../../store/tagSlice';
+import {
+  createTag, updateTag, deselectTag, selectTag,
+} from '../../../../store/tagSlice';
 import { updateArticleTag } from '../../../../store/articleSlice';
 import { setContrast } from '../../../../utils/helpers';
 
 function NewTagForm({
-  reference, parent, tag = {}, mode, position, toggle,
+  reference, parent, tag = {}, mode, position, toggle, isSelected,
 }) {
   const [title, setTitle] = useState(tag.title || '');
   const [color, setColor] = useState(tag.color || chroma.random().hex());
@@ -24,6 +26,10 @@ function NewTagForm({
       const newTag = {
         children: tag.children, _id: tag._id, title, color,
       };
+      if (isSelected) {
+        dispatch(deselectTag(tag));
+        dispatch(selectTag(newTag));
+      }
       dispatch(updateTag(newTag)).then((res) => {
         setResponse(res);
       });

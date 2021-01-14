@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios, { post, put, get } from 'axios';
-import { getArticles } from './articleSlice';
+import axios from 'axios';
 import TopDown from './Classes/TopDown';
 import DownTop from './Classes/DownTop';
 
@@ -12,7 +11,7 @@ const tagSlice = createSlice({
   name: 'tag',
   initialState: {
     tags: [],
-    mode: new TopDown(),
+    mode: 'DownTop',
     selectedTags: [],
     articleTags: [],
   },
@@ -52,10 +51,7 @@ const tagSlice = createSlice({
 
 export const selectTags = (state) => state.tag.tags;
 export const selectSelectedTags = (state) => state.tag.selectedTags;
-export const getTagClasses = (state) => {
-  const model = modeParser(state.tag);
-  return (tag, isStatic) => model.getClasses(tag, isStatic);
-};
+export const getTagClasses = (state) => (tag, isStatic) => modeParser(state.tag).getClasses(tag, isStatic);
 
 export const {
   setTags, setSelectedTags, setArticleTags, selectTag, toggleMode, deselectTag,
@@ -64,7 +60,7 @@ export default tagSlice.reducer;
 
 export const getTags = () => async (dispatch) => {
   try {
-    const { data } = await get(`${API_URL}/tags`);
+    const { data } = await axios.get(`${API_URL}/tags`);
     dispatch(setTags(data.data));
   } catch (err) {
     throw new Error(err);
@@ -73,9 +69,8 @@ export const getTags = () => async (dispatch) => {
 
 export const updateTag = (tag) => async (dispatch) => {
   try {
-    const { data, status } = await put(`${API_URL}/tags`, tag);
+    const { data, status } = await axios.put(`${API_URL}/tags`, tag);
     dispatch(setTags(data.data));
-    dispatch(getArticles());
     return {
       status,
       message: data.message,
@@ -92,7 +87,7 @@ export const updateTag = (tag) => async (dispatch) => {
 
 export const createTag = (title, color, parent) => async (dispatch) => {
   try {
-    const { data, status } = await post(`${API_URL}/tags`, { tag: { title, color }, parent });
+    const { data, status } = await axios.post(`${API_URL}/tags`, { tag: { title, color }, parent });
     dispatch(setTags(data.data));
     return {
       status,

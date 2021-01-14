@@ -9,9 +9,6 @@ import { setContrast } from '../../../../../../utils/helpers';
 export default ({
   tag, selectTag, handleClick, classes, isStatic, deleteTag,
 }) => {
-  const dispatch = useDispatch();
-
-  const isSelected = (tagg) => selectedTags.find((t) => tagg._id.toString() === t._id.toString());
   const handleTagClick = (e) => {
     e.preventDefault();
     e.stopPropagation();

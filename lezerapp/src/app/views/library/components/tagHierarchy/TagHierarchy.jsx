@@ -66,7 +66,7 @@ const TagHierarchy = ({ isStatic = false }) => {
     // eslint-disable-next-line no-alert
     // eslint-disable-next-line no-restricted-globals
     if (confirm(`Are you sure you want to delete the tag with name: ${tag.title}?`)) {
-      selectTag([tag]);
+      dispatch(deselectTag(tag));
       dispatch(deleteTag(tag));
       dispatch(deleteArticleTag(tag));
     }
@@ -89,11 +89,11 @@ const TagHierarchy = ({ isStatic = false }) => {
       <span className="bg-gray-200 font-bold hidden" />
       <div className="mb-4 mt-6 pl-2 font-bold text-base">
         <span>Tags</span>
-        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} toggle={() => setShowTagDropdown(!showTagDropdown)} /> }
+        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} toggle={() => setShowTagDropdown(!showTagDropdown)} isSelected={isSelected(clickedTag)} /> }
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">
-        {renderParents()}
+        {generateList(tags)}
       </ul>
     </>
   );

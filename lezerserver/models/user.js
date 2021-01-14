@@ -25,6 +25,17 @@ userSchema.statics.getUserByUsername = async function (userName) {
   return user;
 };
 
+userSchema.statics.createUser = async function (userName) {
+  if (userName.length > 30) throw new CustomError('Username is too long', 406);
+  const exists = await this.model('User').findOne({ userName });
+  if (exists === null) {
+    const user = new this({ userName });
+    await user.save();
+  } else {
+    throw new CustomError('User already exists.', 401);
+  }
+};
+
 userSchema.methods.getTags = function () {
   return this.tags;
 };
@@ -91,8 +102,7 @@ const findTag = function (tag, allTags) {
   let tagToFind = '';
   const eachRecursive = (tags) => {
     tags.forEach((t) => {
-      // eslint-disable-next-line consistent-return
-      if (tag._id.toString() === t._id.toString()) {
+      if (tag && tag._id.toString() === t._id.toString()) {
         tagToFind = t;
       } else {
         eachRecursive(t.children);

@@ -1,14 +1,15 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-alert */
 import React from 'react';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded';
-import setContrast from '../../../../../../utils/chromaContrast';
+import { setContrast } from '../../../../../../utils/helpers';
 
 export default ({
   tag, selectTag, handleClick, selectedTags, isStatic, deleteTag,
 }) => {
   const isSelected = (tagg) => selectedTags.find((t) => tagg._id.toString() === t._id.toString());
-
   const handleTagClick = (e) => {
     e.preventDefault();
     e.stopPropagation();

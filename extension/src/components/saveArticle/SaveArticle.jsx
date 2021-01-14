@@ -1,37 +1,30 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
 import BallBeat from 'react-pure-loaders/build/BallBeat';
-import { post } from 'axios';
 import chroma from 'chroma-js';
-
+import ArticleSender from '../../utils/ArticleSender';
 import TagListSelect from '../tagListSelect/TagListSelect';
-import { openWebSocket } from '../../utils/websocketCommunication';
 
 function SaveArticle({ setUser, user, autoLoggedIn }) {
   const [loaded, setLoaded] = useState('waitForSelect');
+  const [fetchLoad, setFetchLoad] = useState(true);
   const [error, setError] = useState('');
   const [tab, setTab] = useState({});
 
-  const postArticle = (selectedTags) => {
+  const postArticle = async (selectedTags) => {
     setLoaded(false);
     selectedTags.map((tag) => {
       tag.title = tag.value;
       tag.color = chroma(tag.color).hex();
       return tag;
     });
-    post('http://localhost:3000/api/articles',
-      { url: tab, tags: selectedTags }, {
-        headers: {
-          Username: localStorage.getItem('username'),
-        },
-      })
-      .then(() => {
-        setLoaded(true);
-        // sendMessage({ type: 'NEW ARTICLE' });
-      }).catch((e) => {
-        setError(e.message);
-        setLoaded(true);
-      });
+
+    ArticleSender({ url: tab, tags: selectedTags }, user, fetchLoad).then(() => {
+      setLoaded(true);
+    }).catch((e) => {
+      setError(e.message);
+      setLoaded(true);
+    });
   };
 
   const checkBrowser = () => {
@@ -48,7 +41,7 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
         <div className="w-full h-full p-6 text-center font-bold text-lg">
           <h2>
             Your article has
-            {error ? ' not' : ''}
+            {error && ' not'}
             {' '}
             been saved.
           </h2>
@@ -70,13 +63,30 @@ function SaveArticle({ setUser, user, autoLoggedIn }) {
 
   useEffect(() => {
     checkBrowser();
-    openWebSocket(user);
   }, []);
 
   return (
     <>
       <div className="p-6" style={{ minHeight: '128px' }}>
-        { loaded === 'waitForSelect' ? <TagListSelect onSave={postArticle} /> : ''}
+        { loaded === 'waitForSelect' ? (
+          <>
+            <div className="flex items-center float-right" title="If you uncheck this box the extension will exactly copy what is on your page. This is will be slower but will allow you to post a blocked article which you can view">
+              <input
+                id="fetch"
+                name="fetch"
+                checked={fetchLoad}
+                onChange={() => setFetchLoad(!fetchLoad)}
+                type="checkbox"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              />
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="fetch" className="ml-2 block text-sm text-gray-900">
+                Fetch on server
+              </label>
+            </div>
+            <TagListSelect onSave={postArticle} />
+          </>
+        ) : null }
 
         {
               error

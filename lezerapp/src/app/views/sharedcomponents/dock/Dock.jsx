@@ -50,7 +50,7 @@ const Dock = ({ profilePicture }) => {
           onLogoutSuccess={onLogout}
           onFailure={onLogout}
           render={({ onClick, disabled }) => (
-            <button onClick={onClick} disabled={disabled} type="button" className="focus:outline-none text-center w-full mb-4"><LockIcon /></button>
+            <button onClick={onClick} disabled={disabled} id="logOut" type="button" className="focus:outline-none text-center w-full mb-4"><LockIcon /></button>
           )}
         />
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/click-events-have-key-events */}

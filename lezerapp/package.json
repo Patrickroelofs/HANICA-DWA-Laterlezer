@@ -15,6 +15,7 @@
     "autoprefixer": "^10.0.4",
     "axios": "^0.21.0",
     "chroma-js": "^2.1.0",
+    "cross-env": "^7.0.3",
     "he": "^1.2.0",
     "moment": "^2.29.1",
     "moment-locales-webpack-plugin": "^1.2.0",
@@ -45,7 +46,7 @@
     "build": "react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "e2e": "jest --testMatch=\"**/*.e2e.js\""
+    "e2e": "node ../lezerserver/seeder/seed.js && jest --testMatch=\"**/*.e2e.js\""
   },
   "eslintConfig": {
     "extends": [

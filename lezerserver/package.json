@@ -30,7 +30,7 @@
 		"supertest": "^6.0.1"
 	},
 	"scripts": {
-		"test": "cross-env NODE_ENV=test jest --config jest.config.js",
+		"test": "cross-env NODE_ENV=test && node ./seeder/seed.js && jest --config jest.config.js",
 		"start": "nodemon ./app.js",
 		"seed": "node ./seeder/seed.js"
 	},

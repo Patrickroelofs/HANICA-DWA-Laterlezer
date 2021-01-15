@@ -59,8 +59,7 @@ INLINE_RUNTIME_CHUNK=false
 
 npm run build
 -> Plaats de build folder als extension in je Chromium browser
-
-// de extension zal nu draaien op localhost:3002
+-> Uitleg over installatie van een extension wordt besproken in de Software Guidebook ; Operation & Support
 ```
 
 

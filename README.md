@@ -67,7 +67,7 @@ npm run build
 
 ## Roadmap
 
-Toekomstige features zijn beschreven als user stories onder [Issues](https://github.com/HANICA-DWA/sep2020-project-caracal/issues).
+Toekomstige features zijn beschreven als user stories onder [Issues](https://github.com/HANICA-DWA/sep2020-project-caracal/issues?q=is%3Aissue+is%3Aopen+label%3ABacklog).
 
 ## Documentatie
 

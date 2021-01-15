@@ -38,6 +38,7 @@ node ./app.js
 cd lezerapp
 npm install
 npm run build:tailwind
+npm run seed // Maakt een database genaamd `reader` & vult hem met nepdata.
 npm start
 
 // de client zal nu draaien op localhost:3001

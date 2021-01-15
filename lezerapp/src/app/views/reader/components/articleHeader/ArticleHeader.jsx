@@ -41,7 +41,7 @@ export default function ArticleHeader() {
   return (
     <>
       <div className="flex justify-between">
-        <button type="button" className="focus:outline-none" onClick={goBack}>
+        <button type="button" id="backButton" className="focus:outline-none" onClick={goBack}>
           <KeyboardArrowLeftIcon />
           Back
         </button>

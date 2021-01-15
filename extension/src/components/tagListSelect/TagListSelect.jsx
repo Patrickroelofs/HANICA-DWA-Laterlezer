@@ -79,12 +79,12 @@ function TagListSelect({ onSave }) {
           </button>
         )))}
 
-      <div className="text-right">
+      <div className="mt-8 text-center">
         <button
           id="saveTagsToArticle"
           type="submit"
           onClick={() => postTags()}
-          className="mt-2 mx-auto h-9 px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+          className="outline-none focus:outline-none text-sm bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-white px-4 py-2 shadow-lg"
         >
           Save Article
         </button>

@@ -13,7 +13,7 @@ const tagController = require('../tagController');
 describe('Tag Controller Tests', () => {
   beforeAll(async () => {
     await mongoose.disconnect();
-    await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+    await mongoose.connect('mongodb://localhost:27017/readerTestDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
   });
 
   beforeEach(async () => {

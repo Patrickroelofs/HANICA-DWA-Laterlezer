@@ -9,18 +9,10 @@ function Register() {
   const history = useHistory();
   const [response, setResponse] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    dispatch(registerUser(e.target.username.value)).then(() => {
-      history.push('/app');
-    }).catch((error) => {
-      setResponse({
-        status: error.status,
-        message: error.response.data,
-        success: false,
-      });
-    });
+    const res = await dispatch(registerUser(e.target.username.value));
+    setResponse(res);
   };
 
   return (

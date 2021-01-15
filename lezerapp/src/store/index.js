@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -14,19 +13,11 @@ const persistConfig = {
   storage,
 };
 
-// Logger logs all states after actions
-const loggerMiddleware = (store) => (next) => (action) => {
-  console.info(`%c ACTION: ${action.type}`, 'color: #730073', action);
-  const result = next(action);
-  console.info(`%c STATE AFTER ACTION: ${action.type}`, 'color: #228B22', store.getState());
-  return result;
-};
-
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: [loggerMiddleware, ...getDefaultMiddleware({
+  middleware: [...getDefaultMiddleware({
     /**
      * Fixes serializable value error on action 'persist/REGISTER'
      * React doesnt allow non-serializable values, redux-persist needs them

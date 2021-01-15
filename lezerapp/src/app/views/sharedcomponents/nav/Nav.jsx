@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Link, useParams, useHistory, useLocation,
+  Link, matchPath, useHistory, useLocation,
 } from 'react-router-dom';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
@@ -10,14 +10,27 @@ import TagHierarchy from '../../library/components/tagHierarchy/TagHierarchy';
 import { setSelectedTags } from '../../../../store/tagSlice';
 import { useQuery } from '../../../../utils/helpers';
 
-function Nav({ staticTags = false }) {
+function Nav() {
+  const [staticTags, setStatictags] = useState(false);
   const history = useHistory();
-  const { status } = useParams();
   const dispatch = useDispatch();
   const location = useLocation();
+  const [status, setStatus] = useState('');
   const range = useQuery().get('range');
 
-  const clickHandler = () => {
+  useEffect(() => {
+    if (matchPath(location.pathname, {
+      path: '/app/:id',
+      exact: true,
+    })) {
+      setStatictags(true);
+    } else {
+      setStatictags(false);
+    }
+  }, [location]);
+
+  const clickHandler = (inputStatus) => {
+    setStatus(inputStatus);
     dispatch(setSelectedTags([]));
   };
 
@@ -29,19 +42,19 @@ function Nav({ staticTags = false }) {
   return (
     <section id="navList" className="font-sans text-base">
       <ul>
-        <Link to="/app" onClick={clickHandler}>
+        <Link to="/app" onClick={() => clickHandler('')}>
           <li className={`hover:bg-gray-100 p-3 ${!status && 'bg-gray-200 font-bold'} align-middle`}>
             <AllInboxIcon className="opacity-60 mr-4 align-middle" />
-            All
+            Library
           </li>
         </Link>
-        <Link to="/app/status/archived" onClick={clickHandler}>
+        <Link to="/app/status/archived" onClick={() => clickHandler('archived')}>
           <li className={`hover:bg-gray-100 p-3 ${status === 'archived' && 'bg-gray-200 font-bold'} align-middle`}>
             <ArchiveIcon className="opacity-60 mr-4 align-middle" />
             Archived
           </li>
         </Link>
-        <Link to="/app/status/priority" onClick={clickHandler}>
+        <Link to="/app/status/priority" onClick={() => clickHandler('priority')}>
           <li className={`hover:bg-gray-100 p-3 ${status === 'priority' && 'bg-gray-200 font-bold'} align-middle`}>
             <PriorityHighIcon className="opacity-60 mr-4 align-middle" />
             Priority
@@ -53,12 +66,12 @@ function Nav({ staticTags = false }) {
         <span>
           Added:
         </span>
-        <select disabled={staticTags} onChange={selectTimerange} className="focus:ring-indigo-500 focus:border-indigo-500 h-10 px-5 ml-3 pr-10 rounded-full text-sm">
-          <option selected={!range} value="">All</option>
-          <option selected={range === 'today'} value="today">Today</option>
-          <option selected={range === 'week'} value="week">This week</option>
-          <option selected={range === 'month'} value="month">This month</option>
-          <option selected={range === 'year'} value="year">This year</option>
+        <select value={range || ''} disabled={staticTags} onChange={selectTimerange} className="focus:ring-indigo-500 focus:border-indigo-500 h-10 px-5 ml-3 pr-10 rounded-full text-sm">
+          <option value="">All</option>
+          <option value="today">Today</option>
+          <option value="week">This week</option>
+          <option value="month">This month</option>
+          <option value="year">This year</option>
         </select>
       </div>
       <hr />

@@ -1,89 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import chroma from 'chroma-js';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentArticle, setCurrentArticle } from '../../../../../store/articleSlice';
+import { selectCurrentArticle, addTags } from '../../../../../store/articleSlice';
 import TagPill from '../../../sharedcomponents/tagPill/TagPill';
 import TagParent from './tagParent/TagParent';
+import { getTags, selectTags as selectTagsStore, setSelectedTags as setSelectedTagsStore } from '../../../../../store/tagSlice';
+import TopDown from '../../../../../store/Classes/TopDown';
 
 function TagListSelect() {
   const article = useSelector(selectCurrentArticle);
+  const tags = useSelector(selectTagsStore);
+
   const dispatch = useDispatch();
+
   const [selectedTags, setSelectedTags] = useState([]);
-  const [tags, setTags] = useState([]);
-
-  const fetchTags = () => {
-    axios.get('http://localhost:3000/api/tags').then(({ data }) => {
-      const mapTags = (defTags) => defTags.map((tag) => ({
-        _id: tag._id,
-        title: tag.title,
-        value: tag.title,
-        label: tag.title,
-        color: tag.color,
-        children: mapTags(tag.children),
-      }));
-      setTags(mapTags(data.data));
-    });
-  };
-
-  const postTags = () => {
-    if (selectedTags != null) {
-      selectedTags.map((tag) => {
-        tag.title = tag.value;
-        tag.color = chroma(tag.color).hex();
-        return tag;
-      });
-    }
-    axios.post(`http://localhost:3000/api/articles/${article._id}`, { tags: selectedTags || [] }).then((res) => {
-      dispatch(setCurrentArticle(res.data));
-    });
-  };
 
   const isSelected = (tag) => selectedTags.find((t) => tag._id.toString() === t._id.toString());
 
-  const mapSelectedTags = (selTags) => selTags.map((tag) => ({
-    _id: tag._id,
-    title: tag.title,
-    value: tag.title,
-    label: tag.title,
-    color: tag.color,
-  }));
-
   const selectTags = (selTags) => {
+    const model = new TopDown(tags, selectedTags);
     if (isSelected(selTags[0])) {
-      const childrenIds = (tag) => tag.children.map((t) => [
-        t._id,
-        ...childrenIds(t),
-      ]).flat();
-      const childIds = childrenIds(selTags[0]);
-      const parentIds = selTags.filter((tag) => {
-        const hasSelectedChild = childrenIds(tag).filter((id) => {
-          if (!selTags.find((selTag) => id === selTag._id) && !childIds.includes(id)) {
-            return selectedTags.find((selTag) => id === selTag._id.toString());
-          }
-          return false;
-        });
-        return hasSelectedChild.length === 0;
-      }).map((tag) => tag._id.toString());
-      const ids = [...childIds, ...parentIds];
-      setSelectedTags(selectedTags.filter((t) => !ids.includes(t._id.toString())));
+      setSelectedTags(model.deselectTag(selTags[0]));
     } else {
-      setSelectedTags([
-        ...selectedTags,
-        ...selTags.filter((tag) => !isSelected(tag)),
-      ]);
+      setSelectedTags(model.selectTag(selTags[0]));
     }
   };
 
-  useEffect(() => {
-    fetchTags();
-  }, []);
+  const submitTags = () => {
+    dispatch(setSelectedTagsStore(selectedTags));
+    dispatch(addTags(article._id, selectedTags));
+  };
 
   useEffect(() => {
+    dispatch(getTags());
     if (article.tags) {
-      setSelectedTags(mapSelectedTags(article.tags));
+      setSelectedTags(article.tags);
     }
-  }, [article.tags]);
+  }, []);
 
   return (
     <>
@@ -105,7 +57,7 @@ function TagListSelect() {
       <button
         id="saveTagsToArticle"
         type="submit"
-        onClick={() => postTags()}
+        onClick={submitTags}
         className="inline-block ml-2 h-9 items-center px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
       >
         Save

@@ -25,6 +25,17 @@ userSchema.statics.getUserByUsername = async function (userName) {
   return user;
 };
 
+userSchema.statics.createUser = async function (userName) {
+  if (userName.length > 30) throw new CustomError('Username is too long', 406);
+  const exists = await this.model('User').findOne({ userName });
+  if (exists === null) {
+    const user = new this({ userName });
+    await user.save();
+  } else {
+    throw new CustomError('User already exists.', 401);
+  }
+};
+
 userSchema.methods.getTags = function () {
   return this.tags;
 };
@@ -45,7 +56,42 @@ userSchema.methods.updateOrCreateArticle = function (html, source, data = {}) {
   }
 };
 
+const findParent = function (tag, allTags) {
+  let tagParent = '';
+  const eachRecursive = (tags) => {
+    tags.forEach((parent) => {
+      // eslint-disable-next-line consistent-return
+      parent.children.forEach((child) => {
+        if (child._id.toString() === tag._id.toString()) {
+          tagParent = parent;
+        }
+        eachRecursive(parent.children);
+      });
+    });
+  };
+  eachRecursive(allTags);
+  return tagParent;
+};
+
 userSchema.methods.updateTag = async function (newTag) {
+  const parent = findParent(newTag, this.tags);
+
+  if (newTag.title.length > 29) {
+    throw new CustomError('Tag title is too long.', 400);
+  }
+
+  if (newTag.title === parent.title) {
+    throw new CustomError('Subtag can\'t have the same title as the parent.', 400);
+  }
+
+  if (parent) {
+    parent.children.forEach((tag) => {
+      if (tag.title === newTag.title) {
+        throw new CustomError('Tag already exists.', 400);
+      }
+    });
+  }
+
   const eachRecursive = (tags) => {
     this.tags = tags.map((tag) => {
       if (newTag._id.toString() !== tag._id.toString()) {
@@ -87,12 +133,28 @@ userSchema.methods.getArticlesByTags = function (tags) {
   return filteredArticles;
 };
 
+const findTag = function (tag, allTags) {
+  let tagToFind = '';
+  const eachRecursive = (tags) => {
+    tags.forEach((t) => {
+      if (tag && tag._id.toString() === t._id.toString()) {
+        tagToFind = t;
+      } else {
+        eachRecursive(t.children);
+      }
+    });
+  };
+  eachRecursive(allTags);
+  return tagToFind;
+};
+
 // eslint-disable-next-line consistent-return
 userSchema.methods.createTag = function (data) {
+  const parent = findTag(data.parent, this.tags);
   if (data.tag.title.length > 29) {
     throw new CustomError('Tag title is too long.', 400);
   }
-  if (!data.parent) {
+  if (!parent) {
     this.tags.forEach((tag) => {
       if (tag.title === data.tag.title) {
         throw new CustomError('Tag already exists.', 400);
@@ -101,11 +163,11 @@ userSchema.methods.createTag = function (data) {
     return this.tags.push(data.tag);
   }
 
-  if (data.tag.title === data.parent.title) {
+  if (data.tag.title === parent.title) {
     throw new CustomError('Subtag can\'t have the same title as the parent.', 400);
   }
 
-  data.parent.children.forEach((tag) => {
+  parent.children.forEach((tag) => {
     if (tag.title === data.tag.title) {
       throw new CustomError('Tag already exists.', 400);
     }
@@ -113,9 +175,9 @@ userSchema.methods.createTag = function (data) {
 
   const eachRecursive = (tags) => {
     this.tags = tags.map((tag) => {
-      if (data.parent._id.toString() !== tag._id.toString()) {
+      if (parent._id.toString() !== tag._id.toString()) {
         eachRecursive(tag.children);
-      } else if (data.parent._id.toString() === tag._id.toString()) {
+      } else if (parent._id.toString() === tag._id.toString()) {
         tag.children.push(new Tag(data.tag));
         return tag;
       }
@@ -135,23 +197,6 @@ const setChildrenInArray = function (tag) {
   };
   eachRecursive(tag[0].children);
   return children;
-};
-
-const findParent = function (tag, allTags) {
-  let tagParent = '';
-  const eachRecursive = (tags) => {
-    tags.forEach((parent) => {
-      // eslint-disable-next-line consistent-return
-      parent.children.forEach((child) => {
-        if (child._id.toString() === tag._id.toString()) {
-          tagParent = parent;
-        }
-        eachRecursive(parent.children);
-      });
-    });
-  };
-  eachRecursive(allTags);
-  return tagParent;
 };
 
 // eslint-disable-next-line consistent-return

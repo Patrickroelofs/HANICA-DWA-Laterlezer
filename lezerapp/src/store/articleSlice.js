@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { get } from 'axios';
+import { get, post } from 'axios';
+import moment from 'moment';
+import { setChildrenInArray } from '../utils/helpers';
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -24,6 +26,23 @@ const articleSlice = createSlice({
     removeArticle: (state, action) => {
       state.articles = state.articles.filter((article) => article._id !== action.payload._id);
     },
+    updateArticleTag: (state, action) => {
+      const articleTags = state.currentArticle.tags;
+      for (let i = 0; i < articleTags.length; i++) {
+        if (articleTags[i]._id === action.payload._id) {
+          articleTags[i].title = action.payload.title;
+          articleTags[i].color = action.payload.color;
+        }
+      }
+      state.currentArticle.tags = articleTags;
+    },
+    deleteArticleTag: (state, action) => {
+      if (state.currentArticle) {
+        const tagsToDelete = setChildrenInArray(action.payload);
+        // eslint-disable-next-line no-return-assign
+        tagsToDelete.forEach((tag) => state.currentArticle.tags = state.currentArticle.tags.filter((deletingTag) => (tag._id.toString() !== deletingTag._id.toString())));
+      }
+    },
   },
 });
 
@@ -32,12 +51,68 @@ export const findCurrentArticle = (state) => state.article.articles.find((articl
 export const selectCurrentArticle = (state) => state.article.currentArticle;
 
 export const {
-  setArticles, setCurrentArticle, setCurrentArticleId, updateArticle, removeArticle,
+  setArticles, setCurrentArticle, setCurrentArticleId, updateArticle, removeArticle, updateArticleTag, deleteArticleTag,
 } = articleSlice.actions;
 export default articleSlice.reducer;
 
-export const getArticles = (status, range, tags = []) => (dispatch) => {
-  const joinedTags = tags.map((t) => t.title).join(',');
-  get(`${API_URL}/articles?status=${status}&range=${range}&tags=${joinedTags}`)
-    .then(({ data }) => dispatch(setArticles(data)));
+export const getArticles = (status, range, tags = []) => async (dispatch) => {
+  const joinedTags = tags.map((t) => t._id).join(',');
+
+  try {
+    const { data } = await get(`${API_URL}/articles?status=${status}&range=${range}&tags=${joinedTags}`);
+    dispatch(setArticles(data));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getArticle = (_id) => async (dispatch) => {
+  try {
+    const { data } = await get(`${API_URL}/articles/${_id}`);
+    dispatch(setCurrentArticle(data));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const addTags = (_id, tags = []) => async (dispatch) => {
+  try {
+    const { data } = await post(`${API_URL}/articles/${_id}`, { tags });
+    dispatch(setCurrentArticle(data));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const read = ({ _id, readAt }) => async (dispatch) => {
+  try {
+    const { data } = await post(`${API_URL}/articles/${_id}/status`, {
+      readAt: readAt ? null : moment().toISOString(),
+    });
+    dispatch(updateArticle(data));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const archive = ({ _id, archivedAt }) => async (dispatch) => {
+  try {
+    const { data } = await post(`${API_URL}/articles/${_id}/status`, {
+      archivedAt: archivedAt ? null : moment().toISOString(),
+    });
+    dispatch(removeArticle(data));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const prioritize = ({ _id, prioritizedAt }) => async (dispatch) => {
+  try {
+    const { data } = await post(`${API_URL}/articles/${_id}/status`, {
+      prioritizedAt: prioritizedAt ? null : moment().toISOString(),
+    });
+    dispatch(updateArticle(data));
+  } catch (err) {
+    throw new Error(err);
+  }
 };

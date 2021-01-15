@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { get } from 'axios';
 import TagPill from '../tagPill/TagPill';
 import TagParent from './tagParent/TagParent';
 
@@ -7,12 +7,13 @@ function TagListSelect({ onSave }) {
   const [selectedTags, setSelectedTags] = useState([]);
   const [tags, setTags] = useState([]);
 
-  const fetchTags = () => {
-    axios.get('http://localhost:3000/api/tags', {
-      headers: {
-        Username: localStorage.getItem('username'),
-      },
-    }).then(({ data }) => {
+  const fetchTags = async () => {
+    try {
+      const { data } = await get('http://localhost:3000/api/tags', {
+        headers: {
+          Username: localStorage.getItem('username'),
+        },
+      });
       const mapTags = (defTags) => defTags.map((tag) => ({
         _id: tag._id,
         title: tag.title,
@@ -22,7 +23,9 @@ function TagListSelect({ onSave }) {
         children: mapTags(tag.children),
       }));
       setTags(mapTags(data.data));
-    });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const postTags = () => onSave(selectedTags);
@@ -76,12 +79,12 @@ function TagListSelect({ onSave }) {
           </button>
         )))}
 
-      <div className="sticky fixed bottom-24 float-right">
+      <div className="mt-8 text-center">
         <button
           id="saveTagsToArticle"
           type="submit"
           onClick={() => postTags()}
-          className="mt-2 mx-auto block h-9 px-3 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+          className="outline-none focus:outline-none text-sm bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-white px-4 py-2 shadow-lg"
         >
           Save Article
         </button>

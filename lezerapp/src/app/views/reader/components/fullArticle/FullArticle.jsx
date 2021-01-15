@@ -1,15 +1,17 @@
 import React, { memo } from 'react';
-
 import ScrollToTop from 'react-scroll-up';
+import { useDispatch } from 'react-redux';
+
+import { read } from '../../../../../store/articleSlice';
 
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import axios from 'axios';
-import moment from 'moment';
 
 function FullArticle({ html, id }) {
-  window.onscroll = function () {
+  const dispatch = useDispatch();
+
+  window.onscroll = () => {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-      axios.post(`http://localhost:3000/api/articles/${id}/status`, { readAt: moment().toISOString() });
+      dispatch(read({ _id: id }));
     }
   };
 

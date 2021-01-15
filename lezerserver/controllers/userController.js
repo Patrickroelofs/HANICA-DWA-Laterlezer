@@ -3,27 +3,8 @@ const User = require('../models/user');
 
 exports.createUser = async (req, res, next) => {
   try {
-    await User.findOne({ userName: req.body.userName }).then((exists) => {
-      if (exists === null) {
-        const user = new User({
-          userName: req.body.userName,
-        });
-
-        user.save(((err) => {
-          if (err) {
-            if (err.errors.userName.kind === 'maxlength') {
-              res.status(406).send('Username is too long');
-            } else {
-              res.status(404).json('User could not be created');
-            }
-          } else {
-            res.status(200).send(user.userName);
-          }
-        }));
-      } else {
-        res.status(401).send('User already exists.');
-      }
-    });
+    await User.createUser(req.body.userName);
+    res.status(200).send(req.body.userName);
   } catch (error) {
     next(error);
   }
@@ -31,15 +12,11 @@ exports.createUser = async (req, res, next) => {
 
 exports.loginUser = async (req, res, next) => {
   try {
-    const user = await User.findOne({ userName: req.params.userName });
-    if (user === null) {
-      res.status(401).send('User not found');
-    } else {
-      res.send({
-        username: user.userName,
-        tags: user.tags,
-      });
-    }
+    const user = await User.getUserByUsername(req.params.userName);
+    res.send({
+      username: user.userName,
+      tags: user.tags,
+    });
   } catch (error) {
     next(error);
   }

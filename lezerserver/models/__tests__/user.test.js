@@ -9,7 +9,7 @@ const User = mongoose.model('User');
 
 describe('User Model Tests', () => {
   beforeAll(async () => {
-    await mongoose.connect('mongodb://localhost:27017/testUserDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+    await mongoose.connect('mongodb://localhost:27017/readerTestDB', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
   });
 
   beforeEach(async () => {
@@ -225,7 +225,7 @@ describe('User Model Tests', () => {
       };
       testUser.createTag(newTag);
     } catch (error) {
-      expect(error.message).toEqual('Tag already exists');
+      expect(error.message).toEqual('Tag already exists.');
       expect(error.status).toEqual(400);
     }
   });

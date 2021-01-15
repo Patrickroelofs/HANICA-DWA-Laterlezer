@@ -1,17 +1,20 @@
 import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { get } from 'axios';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import NewTag from '../../../sharedcomponents/newTag/NewTag';
 import TagItem from './components/TagItem';
+import { deleteArticleTag } from '../../../../../store/articleSlice';
+import { selectUsername } from '../../../../../store/userSlice';
 import {
-  setTags, selectTags, selectSelectedTags, setSelectedTags,
+  getTags, selectTags, selectSelectedTags, selectTag, deselectTag, getTagClasses, deleteTag,
 } from '../../../../../store/tagSlice';
 import NewTagForm from '../../../sharedcomponents/newTag/NewTagForm';
 
 const TagHierarchy = ({ isStatic = false }) => {
   const tags = useSelector(selectTags);
   const selectedTags = useSelector(selectSelectedTags);
+  const getClasses = useSelector(getTagClasses);
+  const username = useSelector(selectUsername);
 
   const [showTagDropdown, setShowTagDropdown] = useState(false);
   const [clickedTag, setClickedTag] = useState();
@@ -48,76 +51,53 @@ const TagHierarchy = ({ isStatic = false }) => {
 
   const isSelected = (tag) => selectedTags.find((t) => tag._id.toString() === t._id.toString());
 
-  const selectTag = (tagss) => {
+  const handleTag = (tag) => {
     if (!isStatic) {
-      if (isSelected(tagss[0])) {
-        const childrenIds = (tag) => tag.children.map((t) => [
-          t._id,
-          ...childrenIds(t),
-        ]).flat();
-        const childIds = childrenIds(tagss[0]);
-        const parentIds = tagss.filter((tag) => {
-          const hasSelectedChild = childrenIds(tag).filter((id) => {
-            if (!tagss.find((selTag) => id === selTag._id) && !childIds.includes(id)) {
-              return selectedTags.find((selTag) => id === selTag._id.toString());
-            }
-            return false;
-          });
-          return hasSelectedChild.length === 0;
-        }).map((tag) => tag._id.toString());
-        const ids = [...childIds, ...parentIds];
-        dispatch(setSelectedTags(selectedTags.filter((t) => !ids.includes(t._id))));
+      if (isSelected(tag)) {
+        dispatch(deselectTag(tag));
       } else {
-        dispatch(setSelectedTags([
-          ...selectedTags,
-          ...tagss,
-        ]));
+        dispatch(selectTag(tag));
       }
     }
   };
 
-  useEffect(() => {
-    get('http://localhost:3000/api/tags').then(({ data }) => {
-      dispatch(setTags(data.data));
-    });
-  }, [setTags]);
+  const deleteClickedTag = (tag, e) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-  const tagHierarchyGenerator = (tagz, pickedTag) => {
-    tagz = tagz.map((t) => {
-      const onClick = (parents) => {
-        parents.push(t);
-        pickedTag(parents);
-      };
-      const result = [(<TagItem tag={t} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
-      if (t.children) {
-        result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
-      }
-      return result;
-    });
-    return tagz;
+    // eslint-disable-next-line no-alert
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(`Are you sure you want to delete the tag with name: ${tag.title}?`)) {
+      dispatch(deselectTag(tag));
+      dispatch(deleteTag(tag));
+      dispatch(deleteArticleTag(tag));
+    }
   };
 
-  const renderParents = () => tags.map((t) => {
-    const onClick = (parents) => {
-      parents.push(t);
-      selectTag(parents);
-    };
-    const result = [(<TagItem tag={t} handleClick={handleClick} isStatic={isStatic} selectTag={() => onClick([])} selectedTags={selectedTags} editable={t.editable} />)];
-    if (t.children) {
-      result.push(<ul className="border-l-2 inset border-gray-300 border-solid ml-4">{tagHierarchyGenerator(t.children, onClick)}</ul>);
+  useEffect(() => {
+    if (username) {
+      dispatch(getTags());
+    }
+  }, []);
+
+  const generateList = (tagss) => tagss.map((tag) => {
+    const result = [(<TagItem key={`tags${tag._id}`} tag={tag} handleClick={handleClick} isStatic={isStatic} selectTag={() => handleTag(tag)} classes={getClasses(tag, isStatic)} deleteTag={deleteClickedTag} editable={tag.editable} />)];
+    if (tag.children && tag.children.length > 0) {
+      result.push(<li key={`tags${tag._id}chld`}><ul className="border-l-2 inset border-gray-300 border-solid ml-4">{generateList(tag.children)}</ul></li>);
     }
     return result;
   });
 
   return (
     <>
+      <span className="bg-gray-200 font-bold hidden" />
       <div className="mb-4 mt-6 pl-2 font-bold text-base">
         <span>Tags</span>
-        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} /> }
+        { showTagDropdown && <NewTagForm reference={addTagRef} parent={parentTag} tag={clickedTag} mode={mode} position={position} toggle={() => setShowTagDropdown(!showTagDropdown)} isSelected={mode === 'edit' ? isSelected(clickedTag) : false} /> }
         <NewTag />
       </div>
       <ul id="compositions-list" className="pure-tree main-tree">
-        {renderParents()}
+        {generateList(tags)}
       </ul>
     </>
   );
